@@ -12,17 +12,17 @@ class CratesSpider(scrapy.Spider):
     def start_requests(self):
         urls = [
             'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=1&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=2&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=3&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=4&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=5&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=6&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=7&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=8&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=9&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=10&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=11&per_page=10',
-#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=12&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=2&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=3&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=4&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=5&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=6&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=7&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=8&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=9&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=10&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=11&per_page=10',
+            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=12&per_page=10',
         ]
         for url in urls:
             yield Request.from_curl(
