@@ -12,17 +12,17 @@ class CratesSpider(scrapy.Spider):
     def start_requests(self):
         urls = [
             'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=1&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=2&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=3&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=4&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=5&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=6&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=7&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=8&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=9&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=10&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=11&per_page=10',
-            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=12&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=2&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=3&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=4&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=5&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=6&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=7&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=8&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=9&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=10&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=11&per_page=10',
+#            'https://crates.io/api/v1/crates/bencher/reverse_dependencies?page=12&per_page=10',
         ]
         for url in urls:
             yield Request.from_curl(
@@ -35,14 +35,14 @@ class CratesSpider(scrapy.Spider):
                 + "'cookie: cargo_session=sJIiNcfM9yvCHoGNENQaO8JrPoTF1c7xuZ6xe/LTieY=' "
                 + "--compressed", callback=self.parse)
 
-    def parse(self, response):
+#    def parse(self, response):
         # Not necessary, just saving a backup of the data in response.body
         # just in case something goes wrong/to help with debugging
 
-        page = "bencher_rev_deps"
-        filename = 'crates-%s.html' % page
-        with open(filename, 'wb') as f:
-            f.write(response.body)
+#        page = "bencher_rev_deps"
+#        filename = 'crates-%s.html' % page
+#        with open(filename, 'wb') as f:
+#            f.write(response.body)
 
         #################################################################
         # Similar to last code block, except using the crate name to help
@@ -52,6 +52,7 @@ class CratesSpider(scrapy.Spider):
         # Crate name pattern in response.body:
         # "crate":"<name>"
 
+    def parse(self, response):
         matches = re.findall("\"crate\"\:\"[a-zA-Z0-9\-\_]+\"", 
                 response.body.decode('utf-8'))
         paths = []
@@ -70,31 +71,41 @@ class CratesSpider(scrapy.Spider):
                 + "Chrome/79.0.3945.130 Safari/537.36' -H 'accept: */*' -H 'sec-fetch-site: "
                 + "same-origin' -H 'sec-fetch-mode: cors' -H "
                 + "'referer: https://crates.io/crates' -H "
-                #+ "'referer: https://crates.io/crates/url' -H "
                 + "'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' "
                 + "-H 'cookie: cargo_session=sJIiNcfM9yvCHoGNENQaO8JrPoTF1c7xuZ6xe/LTieY=' "
-                + "--compressed", callback=self.parse_for_github)
+                + "--compressed", callback=self.parse_github)
 
     # Following this link: https://crates.io/api/v1/crates/<crate_name>,
     # we can use this github repository pattern in the new response.body:
     #  "repository":"https://github.com/<unique_path>"
 
-    def parse_for_github(self, response):
+    def parse_github(self, response):
         matches = re.findall("\"repository\"\:\"https://github.com/[a-zA-Z0-9\/\-\_i\.]+\"",
                 response.body.decode('utf-8'))
         repos = []
         for match in matches:
-            _, repo_str = re.split("\:", match)
+            _, repo_str = re.split("\:", match, 1)
             _, repo, _ = re.split("\"", repo_str)
             if repo.endswith(".git"):
                 fullrepo = repo
+            elif repo.endswith("/"):
+                tmp = repo[0:-1]
+                fullrepo = tmp + ".git"
             else:
                 fullrepo = repo + ".git"
             repos.append(fullrepo)
         global count
-        for repo in repos:
+        if len(repos) > 0:
             count += 1
-            print("\n%s\n" % repo)
+            repo = repos[0]
+            # Clean up repo name into a directory name
+            split_repo_name = repo.split("/")
+            repo_name, _ = split_repo_name[-1].split(".")
+            # Clone said repo into clone/ directory, creating it if it
+            # does not already exist
+            newdir = "clones"
+            output3 = subprocess.run(["git", "clone", repo, newdir + "/" + repo_name])
+            print("exit code: %d\n" % output3.returncode)
         print("\n%d\n" % count)
 
         # Using: "https://github.com/<unique_path>.git"
