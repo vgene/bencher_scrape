@@ -2,7 +2,7 @@
 
 # Step 1: Download reverse dependencies of `bencher` crate
 
-#cd crates/ && scrapy crawl crates && cd ..
+cd crates/ && scrapy crawl crates && cd ..
 
 # Step 2: Build all downloaded crates
 
