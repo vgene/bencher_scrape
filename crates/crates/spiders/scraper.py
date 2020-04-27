@@ -104,8 +104,10 @@ class CratesSpider(scrapy.Spider):
             # Clone said repo into clone/ directory, creating it if it
             # does not already exist
             newdir = "clones"
-            output3 = subprocess.run(["git", "clone", repo, newdir + "/" + repo_name])
-            print("exit code: %d\n" % output3.returncode)
+            output_mk = subprocess.run(["mkdir", "-p", newdir])
+            print("exit code: %d\n" % output_mk.returncode)
+            output_cl = subprocess.run(["git", "clone", repo, newdir + "/" + repo_name])
+            print("exit code: %d\n" % output_cl.returncode)
         print("\n%d\n" % count)
 
         # Using: "https://github.com/<unique_path>.git"
