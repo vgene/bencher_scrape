@@ -8,19 +8,19 @@ cd crates/ && scrapy crawl crates && cd ..
 
 RUSTC="$HOME/.cargo_for_bencher"
 ROOT="$PWD"
-SUBDIRS="./crates/clones/*/"
+SUBDIRS="$ROOT/crates/clones/*/"
 
-export CARGO_BUILD_RUSTC="$RUSTC/bin/rustc"
-for d in $SUBDIR
+#export CARGO_BUILD_RUSTC="$RUSTC/bin/rustc"
+for d in $SUBDIRS
 do
-    cd "$d" && cargo build --release && cd "$ROOT"
+    cd "$d" && cargo clean && cargo build --release && cd "$ROOT"
 done
 
 # Step 3: Benchmark
 
-for d in $SUBDIR
+for d in $SUBDIRS
 do
-    cd "$d" && cargo bench --no-fail-fast > bounds_checks_OFF.out && cd "$ROOT"
+    cd "$d" && cargo bench --no-fail-fast > bounds_checks_ON.out && cd "$ROOT"
 done
 
 # Step 4: Build all downloaded crates (bounds checks off)
