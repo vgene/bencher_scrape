@@ -22,19 +22,20 @@ from subprocess import check_output
 import re
 
 pattern = "bench:\s+([0-9,]*)\D+([0-9,]*)"
+name_pattern = "(?<=test\s).*(?=\s+[.]{3})"
 
 def dump_benchmark(
     pattern,
     filepath="./bench.data",
-    headers=['#','unmod-time', 'unmod-error','mod-time','mod-error'],
+    headers=['#','bench-name','unmod-time', 'unmod-error','mod-time','mod-error'],
     idep_var=None,
     **kwargs):
-    """ If I have to append benchmark output to a CSV once more I'm going
-    to drown the world in a bath of fire. This should just work.
+    """
     Customise with your own output path and header row.
     idep_var is an optional independent variable.
     """
     # run cargo bench in cwd, capture output
+    unmod_names = re.findall(name_pattern, check_output(["cat", "unmod.bench"]).decode('utf-8'))
     unmod_result = re.findall(pattern, check_output(["cat", "unmod.bench"]).decode('utf-8'))
     mod_result = re.findall(pattern, check_output(["cat", "mod.bench"]).decode('utf-8'))
     # get rid of nasty commas
@@ -44,6 +45,9 @@ def dump_benchmark(
     length = unmod_len if unmod_len < mod_len else mod_len
     for i in range(length):
         line = []
+        # grab and append benchmark name to line
+        bname = unmod_names[i]
+        line.append(bname)
         # grab each matched line
         unmod_line = unmod_result[i]
         mod_line = mod_result[i]

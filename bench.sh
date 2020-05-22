@@ -32,10 +32,10 @@ done
 
 AGGLOC="$ROOT/aggregate_bench.py"
 
-cat "\n" > "$ROOT/bench.data"
+echo "\n" > "$ROOT/bench.data"
 for d in $SUBDIRS
 do
     #cd "$d" && diff "$UNMOD_RES" "$MOD_RES" > "bench.diff" && cd "$ROOT"
     cd "$d" && python3 "$AGGLOC" && cd "$ROOT"
-    cat "$d/bench.data" >> "$ROOT/bench.data"
+    #cat "$d/bench.data" >> "$ROOT/bench.data"
 done
