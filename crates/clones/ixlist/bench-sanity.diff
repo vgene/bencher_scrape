@@ -1,0 +1,16 @@
+8,14c8,14
+< test iterate_dlist       ... bench:       1,167 ns/iter (+/- 81)
+< test iterate_list        ... bench:       1,692 ns/iter (+/- 50)
+< test iterate_ringbuf     ... bench:         627 ns/iter (+/- 35)
+< test push_front_dlist    ... bench:     107,541 ns/iter (+/- 4,979)
+< test push_front_list     ... bench:       3,717 ns/iter (+/- 533)
+< test push_front_list_cap ... bench:       2,312 ns/iter (+/- 94)
+< test push_front_ringbuf  ... bench:       3,646 ns/iter (+/- 261)
+---
+> test iterate_dlist       ... bench:       1,180 ns/iter (+/- 394)
+> test iterate_list        ... bench:       1,691 ns/iter (+/- 36)
+> test iterate_ringbuf     ... bench:         646 ns/iter (+/- 55)
+> test push_front_dlist    ... bench:     108,271 ns/iter (+/- 4,571)
+> test push_front_list     ... bench:       3,692 ns/iter (+/- 319)
+> test push_front_list_cap ... bench:       2,258 ns/iter (+/- 129)
+> test push_front_ringbuf  ... bench:       3,729 ns/iter (+/- 255)

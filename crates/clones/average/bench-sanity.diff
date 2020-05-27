@@ -1,0 +1,18 @@
+9,10c9,10
+< test bench_kurtosis ... bench:   6,862,945 ns/iter (+/- 365,452)
+< test bench_moments  ... bench:  28,208,228 ns/iter (+/- 505,616)
+---
+> test bench_kurtosis ... bench:   6,818,616 ns/iter (+/- 78,864)
+> test bench_moments  ... bench:  27,885,323 ns/iter (+/- 1,738,486)
+16,17c16,17
+< test bench_average ... bench:   6,331,232 ns/iter (+/- 905,563)
+< test bench_stats   ... bench:   6,545,132 ns/iter (+/- 4,469,108)
+---
+> test bench_average ... bench:   6,330,276 ns/iter (+/- 217,423)
+> test bench_stats   ... bench:   6,429,662 ns/iter (+/- 72,074)
+23,24c23,24
+< test bench_average ... bench:   2,562,394 ns/iter (+/- 66,645)
+< test bench_iter    ... bench:   2,145,380 ns/iter (+/- 63,261)
+---
+> test bench_average ... bench:   2,548,465 ns/iter (+/- 53,165)
+> test bench_iter    ... bench:   2,156,441 ns/iter (+/- 82,832)

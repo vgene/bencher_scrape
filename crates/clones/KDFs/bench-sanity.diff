@@ -1,0 +1,8 @@
+8,10c8,10
+< test sha256_10 ... bench:       3,002 ns/iter (+/- 431) = 3 MB/s
+< test sha256_1k ... bench:      32,660 ns/iter (+/- 708) = 31 MB/s
+< test sha256_8k ... bench:     240,790 ns/iter (+/- 2,454) = 33 MB/s
+---
+> test sha256_10 ... bench:       2,926 ns/iter (+/- 96) = 3 MB/s
+> test sha256_1k ... bench:      32,612 ns/iter (+/- 666) = 31 MB/s
+> test sha256_8k ... bench:     241,483 ns/iter (+/- 10,698) = 33 MB/s

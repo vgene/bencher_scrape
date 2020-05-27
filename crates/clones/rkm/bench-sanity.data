@@ -1,0 +1,4 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+bench_dim128	21780650	533720	21964464	279221	
+bench_iris  	345354	35169	336658	39423	
+bench_s1    	27384977	26602284	28047342	21433466	

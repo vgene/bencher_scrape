@@ -1,0 +1,12 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+push_alpha     	845	39	653	71	
+push_c         	1295	24	1016	56	
+push_string    	1432	54	1433	27	
+try_push_alpha 	752	14	585	163	
+try_push_c     	1161	41	1014	31	
+try_push_string	1473	22	1278	18	
+extend_from_slice   	7	0	8	1	
+extend_with_constant	7	1	6	0	
+extend_with_range   	306	56	288	5	
+extend_with_slice   	8	0	8	1	
+extend_with_write   	8	1	8	1	

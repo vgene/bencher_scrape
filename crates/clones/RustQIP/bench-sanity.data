@@ -1,0 +1,21 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+bench_exp_mod_circuit_base	1270909	106035	1276859	110835	
+bench_exp_mod_circuit_rec 	3697431	334743	3765054	338206	
+bench_apply_many_swaps_large         	194395	13879	192440	14116	
+bench_apply_many_swaps_large_multiops	2573830	87884	2592866	104446	
+bench_apply_many_swaps_small         	4694	218	4842	2279	
+bench_apply_many_swaps_small_multiops	50971	1087	51773	3340	
+bench_apply_two_swaps_large          	2423195	463226	2382554	90756	
+bench_apply_two_swaps_large_multiops 	53688259	1518558	54616377	3775489	
+bench_apply_two_swaps_small          	954	215	938	105	
+bench_apply_two_swaps_small_multiops 	7818	753	7709	242	
+bench_cidentity                      	943	55	915	28	
+bench_cidentity_giant                	3242020	188505	2982531	96783	
+bench_cidentity_giant_halfprec       	3184761	434469	3082225	111809	
+bench_cidentity_larger               	9387	1117	8406	112	
+bench_hadamard                       	950	45	934	35	
+bench_hadamard_larger                	958271	153049	933285	168087	
+bench_identity                       	584	33	571	186	
+bench_identity_larger                	175919	103382	164094	91476	
+bench_identity_larger_sparse         	40957	2011	39283	1152	
+bench_identity_sparse                	1584	89	1478	79	

@@ -1,0 +1,6 @@
+31,32c31,32
+< test bench_default  ... bench:  32,609,039 ns/iter (+/- 6,775,585)
+< test bench_unsorted ... bench:  32,767,740 ns/iter (+/- 3,812,167)
+---
+> test bench_default  ... bench:  32,176,840 ns/iter (+/- 13,871,110)
+> test bench_unsorted ... bench:  33,193,617 ns/iter (+/- 19,215,597)

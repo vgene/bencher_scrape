@@ -1,0 +1,24 @@
+82,86c82,86
+< test log_session_record_json      ... bench:  17,195,339 ns/iter (+/- 553,697)
+< test log_session_record_json_raw  ... bench:   7,259,305 ns/iter (+/- 263,439)
+< test log_session_record_ncsa_json ... bench:  17,356,750 ns/iter (+/- 991,585)
+< test record_state                 ... bench:   5,636,974 ns/iter (+/- 1,305,274)
+< test session_state                ... bench:   5,622,496 ns/iter (+/- 226,760)
+---
+> test log_session_record_json      ... bench:  17,268,416 ns/iter (+/- 1,366,240)
+> test log_session_record_json_raw  ... bench:   7,315,662 ns/iter (+/- 560,858)
+> test log_session_record_ncsa_json ... bench:  17,629,639 ns/iter (+/- 3,031,285)
+> test record_state                 ... bench:   5,632,736 ns/iter (+/- 268,576)
+> test session_state                ... bench:   5,569,666 ns/iter (+/- 73,548)
+92,96c92,96
+< test custom_buffer_from_file_1mib ... bench:     204,160 ns/iter (+/- 6,598)
+< test custom_buffer_from_file_303b ... bench:   2,647,850 ns/iter (+/- 45,263)
+< test default_buffer               ... bench:     196,943 ns/iter (+/- 7,730)
+< test default_buffer_from_file     ... bench:     207,199 ns/iter (+/- 3,927)
+< test default_buffer_no_prefetch   ... bench:   1,019,442 ns/iter (+/- 209,053)
+---
+> test custom_buffer_from_file_1mib ... bench:     329,027 ns/iter (+/- 22,089)
+> test custom_buffer_from_file_303b ... bench:   2,827,760 ns/iter (+/- 341,362)
+> test default_buffer               ... bench:     322,024 ns/iter (+/- 7,661)
+> test default_buffer_from_file     ... bench:     336,039 ns/iter (+/- 22,922)
+> test default_buffer_no_prefetch   ... bench:     853,445 ns/iter (+/- 40,699)

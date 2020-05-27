@@ -1,0 +1,24 @@
+10,15c10,15
+< test push_alpha      ... bench:         845 ns/iter (+/- 39) = 605 MB/s
+< test push_c          ... bench:       1,295 ns/iter (+/- 24) = 395 MB/s
+< test push_string     ... bench:       1,432 ns/iter (+/- 54) = 357 MB/s
+< test try_push_alpha  ... bench:         752 ns/iter (+/- 14) = 680 MB/s
+< test try_push_c      ... bench:       1,161 ns/iter (+/- 41) = 440 MB/s
+< test try_push_string ... bench:       1,473 ns/iter (+/- 22) = 347 MB/s
+---
+> test push_alpha      ... bench:         653 ns/iter (+/- 71) = 784 MB/s
+> test push_c          ... bench:       1,016 ns/iter (+/- 56) = 503 MB/s
+> test push_string     ... bench:       1,433 ns/iter (+/- 27) = 357 MB/s
+> test try_push_alpha  ... bench:         585 ns/iter (+/- 163) = 875 MB/s
+> test try_push_c      ... bench:       1,014 ns/iter (+/- 31) = 504 MB/s
+> test try_push_string ... bench:       1,278 ns/iter (+/- 18) = 400 MB/s
+21,24c21,24
+< test extend_from_slice    ... bench:           7 ns/iter (+/- 0) = 73142 MB/s
+< test extend_with_constant ... bench:           7 ns/iter (+/- 1) = 73142 MB/s
+< test extend_with_range    ... bench:         306 ns/iter (+/- 56) = 1673 MB/s
+< test extend_with_slice    ... bench:           8 ns/iter (+/- 0) = 64000 MB/s
+---
+> test extend_from_slice    ... bench:           8 ns/iter (+/- 1) = 64000 MB/s
+> test extend_with_constant ... bench:           6 ns/iter (+/- 0) = 85333 MB/s
+> test extend_with_range    ... bench:         288 ns/iter (+/- 5) = 1777 MB/s
+> test extend_with_slice    ... bench:           8 ns/iter (+/- 1) = 64000 MB/s

@@ -1,0 +1,11 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+log_session_record_json     	17195339	553697	17268416	1366240	
+log_session_record_json_raw 	7259305	263439	7315662	560858	
+log_session_record_ncsa_json	17356750	991585	17629639	3031285	
+record_state                	5636974	1305274	5632736	268576	
+session_state               	5622496	226760	5569666	73548	
+custom_buffer_from_file_1mib	204160	6598	329027	22089	
+custom_buffer_from_file_303b	2647850	45263	2827760	341362	
+default_buffer              	196943	7730	322024	7661	
+default_buffer_from_file    	207199	3927	336039	22922	
+default_buffer_no_prefetch  	1019442	209053	853445	40699	

@@ -1,0 +1,8 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+iterate_dlist      	1167	81	1180	394	
+iterate_list       	1692	50	1691	36	
+iterate_ringbuf    	627	35	646	55	
+push_front_dlist   	107541	4979	108271	4571	
+push_front_list    	3717	533	3692	319	
+push_front_list_cap	2312	94	2258	129	
+push_front_ringbuf 	3646	261	3729	255	

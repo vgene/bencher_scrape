@@ -1,0 +1,12 @@
+26,30c26,30
+< test benchmark_from_decimal     ... bench:         280 ns/iter (+/- 20)
+< test benchmark_from_permutation ... bench:         145 ns/iter (+/- 11)
+< test benchmark_max_value        ... bench:           9 ns/iter (+/- 2)
+< test benchmark_to_decimal       ... bench:          86 ns/iter (+/- 4)
+< test benchmark_to_permutation   ... bench:         249 ns/iter (+/- 65)
+---
+> test benchmark_from_decimal     ... bench:         270 ns/iter (+/- 8)
+> test benchmark_from_permutation ... bench:         138 ns/iter (+/- 4)
+> test benchmark_max_value        ... bench:           9 ns/iter (+/- 0)
+> test benchmark_to_decimal       ... bench:          84 ns/iter (+/- 4)
+> test benchmark_to_permutation   ... bench:         261 ns/iter (+/- 20)
