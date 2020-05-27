@@ -33,9 +33,7 @@ Therefore:
 1. Install [gnuplot](http://www.gnuplot.info/) either by way of your system package manager or by following one of 
 [these](http://www.gnuplot.info/download.html). I am using version 5.2, and default terminal type is 'qt'.
 
-2. `cp gnuplot-script ./path/to/data/file/directory` 
-
-one data file is 
+2. `cp gnuplot-script ./path/to/data/file/directory`. For example, one data file is 
 [this](https://github.com/nataliepopescu/bencher_scrape/blob/master/crates/clones/KDFs/bench-sanity.data)
 one, so the path to the directory would be: `crates/clones/KDFs/`
 
