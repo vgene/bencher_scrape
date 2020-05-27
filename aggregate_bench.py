@@ -22,22 +22,28 @@ from subprocess import check_output
 import re
 
 pattern = "bench:\s+([0-9,]*)\D+([0-9,]*)"
-name_pattern = "(?<=test\s).*(?=\s+[.]{3})"
+name_pattern = "(?<=test\s).*(?=\s+[.]{3}\s+bench)"
+
+default_file = "./bench.data"
+
+default_unmod = "./unmod.bench"
+default_mod = "./mod.bench"
 
 def dump_benchmark(
     pattern,
-    filepath="./bench.data",
+    filepath=default_file,
+    unmod=default_unmod,
+    mod=default_mod,
     headers=['#','bench-name','unmod-time', 'unmod-error','mod-time','mod-error'],
-    idep_var=None,
     **kwargs):
     """
     Customise with your own output path and header row.
     idep_var is an optional independent variable.
     """
     # run cargo bench in cwd, capture output
-    unmod_names = re.findall(name_pattern, check_output(["cat", "unmod.bench"]).decode('utf-8'))
-    unmod_result = re.findall(pattern, check_output(["cat", "unmod.bench"]).decode('utf-8'))
-    mod_result = re.findall(pattern, check_output(["cat", "mod.bench"]).decode('utf-8'))
+    unmod_names = re.findall(name_pattern, check_output(["cat", unmod]).decode('utf-8'))
+    unmod_result = re.findall(pattern, check_output(["cat", unmod]).decode('utf-8'))
+    mod_result = re.findall(pattern, check_output(["cat", mod]).decode('utf-8'))
     # get rid of nasty commas
     output = []
     unmod_len = len(unmod_result)
@@ -94,13 +100,17 @@ def writerow(filehandle, array):
     filehandle.write("\n")
 
 if __name__ == "__main__":
-    # You know what an independent variable is, of course
-    idep_var = None
     # So brittle. Shhh.
-    if len(sys.argv) > 1 and sys.argv[1] is not None:
-        idep_var = sys.argv[1]
+    filepath = default_file
+    unmod = default_unmod
+    mod = default_mod
+    if len(sys.argv) == 4:
+        filepath = sys.argv[1]
+        unmod = sys.argv[2]
+        mod = sys.argv[3]
     dump_benchmark(
         pattern,
-        filepath="./bench.data",
-        idep_var=idep_var,
+        filepath=filepath,
+        unmod=unmod,
+        mod=mod
     )
