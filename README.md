@@ -13,26 +13,36 @@ After setting up your python and [scrapy](https://docs.scrapy.org/en/latest/intr
 Note that this script generates and aggregates the data as:
 
  1) a file whose contents are the output of `diff`ing the 
-two sets of benchmarks (i.e. bench.diff), and
+two sets of benchmarks (i.e. *.diff), and
 
  2) a file that contains the parsed output of these benchmarks and which
-can be easily used to generate a graph using gnuplot (i.e. bench.data). 
+can be easily used to generate a graph using gnuplot (i.e. *.data). 
 
 The `diff` output is meant for manual inspection
-of specific benchmark numbers, whereas the parsed data file/the plot generated from it are more useful in conveying the 
+of specific benchmark numbers, whereas the parsed data file/the plot 
+generated from it are more useful in conveying the 
 overall performance characteristics of the crate.
 
 ## Generating Graphs
 
-1. Install [gnuplot](http://www.gnuplot.info/) either by way of your system package manager or by following one of the 
-links listed [here](http://www.gnuplot.info/download.html). I am using version 5.2, and default terminal type is 'qt'.
+The `gnuplot-script` reads from the respective `bench-sanity.data` files, so (in the current state of the tool)
+the script should be invoked from the same directory as the data you want to visualize. 
 
-2. `cp gnuplot-script ./path/to/data/file`
+Therefore: 
 
-3. Start up gnuplot by simply typing: `gnuplot`
+1. Install [gnuplot](http://www.gnuplot.info/) either by way of your system package manager or by following one of 
+[these](http://www.gnuplot.info/download.html). I am using version 5.2, and default terminal type is 'qt'.
 
-4. In gnuplot's REPL: `load "gnuplot-script"`
+2. `cp gnuplot-script ./path/to/data/file/directory` 
+        (one data file is 
+        [this one](https://github.com/nataliepopescu/bencher_scrape/blob/master/crates/clones/KDFs/bench-sanity.data), 
+        so the path to the directory would be: `crates/clones/KDFs/)
 
+3. Navigate into the directory from step 2
+
+4. Start up gnuplot by simply typing: `gnuplot`
+
+5. In gnuplot's REPL, type: `load "gnuplot-script"`
 
 ## End Goals
 
@@ -41,4 +51,4 @@ Upon completion, this command should automatically:
 1. Download and install the crate code [done]
 2. Run the benchmarks normally [done]
 3. Run the benchmarks with Rust bounds checks turned off [in progress]
-4. Generate a compact form of comparison between the two sets of benchmarks [done]
+4. Generate a compact form of comparison between the two sets of benchmarks [done-ish]
