@@ -12,16 +12,16 @@ After setting up your python and [scrapy](https://docs.scrapy.org/en/latest/intr
 
 Note that this script generates and aggregates the data as:
 
- 1) a file whose contents are the output of `diff`ing the 
-two sets of benchmarks (i.e. *.diff), and
+ 1) [*.diff] files whose contents are the output of `diff`ing the 
+two sets of benchmarks, and
 
- 2) a file that contains the parsed output of these benchmarks and which
-can be easily used to generate a graph using gnuplot (i.e. *.data). 
+ 2) [*.data] files that contain the parsed output of these benchmarks and which
+can be easily used to generate a graph with gnuplot.
 
 The `diff` output is meant for manual inspection
 of specific benchmark numbers, whereas the parsed data file/the plot 
-generated from it are more useful in conveying the 
-overall performance characteristics of the crate.
+generated from it is more useful in conveying the 
+overall performance characteristic(s) of the crate.
 
 ## Generating Graphs
 
@@ -34,15 +34,20 @@ Therefore:
 [these](http://www.gnuplot.info/download.html). I am using version 5.2, and default terminal type is 'qt'.
 
 2. `cp gnuplot-script ./path/to/data/file/directory` 
+
         (one data file is 
         [this one](https://github.com/nataliepopescu/bencher_scrape/blob/master/crates/clones/KDFs/bench-sanity.data), 
-        so the path to the directory would be: `crates/clones/KDFs/)
+        so the path to the directory would be: `crates/clones/KDFs/`)
 
-3. Navigate into the directory from step 2
+3. Navigate into the directory from the above step
 
 4. Start up gnuplot by simply typing: `gnuplot`
 
 5. In gnuplot's REPL, type: `load "gnuplot-script"`
+
+## What Changes are we Measuring?
+
+See them [here](https://github.com/nataliepopescu/rust).
 
 ## End Goals
 
