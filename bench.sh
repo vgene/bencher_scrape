@@ -51,8 +51,6 @@ DIFF_FILE="$BENCH_NAME.diff"
 for d in $SUBDIRS
 do
     cd "$d" &&
-        mv UNMOD_RES "$UNMOD_RES" && 
-        mv MOD_RES "$MOD_RES" &&
         # Low effort to read if small set of data
         diff "$UNMOD_RES" "$MOD_RES" > "$DIFF_FILE" && 
         # Better visualization for larger sets of data
