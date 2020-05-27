@@ -35,9 +35,9 @@ Therefore:
 
 2. `cp gnuplot-script ./path/to/data/file/directory` 
 
-        (one data file is 
+        one data file is 
         [this one](https://github.com/nataliepopescu/bencher_scrape/blob/master/crates/clones/KDFs/bench-sanity.data), 
-        so the path to the directory would be: `crates/clones/KDFs/`)
+        so the path to the directory would be: `crates/clones/KDFs/`
 
 3. Navigate into the directory from the above step
 
