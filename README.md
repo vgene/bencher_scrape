@@ -42,7 +42,7 @@ one, so the path to the directory would be: `crates/clones/KDFs/`
 
 4. Start up gnuplot by simply typing: `gnuplot`
 
-5. In gnuplot's REPL, type: `load "gnuplot-script"`
+5. In gnuplot's REPL, type: `filename="bench-sanity.data"; load "gnuplot-script"`
 
 ## What Changes are we Measuring?
 

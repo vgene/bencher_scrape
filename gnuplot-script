@@ -15,5 +15,5 @@ set xtics rotate
 #plot "bench.data" u 1 smooth cumulative t "Vanilla" w lines, \
 #    "bench.data" u 3 smooth cumulative t "Modified" w lines
 
-plot "bench-sanity.data" u 2:xtic(1) t "Vanilla" with histogram, \
-    "bench-sanity.data" u 4 t "Modified" with histogram
+plot filename u 2:xtic(1) t "Vanilla" with histogram, \
+    filename u 4 t "Modified" with histogram
