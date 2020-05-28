@@ -1,0 +1,12 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+bench_eighty_points     	228608	91349	204801	15907	
+bench_fifty_points      	89497	29272	81430	3512	
+bench_forty_points      	57637	16209	52744	1389	
+bench_ninety_points     	280172	18026	257812	8441	
+bench_one_hundred_points	339500	36159	313880	7151	
+bench_seventy_points    	177109	13972	159084	6392	
+bench_sixty_points      	179845	603123	116717	7534	
+bench_ten_points        	4650	777	4381	169	
+bench_thirty_points     	32838	1696	30591	299	
+bench_three_points      	1073	144	1057	105	
+bench_twenty_points     	15385	3539	14219	212	

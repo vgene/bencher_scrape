@@ -1,0 +1,10 @@
+189,192c189,192
+< test a_thousand_classes                      ... bench:   2,108,358 ns/iter (+/- 60,797)
+< test big_tree                                ... bench:  13,932,672 ns/iter (+/- 417,013)
+< test io_read                                 ... bench:     331,039 ns/iter (+/- 128,964)
+< test is_subclass_with_many_direct_subclasses ... bench:   2,484,371 ns/iter (+/- 74,820)
+---
+> test a_thousand_classes                      ... bench:   2,137,879 ns/iter (+/- 97,279)
+> test big_tree                                ... bench:  13,826,256 ns/iter (+/- 2,255,930)
+> test io_read                                 ... bench:     321,087 ns/iter (+/- 47,848)
+> test is_subclass_with_many_direct_subclasses ... bench:   2,491,383 ns/iter (+/- 30,255)

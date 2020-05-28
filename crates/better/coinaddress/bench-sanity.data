@@ -1,0 +1,2 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+test bench_validate_hash	20966	736	20617	420	

@@ -1,0 +1,10 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+chunk_size_100  	1666	1017	1242	44	
+chunk_size_1005 	1072	195	751	26	
+chunk_size_500  	1176	277	850	42	
+message_count_1 	1055	355	715	10	
+message_count_10	3549	287	2632	88	
+message_count_20	6406	1473	4834	141	
+message_size_10k	3720	148	3118	88	
+message_size_1k 	1376	11	956	15	
+message_size_5k 	2100	82	1558	66	

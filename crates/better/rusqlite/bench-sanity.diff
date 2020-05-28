@@ -1,0 +1,6 @@
+112,113c112,113
+< test bench_cache    ... bench:         356 ns/iter (+/- 13)
+< test bench_no_cache ... bench:       2,292 ns/iter (+/- 423)
+---
+> test bench_cache    ... bench:         336 ns/iter (+/- 5)
+> test bench_no_cache ... bench:       2,287 ns/iter (+/- 147)

@@ -1,0 +1,5 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+a_thousand_classes                     	2108358	60797	2137879	97279	
+big_tree                               	13932672	417013	13826256	2255930	
+io_read                                	331039	128964	321087	47848	
+is_subclass_with_many_direct_subclasses	2484371	74820	2491383	30255	

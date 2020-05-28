@@ -1,0 +1,4 @@
+34c34
+< test read_entry ... bench:      79,237 ns/iter (+/- 1,965) = 13233 MB/s
+---
+> test read_entry ... bench:      77,564 ns/iter (+/- 1,993) = 13518 MB/s
