@@ -1,0 +1,2 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+test decode_logo_frames	475269	28691	487831	46476	

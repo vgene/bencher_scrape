@@ -1,0 +1,6 @@
+8,9c8,9
+< test q1  ... bench:   1,040,371 ns/iter (+/- 42,858)
+< test q10 ... bench:     563,148 ns/iter (+/- 58,597)
+---
+> test q1  ... bench:   1,122,218 ns/iter (+/- 16,812)
+> test q10 ... bench:     753,375 ns/iter (+/- 86,654)

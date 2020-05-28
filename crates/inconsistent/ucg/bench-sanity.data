@@ -1,0 +1,14 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+parse_bareword            	62752	1481	63742	10303	
+parse_complex_nested_list 	5404533	172933	5679561	941244	
+parse_complex_tuple       	265061	8446	271713	81360	
+parse_complex_tuple_list  	3083360	47506	3329045	2111125	
+parse_int                 	61383	3186	62548	4469	
+parse_post_partial_float  	63430	2528	65562	11902	
+parse_pre_partial_float   	62937	6477	62763	8301	
+parse_selector_symbol_head	88794	2287	89394	3234	
+parse_selector_tuple_head 	214512	12463	224519	53716	
+parse_simple_list         	701391	40985	744012	82087	
+parse_simple_tuple        	638874	12345	644459	29800	
+parse_string              	60189	1394	61675	12720	
+parse_whole_float         	63018	5249	63584	1852	

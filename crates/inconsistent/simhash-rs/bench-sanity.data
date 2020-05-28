@@ -1,0 +1,2 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+test bench_simhash	1116594	25941	1168149	793939	

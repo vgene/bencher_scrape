@@ -1,0 +1,10 @@
+12c12
+< test bench_kilobyte_baseline    ... bench:         313 ns/iter (+/- 156) = 3271 MB/s
+---
+> test bench_kilobyte_baseline    ... bench:         312 ns/iter (+/- 7) = 3282 MB/s
+14,15c14,15
+< test bench_megabyte_baseline    ... bench:     315,474 ns/iter (+/- 10,295) = 3323 MB/s
+< test bench_megabyte_specialized ... bench:      45,967 ns/iter (+/- 886) = 22811 MB/s
+---
+> test bench_megabyte_baseline    ... bench:     315,718 ns/iter (+/- 18,257) = 3321 MB/s
+> test bench_megabyte_specialized ... bench:      45,981 ns/iter (+/- 2,476) = 22804 MB/s

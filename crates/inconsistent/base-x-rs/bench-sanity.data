@@ -1,0 +1,7 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+decode_base16	2188	31	2289	137	
+decode_base2 	6952	430	7302	156	
+decode_base58	1839	222	1883	116	
+encode_base16	5195	100	5091	149	
+encode_base2 	11033	261	10804	39	
+encode_base58	4233	67	4165	243	

@@ -1,0 +1,4 @@
+8c8
+< test short ... bench:       2,262 ns/iter (+/- 56) = 11 MB/s
+---
+> test short ... bench:       5,952 ns/iter (+/- 5,977) = 4 MB/s

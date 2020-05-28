@@ -1,0 +1,11 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+crc12_construct       	1419	22	1437	436	
+crc12_update_megabytes	7497067	510270	7966803	2036738	
+crc16_construct       	1613	86	1610	34	
+crc16_update_megabytes	2433399	183846	2382525	38958	
+crc32_construct       	1918	614	1819	69	
+crc32_update_megabytes	2289488	156009	2015440	19351	
+crc64_construct       	14356	1444	13798	276	
+crc64_update_megabytes	2529746	38510	2538940	25817	
+crc8_construct        	1528	21	1529	45	
+crc8_update_megabytes 	1971708	89546	1951487	20403	

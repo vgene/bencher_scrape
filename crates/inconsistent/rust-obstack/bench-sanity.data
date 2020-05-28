@@ -1,0 +1,6 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+cons_list_with_box    	1207790	22413	1211542	59848	
+cons_list_with_obstack	45509	82	45902	6628	
+cons_list_with_rc     	1240912	18253	1245387	104763	
+str_cons_list_box     	2700857	46655	2695754	108537	
+str_cons_list_stack   	1396334	51507	1394733	74971	

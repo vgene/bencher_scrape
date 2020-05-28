@@ -1,0 +1,14 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+cloning_a_fifteen_puzzle                        	77	4	79	9	
+from_decimal_on_a_fifteen_puzzle                	463	14	456	19	
+from_decimal_unchecked_on_a_fifteen_puzzle      	442	4	435	24	
+moves_for_a_fifteen_puzzle                      	80	3	80	5	
+new_eight_puzzle                                	480	7	494	34	
+new_eighty_puzzle                               	836	21	858	41	
+scramble_fifty_moves_on_a_fifteen_puzzle        	18807	564	18822	1633	
+ten_mutable_slides_on_a_fifteen_puzzle          	1515	8	1535	25	
+ten_mutable_unchecked_slides_on_a_fifteen_puzzle	1443	40	1463	18	
+ten_slides_on_a_fifteen_puzzle                  	2337	48	2388	15	
+ten_unchecked_slides_on_a_fifteen_puzzle        	2257	6	2303	34	
+to_decimal_on_a_fifteen_puzzle                  	471	8	470	18	
+to_decimal_unchecked_on_a_fifteen_puzzle        	158	5	160	1	
