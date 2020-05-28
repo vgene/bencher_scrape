@@ -47,6 +47,34 @@ one, so the path to the directory would be: `crates/clones/KDFs/`
 
 See them [here](https://github.com/nataliepopescu/rust).
 
+### Building the Modified Rustc Locally
+
+Clone the [repo](https://github.com/nataliepopescu/rust) and largely follow the instructions listed there.
+This includes double checking all of your dependencies. You may also want to change the default "prefix" 
+directory (installation location of this rustc) to something you have write acces to. Normally, running
+`which rustc` lands me in `~/.cargo/bin/rustc`, so I just created an analogous directory `~/.cargo-mod/` 
+and changed my config.toml respectively:
+
+```
+[install]
+
+...
+
+prefix = "/Users/np/.cargo-mod"
+```
+
+When you are ready to build and install, run:
+
+`./x.py build && ./x.py install && ./x.py install cargo`
+
+Note that this will take a while. Once the modified rustc is installed and you are ready to build with it,
+you should set the `CARGO_BUILD_RUSTC` environment variable to point to the modified rustc, i.e.:
+
+`$ export $CARGO_BUILD_RUSTC="/Users/np/.cargo-mod/bin/rustc"`
+
+The `bench.sh` script toggles this environment variable back and forth between `~/.cargo/bin/rustc` and
+`~/.cargo-mod/bin/rustc`, which you can do manually as well. 
+
 ## End Goals
 
 Upon completion, this command should automatically:
