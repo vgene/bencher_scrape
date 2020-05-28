@@ -31,7 +31,8 @@ the script should be invoked from the same directory as the data you want to vis
 Therefore: 
 
 1. Install [gnuplot](http://www.gnuplot.info/) either by way of your system package manager or by following one of 
-[these](http://www.gnuplot.info/download.html). I am using version 5.2, and default terminal type is 'qt'.
+[these](http://www.gnuplot.info/download.html). I am using version 5.2 (installed with homebrew), and the 
+default terminal type is 'qt'.
 
 2. `cp gnuplot-script ./path/to/data/file/directory`. For example, one data file is 
 [this](https://github.com/nataliepopescu/bencher_scrape/blob/master/crates/clones/KDFs/bench-sanity.data)
@@ -51,7 +52,7 @@ See them [here](https://github.com/nataliepopescu/rust).
 
 Clone the [repo](https://github.com/nataliepopescu/rust) and largely follow the instructions listed there.
 This includes double checking all of your dependencies. You may also want to change the default "prefix" 
-directory (installation location of this rustc) to something you have write acces to. Normally, running
+directory (installation location of this rustc) to something you have write access to. Normally, running
 `which rustc` lands me in `~/.cargo/bin/rustc`, so I just created an analogous directory `~/.cargo-mod/` 
 and changed my config.toml respectively:
 
