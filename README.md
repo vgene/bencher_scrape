@@ -66,7 +66,9 @@ prefix = "/Users/np/.cargo-mod"
 
 When you are ready to build and install, run:
 
-`./x.py build && ./x.py install && ./x.py install cargo`
+```
+$ ./x.py build && ./x.py install && ./x.py install cargo
+```
 
 Note that this will take a while. Once the modified rustc is installed and you are ready to build with it,
 you should set the `CARGO_BUILD_RUSTC` environment variable to point to the modified rustc, i.e.:
