@@ -71,7 +71,9 @@ When you are ready to build and install, run:
 Note that this will take a while. Once the modified rustc is installed and you are ready to build with it,
 you should set the `CARGO_BUILD_RUSTC` environment variable to point to the modified rustc, i.e.:
 
-`$ export $CARGO_BUILD_RUSTC="/Users/np/.cargo-mod/bin/rustc"`
+```
+$ export $CARGO_BUILD_RUSTC="/Users/np/.cargo-mod/bin/rustc"
+```
 
 The `bench.sh` script toggles this environment variable back and forth between `~/.cargo/bin/rustc` and
 `~/.cargo-mod/bin/rustc`, which you can do manually as well. 
