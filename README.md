@@ -9,7 +9,9 @@ Using the python tool, [scrapy](https://docs.scrapy.org/en/latest/index.html#), 
 After setting up your python and [scrapy](https://docs.scrapy.org/en/latest/intro/install.html) environments,
 you can just run the tool with the default configuration by simply running: 
 
-`./bench.sh`
+```sh
+$ ./bench.sh
+```
 
 The default configuration does the following: 
 
@@ -26,7 +28,9 @@ In the following subdirectories under [crates](https://github.com/nataliepopescu
 
 To see the flags you can use to further tailor the script's functionality, run: 
 
-`./bench.sh -h`
+```sh
+$ ./bench.sh -h
+```
 
 ### Output Files
 
@@ -54,15 +58,31 @@ Therefore:
 [these](http://www.gnuplot.info/download.html). I am using version 5.2 (installed with homebrew), and the 
 default terminal type is 'qt'.
 
-2. `cp gnuplot-script ./path/to/data/file/directory`. For example, one data file is 
-[this](https://github.com/nataliepopescu/bencher_scrape/blob/master/crates/clones/KDFs/bench-sanity.data)
-one, so the path to the directory would be: `crates/clones/KDFs/`
+2. If you ran the `bench.sh` script for both the unmodified _and_ modified versions, then the
+`gnuplot-script` will be automatically copied into the same directory as the individual crate data.
+If not, you will have to copy the script there manually.
 
-3. Navigate into the directory from the above step
+3. Navigate into the directory for the crate whose data you want to visualize.
 
-4. Start up gnuplot by simply typing: `gnuplot`
+4. Start up gnuplot by simply typing: `gnuplot`.
 
-5. In gnuplot's REPL, type: `filename="bench-sanity.data"; load "gnuplot-script"`
+5. In gnuplot's REPL, type: 
+
+```sh
+$ gnuplot> filename="bench-sanity.data"; load "gnuplot-script"
+```
+
+If you passed a label/name to `bench.sh` like:
+
+```sh
+$ ./bench.sh -n "just-for-kicks"
+```
+
+then in the REPL you will need to change the filename value as such: 
+
+```sh
+$ gnuplot> filename="bench-just-for-kicks.data"; load "gnuplot-script"
+```
 
 ## What Changes are we Measuring?
 
