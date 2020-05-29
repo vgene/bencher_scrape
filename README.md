@@ -6,9 +6,29 @@ Using the python tool, [scrapy](https://docs.scrapy.org/en/latest/index.html#), 
 
 ## Running the Tool
 
-After setting up your python and [scrapy](https://docs.scrapy.org/en/latest/intro/install.html) environments, simply run:
+After setting up your python and [scrapy](https://docs.scrapy.org/en/latest/intro/install.html) environments,
+you can just run the tool with the default configuration by simply running: 
 
 `./bench.sh`
+
+The default configuration does the following: 
+
+- [ ] Scrapes crates.io and downloads crates
+- [X] Benchmarks crates after compiling with _both_ (unmodified and modified) rustc versions
+- [ ] Runs crate tests using the version compiled with modified rust
+- [X] Diffs benchmark output and copies data-aggregation and plotting scripts into the crate directory
+
+In the following subdirectories under [crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates): 
+
+- [ ] better
+- [X] inconsistent
+- [ ] worse
+
+Run: 
+
+`./bench.sh -h`
+
+To see the flags you can use to further tailor the script's functionality. 
 
 Note that this script generates and aggregates the data as:
 
