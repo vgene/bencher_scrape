@@ -24,11 +24,9 @@ In the following subdirectories under [crates](https://github.com/nataliepopescu
 - [X] inconsistent
 - [ ] worse
 
-Run: 
+To see the flags you can use to further tailor the script's functionality, run: 
 
 `./bench.sh -h`
-
-To see the flags you can use to further tailor the script's functionality. 
 
 Note that this script generates and aggregates the data as:
 
