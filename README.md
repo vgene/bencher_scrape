@@ -35,8 +35,8 @@ Note that this script generates and aggregates the data as:
  1) [*.diff] files whose contents are the output of `diff`ing the 
 two sets of benchmarks, and
 
- 2) [*.data] files that contain the parsed output of these benchmarks and which
-can be easily used to generate a graph with gnuplot.
+ 2) [*.data] files that contain the parsed output of these benchmarks,
+useful for generating graphs with gnuplot.
 
 The `diff` output is meant for manual inspection
 of specific benchmark numbers, whereas the parsed data file/the plot 
