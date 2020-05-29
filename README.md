@@ -28,6 +28,8 @@ To see the flags you can use to further tailor the script's functionality, run:
 
 `./bench.sh -h`
 
+### Output Files
+
 Note that this script generates and aggregates the data as:
 
  1) [*.diff] files whose contents are the output of `diff`ing the 
