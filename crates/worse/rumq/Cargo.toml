@@ -1,0 +1,10 @@
+[workspace]
+
+members = [
+  "mqtt4bytes",
+  "mqtt5bytes",
+  "rumq-core",
+  "rumq-client",
+  "rumq-broker",
+  "rumq-cli"
+]
