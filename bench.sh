@@ -14,22 +14,23 @@ dir="a"
 name="sanity-2"
 
 usage () {
-    echo -n ""
-    echo -n "Usage: $0 [-s] [-b <rustc-optn>] [-t] [-d <dir-symbol>] [-n <out-label>]"
-    echo -n "   -s               scrape reverse dependencies and download locally"
-    echo -n "   -b <rustc-optn>  bench crates with one of the following options:"
-    echo -n "                      'u' = unmodified rustc ONLY"
-    echo -n "                      'm' = modified rustc ONLY"
-    echo -n "                      'b' = both unmodified and modified rustc"
-    echo -n "   -t               run crate tests after compiling with modified rustc,"
-    echo -n "                    building the crate if necessary"
-    echo -n "   -d <dir-symbol>  run only for the crates in the specified directory, where"
-    echo -n "                      'b' = better"
-    echo -n "                      'i' = inconsistent"
-    echo -n "                      'w' = worse"
-    echo -n "                      'a' = all of the above"
-    echo -n "   -n <out-label>   what to label the output files of this invocation with"
-    echo -n ""
+    echo ""
+    echo "Usage: $0 [-s] [-b <rustc-optn>] [-t] [-d <dir-symbol>] [-n <out-label>]"
+    echo "   -s               scrape reverse dependencies and download locally"
+    echo "   -b <rustc-optn>  bench crates with one of the following options:"
+    echo "                      'u' = unmodified rustc ONLY"
+    echo "                      'm' = modified rustc ONLY"
+    echo "                      'b' = both unmodified and modified rustc"
+    echo "                      'n' = don't run benchmarks"
+    echo "   -t               run crate tests after compiling with modified rustc,"
+    echo "                    building the crate if necessary"
+    echo "   -d <dir-symbol>  run only for the crates in the specified directory, where"
+    echo "                      'b' = better"
+    echo "                      'i' = inconsistent"
+    echo "                      'w' = worse"
+    echo "                      'a' = all of the above"
+    echo "   -n <out-label>   what to label the output files of this invocation with"
+    echo ""
 }
 
 # Parse commandline arguments
@@ -85,8 +86,8 @@ a)
     SUBDIRS=("$better" "$inconsistent" "$worse")
     ;;
 *)
-    echo -n ""
-    echo -n "ERROR: Nonexistent directory option [ "$dir" ] passed to [ -d ]."
+    echo ""
+    echo "ERROR: Nonexistent directory option [ "$dir" ] passed to [ -d ]."
     usage
     exit 1
     ;;
@@ -106,9 +107,13 @@ b)
     unmod=1
     mod=1
     ;;
+n)
+    unmod=0
+    mod=0
+    ;;
 *)
-    echo -n ""
-    echo -n "ERROR: Nonexistent compiler-version-option [ "$comp" ] passed to [ -b ]."
+    echo ""
+    echo "ERROR: Nonexistent compiler-version-option [ "$comp" ] passed to [ -b ]."
     usage
     exit 1
     ;;
@@ -122,6 +127,7 @@ MOD_NAME="mod-$SUFFIX"
 
 UNMOD_RES="$UNMOD_NAME.bench"
 MOD_RES="$MOD_NAME.bench"
+UNMOD_TESTS="$UNMOD_NAME.tests"
 MOD_TESTS="$MOD_NAME.tests"
 
 TARGET="target"
@@ -165,7 +171,14 @@ then
     export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
-        # Can save building the same thing twice if step 3 was executed
+        # Can save building the unmodified version twice if step 2 was executed
+        if [ "$unmod" -eq 0 ]
+        then
+            cd "$d" && cargo clean && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
+        else
+            cd "$d" && cp -r "$UNMOD_TARGET_DIR" "$TARGET" && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
+        fi
+        # Can save building the modified version twice if step 3 was executed
         if [ "$mod" -eq 0 ]
         then
             cd "$d" && cargo clean && cargo test > "$MOD_TESTS" && cd "$ROOT"
@@ -179,25 +192,27 @@ fi
 
 AGGLOC="$ROOT/aggregate_bench.py"
 BENCH_NAME="bench-$SUFFIX"
-DATA_FILE="$BENCH_NAME.data"
-DIFF_FILE="$BENCH_NAME.diff"
+TEST_NAME="test-$SUFFIX"
+DATA_BENCH="$BENCH_NAME.data"
+DIFF_BENCH="$BENCH_NAME.diff"
+DIFF_TEST="$TEST_NAME.diff"
 SCRIPT_NAME="gnuplot-script"
 
 if [ "$unmod" -eq 1 -a "$mod" -eq 1 ]
 then
-    # Simple diff: Low effort to read if small set of data
+    # Simple benchmark diff: Low effort to read if small set of data
     for d in ${SUBDIRS[@]}
     do
         cd "$d" &&
-            diff "$UNMOD_RES" "$MOD_RES" > "$DIFF_FILE" && 
+            diff "$UNMOD_RES" "$MOD_RES" > "$DIFF_BENCH" && 
             cd "$ROOT"
     done
     
-    # Data Aggregator for Gnuplot: Better visualization for larger sets of data
+    # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
     for d in ${SUBDIRS[@]}
     do
         cd "$d" &&
-            python3 "$AGGLOC" "$PWD/$DATA_FILE" "$UNMOD_RES" "$MOD_RES" &&
+            python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$UNMOD_RES" "$MOD_RES" &&
             cd "$ROOT"
     done
     
@@ -206,6 +221,17 @@ then
     do
         cd "$d" &&
             cp "$ROOT/$SCRIPT_NAME" "$PWD/$SCRIPT_NAME" &&
+            cd "$ROOT"
+    done
+fi
+
+# Simple test diff: check if test failures are specific to the modified rustc or not
+if [ "$tst" -eq 1 ]
+then
+    for d in ${SUBDIRS[@]}
+    do
+        cd "$d" &&
+            diff "$UNMOD_TESTS" "$MOD_TESTS" > "$DIFF_TEST" && 
             cd "$ROOT"
     done
 fi
