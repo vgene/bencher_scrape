@@ -168,7 +168,7 @@ then
         # Can save building the same thing twice if step 3 was executed
         if [ "$mod" -eq 0 ]
         then
-            cd "$d" && cargo test > "$MOD_TESTS" && cd "$ROOT"
+            cd "$d" && cargo clean && cargo test > "$MOD_TESTS" && cd "$ROOT"
         else
             cd "$d" && cp -r "$MOD_TARGET_DIR" "$TARGET" && cargo test > "$MOD_TESTS" && cd "$ROOT"
         fi
