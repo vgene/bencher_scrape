@@ -22,9 +22,9 @@ The default configuration does the following:
 
 In the following subdirectories under [crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates): 
 
-- [ ] better
+- [X] better
 - [X] inconsistent
-- [ ] worse
+- [X] worse
 
 To see the flags you can use to further tailor the script's functionality, run: 
 
@@ -92,7 +92,7 @@ See them [here](https://github.com/nataliepopescu/rust).
 
 Clone the [repo](https://github.com/nataliepopescu/rust) and largely follow the instructions listed there.
 This includes double checking all of your dependencies. You may also want to change the default "prefix" 
-directory (installation location of this rustc) to something you have write access to. Normally, running
+directory (install location of this rustc) and the "sysconfdir" to something you have write access to. Normally, running
 `which rustc` lands me in `~/.cargo/bin/rustc`, so I just created an analogous directory `~/.cargo-mod/` 
 and changed my config.toml respectively:
 
@@ -102,6 +102,10 @@ and changed my config.toml respectively:
 ...
 
 prefix = "/Users/np/.cargo-mod"
+
+sysconfdir = "$prefix/sysconf"
+
+...
 ```
 
 When you are ready to build and install, run:
@@ -127,4 +131,4 @@ Upon completion, this command should automatically:
 1. Download and install the crate code [done]
 2. Run the benchmarks normally [done]
 3. Run the benchmarks with Rust bounds checks turned off [in progress]
-4. Generate a compact form of comparison between the two sets of benchmarks [done-ish]
+4. Generate a compact form of comparison between the two sets of benchmarks [done]
