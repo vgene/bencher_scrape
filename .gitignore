@@ -1,6 +1,5 @@
 *.plt
 *.lock
-*.toml
 *.gitignore
 *.out
 *.yml
