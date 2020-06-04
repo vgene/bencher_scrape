@@ -6,7 +6,7 @@ import subprocess
 count = 0
 
 class CratesSpider(scrapy.Spider):
-    name = 'crates'
+    name = 'get-crates'
 
     # Stopped checking githubs at page 6 (109 out of 118 is fine w me)
     def start_requests(self):
@@ -26,14 +26,16 @@ class CratesSpider(scrapy.Spider):
         ]
         for url in urls:
             yield Request.from_curl(
-                "curl " + url + " -H 'authority: crates.io' -H 'user-agent: Mozilla/5.0 "
-                + "(Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) "
-                + "Chrome/79.0.3945.130 Safari/537.36' -H 'accept: */*' -H 'sec-fetch-site: "
-                + "same-origin' -H 'sec-fetch-mode: cors' -H "
-                + "'referer: https://crates.io/crates/bencher/reverse_dependencies' -H "
-                + "'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H "
-                + "'cookie: cargo_session=sJIiNcfM9yvCHoGNENQaO8JrPoTF1c7xuZ6xe/LTieY=' "
-                + "--compressed", callback=self.parse)
+                "curl " + url,
+                #+ " -H 'authority: crates.io' -H 'user-agent: Mozilla/5.0 "
+                #+ "(Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) "
+                #+ "Chrome/79.0.3945.130 Safari/537.36' -H 'accept: */*' -H 'sec-fetch-site: "
+                #+ "same-origin' -H 'sec-fetch-mode: cors' -H "
+                #+ "'referer: https://crates.io/crates/bencher/reverse_dependencies' -H "
+                #+ "'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' -H "
+                #+ "'cookie: cargo_session=sJIiNcfM9yvCHoGNENQaO8JrPoTF1c7xuZ6xe/LTieY=' "
+                #+ "--compressed", 
+                callback=self.parse)
 
 #    def parse(self, response):
         # Not necessary, just saving a backup of the data in response.body
@@ -66,14 +68,16 @@ class CratesSpider(scrapy.Spider):
             #print("\n%s\n" % path)
             #count += 1
             yield Request.from_curl(
-                "curl " + path + " -H 'authority: crates.io' -H 'user-agent: Mozilla/5.0 "
-                + "(Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) "
-                + "Chrome/79.0.3945.130 Safari/537.36' -H 'accept: */*' -H 'sec-fetch-site: "
-                + "same-origin' -H 'sec-fetch-mode: cors' -H "
-                + "'referer: https://crates.io/crates' -H "
-                + "'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' "
-                + "-H 'cookie: cargo_session=sJIiNcfM9yvCHoGNENQaO8JrPoTF1c7xuZ6xe/LTieY=' "
-                + "--compressed", callback=self.parse_github)
+                "curl " + path,
+                #+ " -H 'authority: crates.io' -H 'user-agent: Mozilla/5.0 "
+                #+ "(Macintosh; Intel Mac OS X 10_15_2) AppleWebKit/537.36 (KHTML, like Gecko) "
+                #+ "Chrome/79.0.3945.130 Safari/537.36' -H 'accept: */*' -H 'sec-fetch-site: "
+                #+ "same-origin' -H 'sec-fetch-mode: cors' -H "
+                #+ "'referer: https://crates.io/crates' -H "
+                #+ "'accept-encoding: gzip, deflate, br' -H 'accept-language: en-US,en;q=0.9' "
+                #+ "-H 'cookie: cargo_session=sJIiNcfM9yvCHoGNENQaO8JrPoTF1c7xuZ6xe/LTieY=' "
+                #+ "--compressed",
+                callback=self.parse_github)
 
     # Following this link: https://crates.io/api/v1/crates/<crate_name>,
     # we can use this github repository pattern in the new response.body:
@@ -106,7 +110,8 @@ class CratesSpider(scrapy.Spider):
             newdir = "clones"
             output_mk = subprocess.run(["mkdir", "-p", newdir])
             print("exit code: %d\n" % output_mk.returncode)
-            output_cl = subprocess.run(["git", "clone", repo, newdir + "/" + repo_name])
+            output_cl = subprocess.run(["echo", newdir + "/" + repo_name])
+            #output_cl = subprocess.run(["git", "clone", repo, newdir + "/" + repo_name])
             print("exit code: %d\n" % output_cl.returncode)
         print("\n%d\n" % count)
 
