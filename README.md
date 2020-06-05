@@ -112,7 +112,7 @@ sysconfdir = "$prefix/sysconf"
 When you are ready to build and install, run:
 
 ```sh
-$ ./x.py build && ./x.py install && ./x.py install cargo
+$ ./x.py build && ./x.py install && ./x.py install cargo && ./x.py doc
 ```
 
 Note that this will take a while. Once the modified rustc is installed and you are ready to build with it,
