@@ -153,7 +153,24 @@ then
     done
 fi
 
-# Step 3: Build and bench with modified rustc (slice bounds checks now OFF)
+# Step 3: Run crate tests when compiled with unmodified rustc
+
+if [ "$tst" -eq 1 ]
+then
+    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
+    for d in ${SUBDIRS[@]}
+    do
+        # Can save building the unmodified version twice if step 2 was executed
+        if [ "$unmod" -eq 0 ]
+        then
+            cd "$d" && cargo clean && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
+        else
+            cd "$d" && cp -r "$UNMOD_TARGET_DIR" "$TARGET" && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
+        fi
+    done
+fi
+
+# Step 4: Build and bench with modified rustc (slice bounds checks now OFF)
 
 if [ "$mod" -eq 1 ]
 then
@@ -164,21 +181,14 @@ then
     done
 fi
 
-# Step 4: Run crate tests when compiled with modified rustc
+# Step 5: Run crate tests when compiled with modified rustc
 
 if [ "$tst" -eq 1 ]
 then
     export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
-        # Can save building the unmodified version twice if step 2 was executed
-        if [ "$unmod" -eq 0 ]
-        then
-            cd "$d" && cargo clean && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
-        else
-            cd "$d" && cp -r "$UNMOD_TARGET_DIR" "$TARGET" && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
-        fi
-        # Can save building the modified version twice if step 3 was executed
+        # Can save building the modified version twice if step 4 was executed
         if [ "$mod" -eq 0 ]
         then
             cd "$d" && cargo clean && cargo test > "$MOD_TESTS" && cd "$ROOT"
@@ -188,7 +198,7 @@ then
     done
 fi
 
-# Step 5: Conglomerate results
+# Step 6: Conglomerate results
 
 AGGLOC="$ROOT/aggregate_bench.py"
 BENCH_NAME="bench-$SUFFIX"
