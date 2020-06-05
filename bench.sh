@@ -7,7 +7,7 @@ scrape=0
 # Bench BOTH unmod + mod
 comp="b"
 # Don't run tests
-tstcomp="x"
+tstcomp="n"
 # Bench in all subdirectories
 dir="a"
 # Some descriptive mame of this invocation
@@ -16,21 +16,22 @@ name="sanity-2"
 usage () {
     echo ""
     echo "Usage: $0 [-s] [-b <rustc-optn>] [-t] [-d <dir-symbol>] [-n <out-label>]"
-    echo "   -s               scrape reverse dependencies and download locally [default = off]"
+    echo "   -s               scrape reverse dependencies and download locally  [default = off]"
     echo "   -b <rustc-optn>  bench crates with one of the following options:"
     echo "                      'u' = unmodified rustc ONLY"
     echo "                      'm' = modified rustc ONLY"
-    echo "                      'b' = both unmodified and modified rustc [default]"
+    echo "                      'b' = both unmodified and modified rustc        [default]"
     echo "                      'n' = don't run benchmarks"
-    echo "   -t <rustc-optn>  test crates with one of the following options [default = none]:"
+    echo "   -t <rustc-optn>  test crates with one of the following options:"
     echo "                      'u' = unmodified rustc ONLY"
     echo "                      'm' = modified rustc ONLY"
     echo "                      'b' = both unmodified and modified rustc"
+    echo "                      'n' = don't run tests                           [default]"
     echo "   -d <dir-symbol>  run only for the crates in the specified directory, where"
     echo "                      'b' = better"
     echo "                      'i' = inconsistent"
     echo "                      'w' = worse"
-    echo "                      'a' = all of the above [default]"
+    echo "                      'a' = all of the above                          [default]"
     echo "   -n <out-label>   what to label the output files of this invocation with"
     echo ""
 }
@@ -134,6 +135,10 @@ m)
 b)
     tstunmod=1
     tstmod=1
+    ;;
+n)
+    tstunmod=0
+    tstmod=0
     ;;
 *)
     echo ""
