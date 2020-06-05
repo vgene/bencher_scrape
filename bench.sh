@@ -6,8 +6,8 @@
 scrape=0
 # Bench BOTH unmod + mod
 comp="b"
-# Bench, don't test
-tst=0
+# Don't run tests
+tstcomp="x"
 # Bench in all subdirectories
 dir="a"
 # Some descriptive mame of this invocation
@@ -16,25 +16,27 @@ name="sanity-2"
 usage () {
     echo ""
     echo "Usage: $0 [-s] [-b <rustc-optn>] [-t] [-d <dir-symbol>] [-n <out-label>]"
-    echo "   -s               scrape reverse dependencies and download locally"
+    echo "   -s               scrape reverse dependencies and download locally [default = off]"
     echo "   -b <rustc-optn>  bench crates with one of the following options:"
     echo "                      'u' = unmodified rustc ONLY"
     echo "                      'm' = modified rustc ONLY"
-    echo "                      'b' = both unmodified and modified rustc"
+    echo "                      'b' = both unmodified and modified rustc [default]"
     echo "                      'n' = don't run benchmarks"
-    echo "   -t               run crate tests after compiling with modified rustc,"
-    echo "                    building the crate if necessary"
+    echo "   -t <rustc-optn>  test crates with one of the following options [default = none]:"
+    echo "                      'u' = unmodified rustc ONLY"
+    echo "                      'm' = modified rustc ONLY"
+    echo "                      'b' = both unmodified and modified rustc"
     echo "   -d <dir-symbol>  run only for the crates in the specified directory, where"
     echo "                      'b' = better"
     echo "                      'i' = inconsistent"
     echo "                      'w' = worse"
-    echo "                      'a' = all of the above"
+    echo "                      'a' = all of the above [default]"
     echo "   -n <out-label>   what to label the output files of this invocation with"
     echo ""
 }
 
 # Parse commandline arguments
-while getopts "sb:td:n:h" opt
+while getopts "sb:t:d:n:h" opt
 do
     case "$opt" in
     s)
@@ -44,7 +46,7 @@ do
         comp="$OPTARG"
         ;;
     t)
-        tst=1
+        tstcomp="$OPTARG"
         ;;
     d)
         dir="$OPTARG"
@@ -93,7 +95,7 @@ a)
     ;;
 esac
 
-# Resolve which compiler version(s) to use
+# Resolve which compiler version(s) to use for benchmarks
 unmod=0
 mod=0
 case "$comp" in
@@ -114,6 +116,28 @@ n)
 *)
     echo ""
     echo "ERROR: Nonexistent compiler-version-option [ "$comp" ] passed to [ -b ]."
+    usage
+    exit 1
+    ;;
+esac
+
+# Resolve which compiler version(s) to use for tests
+tstunmod=0
+tstmod=0
+case "$tstcomp" in
+u)
+    tstunmod=1
+    ;;
+m)
+    tstmod=1
+    ;;
+b)
+    tstunmod=1
+    tstmod=1
+    ;;
+*)
+    echo ""
+    echo "ERROR: Nonexistent compiler-version-option [ "$tstcomp" ] passed to [ -t ]."
     usage
     exit 1
     ;;
@@ -155,7 +179,7 @@ fi
 
 # Step 3: Run crate tests when compiled with unmodified rustc
 
-if [ "$tst" -eq 1 ]
+if [ "$tstunmod" -eq 1 ]
 then
     export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
     for d in ${SUBDIRS[@]}
@@ -183,7 +207,7 @@ fi
 
 # Step 5: Run crate tests when compiled with modified rustc
 
-if [ "$tst" -eq 1 ]
+if [ "$tstmod" -eq 1 ]
 then
     export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
@@ -236,7 +260,7 @@ then
 fi
 
 # Simple test diff: check if test failures are specific to the modified rustc or not
-if [ "$tst" -eq 1 ]
+if [ "$tstunmod" -eq 1 -a "$tstmod" -eq 1 ]
 then
     for d in ${SUBDIRS[@]}
     do
