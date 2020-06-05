@@ -16,9 +16,10 @@ $ ./bench.sh
 The default configuration does the following: 
 
 - [ ] Scrapes crates.io and downloads crates
-- [X] Benchmarks crates after compiling with _both_ (unmodified and modified) rustc versions
-- [ ] Runs crate tests using the version compiled with modified rust
+- [X] Benchmarks crates after compiling with both (unmodified and modified) rustc versions
+- [ ] Runs crate tests using the specified rustc version
 - [X] Diffs benchmark output and copies data-aggregation and plotting scripts into the crate directory
+- [ ] Diffs test output
 
 In the following subdirectories under [crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates): 
 
@@ -26,7 +27,7 @@ In the following subdirectories under [crates](https://github.com/nataliepopescu
 - [X] inconsistent
 - [X] worse
 
-To see the flags you can use to further tailor the script's functionality, run: 
+For more customizing options, run:
 
 ```sh
 $ ./bench.sh -h
@@ -36,10 +37,10 @@ $ ./bench.sh -h
 
 Note that this script generates and aggregates the data as:
 
- 1) [*.diff] files whose contents are the output of `diff`ing the 
+ 1) [ diff ] files whose contents are the output of `diff`ing the 
 two sets of benchmarks, and
 
- 2) [*.data] files that contain the parsed output of these benchmarks,
+ 2) [ data ] files that contain the parsed output of these benchmarks,
 useful for generating graphs with gnuplot.
 
 The `diff` output is meant for manual inspection
@@ -55,8 +56,8 @@ the script should be invoked from the same directory as the data you want to vis
 Therefore: 
 
 1. Install [gnuplot](http://www.gnuplot.info/) either by way of your system package manager or by following one of 
-[these](http://www.gnuplot.info/download.html). I am using version 5.2 (installed with homebrew), and the 
-default terminal type is 'qt'.
+[these](http://www.gnuplot.info/download.html). On MacOS (10.15.2), I am using version 5.2 (installed with homebrew), 
+and the default terminal type is 'qt'. On Ubuntu (14.04.6 LTS), I am using version 4.6 with default terminal type 'jpeg'.
 
 2. If you ran the `bench.sh` script for both the unmodified _and_ modified versions, then the
 `gnuplot-script` will be automatically copied into the same directory as the individual crate data.
@@ -126,9 +127,12 @@ The `bench.sh` script toggles this environment variable back and forth between `
 
 ## End Goals
 
-Upon completion, this command should automatically:
+Upon completion, this tool will be able to do the following:
 
-1. Download and install the crate code [done]
-2. Run the benchmarks normally [done]
-3. Run the benchmarks with Rust bounds checks turned off [in progress]
-4. Generate a compact form of comparison between the two sets of benchmarks [done]
+1. [done] Download and install crates
+2. [done] Run the benchmarks normally
+3. [done] Run the tests normally
+3. [done] Run the benchmarks with Rust bounds checks turned off
+3. [done] Run the test with Rust bounds checks turned off
+4. [done] Generate a compact form of comparison between the two sets of benchmarks
+4. [done] Generate a compact form of comparison between the two sets of tests
