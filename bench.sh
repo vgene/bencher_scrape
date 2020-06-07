@@ -175,7 +175,7 @@ fi
 
 if [ "$unmod" -eq 1 ]
 then
-    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
+#    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
         cd "$d" && cargo clean && cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
@@ -186,7 +186,7 @@ fi
 
 if [ "$tstunmod" -eq 1 ]
 then
-    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
+#    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
         # Can save building the unmodified version twice if step 2 was executed
@@ -203,10 +203,10 @@ fi
 
 if [ "$mod" -eq 1 ]
 then
-    export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
+#    export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
-        cd "$d" && cargo clean && cargo bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
+        cd "$d" && cargo clean && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
     done
 fi
 
@@ -214,15 +214,15 @@ fi
 
 if [ "$tstmod" -eq 1 ]
 then
-    export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
+#    export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
         # Can save building the modified version twice if step 4 was executed
         if [ "$mod" -eq 0 ]
         then
-            cd "$d" && cargo clean && cargo test > "$MOD_TESTS" && cd "$ROOT"
+            cd "$d" && cargo clean && cargo "+stage2" test > "$MOD_TESTS" && cd "$ROOT"
         else
-            cd "$d" && cp -r "$MOD_TARGET_DIR" "$TARGET" && cargo test > "$MOD_TESTS" && cd "$ROOT"
+            cd "$d" && cp -r "$MOD_TARGET_DIR" "$TARGET" && cargo "+stage2" test > "$MOD_TESTS" && cd "$ROOT"
         fi
     done
 fi

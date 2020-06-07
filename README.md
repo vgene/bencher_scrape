@@ -116,14 +116,26 @@ $ ./x.py build && ./x.py install && ./x.py install cargo && ./x.py doc
 ```
 
 Note that this will take a while. Once the modified rustc is installed and you are ready to build with it,
-you should set the `CARGO_BUILD_RUSTC` environment variable to point to the modified rustc, i.e.:
+you should create a rust toolchain for the stage2 build of the modified version. 
 
 ```sh
-$ export $CARGO_BUILD_RUSTC="/Users/np/.cargo-mod/bin/rustc"
+$ rustup toolchain link stage2 build/<host-triple>/stage2
 ```
 
-The `bench.sh` script toggles this environment variable back and forth between `~/.cargo/bin/rustc` and
-`~/.cargo-mod/bin/rustc`, which you can do manually as well. 
+Now you can run with the modified rustc like:
+
+```sh
+$ rustc +stage2 <cmd>
+```
+
+Or:
+
+```sh
+$ cargo +stage2 <cmd>
+```
+
+The `bench.sh` script toggles between using the rustc specified in the `rust-toolchain`
+file and this locally modified version, which you can do manually as well.
 
 ## End Goals
 
