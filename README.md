@@ -21,7 +21,7 @@ $ ./bench.sh -h
 ```
 
 The `directories` field refers to the subdirectories under 
-[crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates): 
+[crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates).
 
 ### Output Files
 
