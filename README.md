@@ -16,9 +16,9 @@ $ ./bench.sh
 The default configuration does the following: 
 
 - [ ] Scrapes crates.io and downloads crates
-- [X] Benchmarks crates after compiling with both (unmodified and modified) rustc versions
+- [ ] Benchmarks crates after compiling with both (unmodified and modified) rustc versions
 - [ ] Runs crate tests using the specified rustc version
-- [X] Diffs benchmark output and copies data-aggregation and plotting scripts into the crate directory
+- [ ] Diffs benchmark output and copies data-aggregation and plotting scripts into the crate directory
 - [ ] Diffs test output
 
 In the following subdirectories under [crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates): 

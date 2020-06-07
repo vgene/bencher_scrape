@@ -5,7 +5,7 @@
 # Don't scrape
 scrape=0
 # Bench BOTH unmod + mod
-comp="b"
+comp="n"
 # Don't run tests
 tstcomp="n"
 # Bench in all subdirectories
@@ -20,8 +20,8 @@ usage () {
     echo "   -b <rustc-optn>  bench crates with one of the following options:"
     echo "                      'u' = unmodified rustc ONLY"
     echo "                      'm' = modified rustc ONLY"
-    echo "                      'b' = both unmodified and modified rustc        [default]"
-    echo "                      'n' = don't run benchmarks"
+    echo "                      'b' = both unmodified and modified rustc"
+    echo "                      'n' = don't run benchmarks                      [default]"
     echo "   -t <rustc-optn>  test crates with one of the following options:"
     echo "                      'u' = unmodified rustc ONLY"
     echo "                      'm' = modified rustc ONLY"
