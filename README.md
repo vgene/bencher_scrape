@@ -13,25 +13,15 @@ you can just run the tool with the default configuration by simply running:
 $ ./bench.sh
 ```
 
-The default configuration does the following: 
-
-- [ ] Scrapes crates.io and downloads crates
-- [ ] Benchmarks crates after compiling with both (unmodified and modified) rustc versions
-- [ ] Runs crate tests using the specified rustc version
-- [ ] Diffs benchmark output and copies data-aggregation and plotting scripts into the crate directory
-- [ ] Diffs test output
-
-In the following subdirectories under [crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates): 
-
-- [X] better
-- [X] inconsistent
-- [X] worse
-
-For more customizing options, run:
+The default configuration runs neither the benchmarks nor the tests. 
+For customizing options, run:
 
 ```sh
 $ ./bench.sh -h
 ```
+
+The `directories` field refers to the subdirectories under 
+[crates](https://github.com/nataliepopescu/bencher_scrape/tree/master/crates): 
 
 ### Output Files
 
