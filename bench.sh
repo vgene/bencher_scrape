@@ -268,7 +268,7 @@ then
 fi
 
 # Simple test diff: check if test failures are specific to the modified rustc or not
-if [ "$tstunmod" -eq 1 -a "$tstmod" -eq 0 ]
+if [ "$tstunmod" -eq 1 -a "$tstmod" -eq 1 ]
 then
     for d in ${SUBDIRS[@]}
     do
