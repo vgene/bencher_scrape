@@ -1,0 +1,22 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+rand_bytes_chacha      	3614750	31642	3618905	7056	
+rand_bytes_isaac       	1068844	9910	1074628	5796	
+rand_bytes_isaac64     	561367	1939	566682	1010	
+rand_bytes_splitmix    	524097	1642	522857	2855	
+rand_bytes_xoroshiro128	601694	2385	601373	1558	
+rand_bytes_xorshift    	625492	3495	626109	1374	
+rand_bytes_xorshift1024	702282	9493	650370	956	
+rand_f64_chacha        	2834969	4284	2834875	5425	
+rand_f64_isaac         	929526	6683	930266	9282	
+rand_f64_isaac64       	546554	720	588029	649	
+rand_f64_splitmix      	391648	3348	389320	8456	
+rand_f64_xoroshiro128  	315004	770	314953	196	
+rand_f64_xorshift      	517049	716	517043	752	
+rand_f64_xorshift1024  	510348	9166	490045	5307	
+rand_u64_chacha        	2803633	5207	2803550	4313	
+rand_u64_isaac         	883758	13717	883454	574	
+rand_u64_isaac64       	506126	6002	545563	20444	
+rand_u64_splitmix      	270767	942	270835	656	
+rand_u64_xoroshiro128  	253209	522	253637	540	
+rand_u64_xorshift      	397139	256	397096	2339	
+rand_u64_xorshift1024  	461220	5154	448416	2131	

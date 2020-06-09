@@ -1,0 +1,10 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+bench_btoi                    	24	0	24	0	
+bench_btou                    	22	0	22	0	
+bench_btou_saturating         	26	0	26	0	
+bench_from_str                	41	37	41	0	
+bench_from_str_unchecked      	25	0	25	0	
+bench_small_btou              	5	0	5	0	
+bench_small_btou_saturating   	7	0	7	0	
+bench_small_from_str          	20	0	20	0	
+bench_small_from_str_unchecked	9	0	9	0	

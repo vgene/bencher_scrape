@@ -1,0 +1,10 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+include_array_lazy_static  	78	0	78	1	
+include_array_native_static	117	0	79	0	
+include_array_no_static    	55402	381	56219	445	
+include_bytes_lazy_static  	851	2	852	3	
+include_bytes_native_static	846	2	850	15	
+include_bytes_no_static    	7100	125	7430	232	
+include_str_lazy_static    	4675	117	4109	18	
+include_str_native_static  	4698	84	4106	28	
+include_str_no_static      	12115	199	11739	221	

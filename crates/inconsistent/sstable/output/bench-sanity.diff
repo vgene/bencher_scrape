@@ -1,0 +1,6 @@
+46,47c46,47
+< test bench_read  ... bench:  31,241,004 ns/iter (+/- 352,030)
+< test bench_write ... bench: 156,249,293 ns/iter (+/- 4,757,831)
+---
+> test bench_read  ... bench:  31,542,922 ns/iter (+/- 566,391)
+> test bench_write ... bench: 158,004,368 ns/iter (+/- 5,431,260)

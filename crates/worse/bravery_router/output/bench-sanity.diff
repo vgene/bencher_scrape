@@ -1,0 +1,24 @@
+41,43c41,43
+< test recognizer      ... bench:       2,382 ns/iter (+/- 38)
+< test router          ... bench:         486 ns/iter (+/- 57)
+< test router_plus_vec ... bench:         495 ns/iter (+/- 45)
+---
+> test recognizer      ... bench:       2,415 ns/iter (+/- 28)
+> test router          ... bench:         503 ns/iter (+/- 56)
+> test router_plus_vec ... bench:         486 ns/iter (+/- 69)
+49,51c49,51
+< test recognizer      ... bench:         601 ns/iter (+/- 15)
+< test router          ... bench:         125 ns/iter (+/- 1)
+< test router_plus_vec ... bench:         129 ns/iter (+/- 2)
+---
+> test recognizer      ... bench:         683 ns/iter (+/- 97)
+> test router          ... bench:         126 ns/iter (+/- 0)
+> test router_plus_vec ... bench:         133 ns/iter (+/- 0)
+57,59c57,59
+< test recognizer      ... bench:       2,359 ns/iter (+/- 73)
+< test router          ... bench:         631 ns/iter (+/- 2)
+< test router_plus_vec ... bench:         660 ns/iter (+/- 1)
+---
+> test recognizer      ... bench:       2,153 ns/iter (+/- 23)
+> test router          ... bench:         613 ns/iter (+/- 10)
+> test router_plus_vec ... bench:         608 ns/iter (+/- 1)

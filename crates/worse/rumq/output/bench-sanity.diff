@@ -1,0 +1,12 @@
+34,35c34,35
+< test deserialize_publishes ... bench:         252 ns/iter (+/- 15) = 4063 MB/s
+< test serialize_publishes   ... bench:         482 ns/iter (+/- 13) = 2124 MB/s
+---
+> test deserialize_publishes ... bench:         244 ns/iter (+/- 20) = 4196 MB/s
+> test serialize_publishes   ... bench:         484 ns/iter (+/- 1) = 2115 MB/s
+134,135c134,135
+< test publish_deserialize_perf ... bench:         445 ns/iter (+/- 10)
+< test publish_serialize_perf   ... bench:         227 ns/iter (+/- 4)
+---
+> test publish_deserialize_perf ... bench:         444 ns/iter (+/- 5)
+> test publish_serialize_perf   ... bench:         229 ns/iter (+/- 1)

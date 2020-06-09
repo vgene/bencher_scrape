@@ -1,0 +1,6 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+bench_from_string       	61	0	61	0	
+bench_from_time         	28	1	28	0	
+bench_generator_generate	75	2	72	0	
+bench_new               	94	1	92	1	
+bench_to_string         	84	0	84	0	

@@ -1,0 +1,6 @@
+16,17c16,17
+< test spake2_start            ... bench:     295,174 ns/iter (+/- 988)
+< test spake2_start_and_finish ... bench:     590,852 ns/iter (+/- 1,132)
+---
+> test spake2_start            ... bench:     301,495 ns/iter (+/- 804)
+> test spake2_start_and_finish ... bench:     589,330 ns/iter (+/- 1,692)

@@ -1,0 +1,4 @@
+9c9
+< test simple ... bench:       2,462 ns/iter (+/- 18)
+---
+> test simple ... bench:       2,504 ns/iter (+/- 53)

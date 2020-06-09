@@ -1,0 +1,6 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+benchmark_from_decimal    	377	0	376	1	
+benchmark_from_permutation	126	0	128	1	
+benchmark_max_value       	24	2	24	0	
+benchmark_to_decimal      	67	0	73	1	
+benchmark_to_permutation  	309	7	313	8	

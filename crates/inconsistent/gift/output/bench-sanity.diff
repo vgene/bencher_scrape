@@ -1,0 +1,4 @@
+17c17
+< test decode_logo_frames ... bench:     896,157 ns/iter (+/- 1,189)
+---
+> test decode_logo_frames ... bench:     889,286 ns/iter (+/- 1,094)

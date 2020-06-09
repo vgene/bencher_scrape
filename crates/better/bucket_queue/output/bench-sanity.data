@@ -1,0 +1,11 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+benchmark_100_000_items_into_32_buckets            	2175093	43059	1983239	24689	
+benchmark_100_000_items_into_32x32_nested_buckets  	5450743	60444	4767862	91131	
+benchmark_100_items_into_4_buckets                 	2176	194	1919	17	
+benchmark_100_items_into_4x4_nested_buckets        	5450	232	4735	186	
+benchmark_10_000_items_into_16_buckets             	205874	2414	186377	401	
+benchmark_10_000_items_into_16x16_nested_buckets   	507033	7615	439705	9435	
+benchmark_1_000_000_items_into_64_buckets          	35915524	6238397	28105144	3812075	
+benchmark_1_000_000_items_into_64x64_nested_buckets	68545807	4749824	60026111	10992169	
+benchmark_1_000_items_into_8_buckets               	20528	1254	18428	207	
+benchmark_1_000_items_into_8x8_nested_buckets      	50595	1258	43776	1331	

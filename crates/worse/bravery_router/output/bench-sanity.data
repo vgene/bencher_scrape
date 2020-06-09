@@ -1,0 +1,10 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+recognizer     	2382	38	2415	28	
+router         	486	57	503	56	
+router_plus_vec	495	45	486	69	
+recognizer     	601	15	683	97	
+router         	125	1	126	0	
+router_plus_vec	129	2	133	0	
+recognizer     	2359	73	2153	23	
+router         	631	2	613	10	
+router_plus_vec	660	1	608	1	

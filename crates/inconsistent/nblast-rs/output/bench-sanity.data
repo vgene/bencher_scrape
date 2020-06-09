@@ -1,0 +1,10 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+bench_all_to_all                        	326832540	364524	317601123	658470	
+bench_arena_construction                	1368197	14284	1392590	29809	
+bench_arena_query                       	1210795	10132	1210562	15145	
+bench_arena_query_geom                  	2219718	18849	2203047	11138	
+bench_arena_query_norm                  	1214396	15280	1211816	15148	
+bench_arena_query_norm_geom             	2219774	17334	2203762	12600	
+bench_query                             	1215263	15356	1212625	16134	
+bench_rstarpt_construction              	2168026	6418	2186063	9076	
+bench_rstarpt_construction_with_tangents	255557	4374	253290	2328	

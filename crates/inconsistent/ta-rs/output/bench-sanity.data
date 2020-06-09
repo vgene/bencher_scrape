@@ -1,0 +1,16 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+BollingerBands                    	212647	138	202221	144	
+EfficiencyRatio                   	145171	107152	147112	2383	
+ExponentialMovingAverage          	31275	34	31285	340	
+FastStochastic                    	206568	1969	189560	3109	
+Maximum                           	100660	1798	97576	1537	
+Minimum                           	101042	1775	97729	1130	
+MoneyFlowIndex                    	178716	4031	177638	3619	
+MovingAverageConvergenceDivergence	40465	363	41521	77	
+OnBalanceVolume                   	56384	1197	57387	1402	
+RateOfChange                      	48343	135	50883	411	
+RelativeStrengthIndex             	61438	1225	62026	1269	
+SimpleMovingAverage               	118030	390	116981	92	
+SlowStochastic                    	234316	2375	230162	4294	
+StandardDeviation                 	200411	75	200357	72	
+TrueRange                         	85497	713	81405	63	

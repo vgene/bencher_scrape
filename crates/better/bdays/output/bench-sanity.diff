@@ -1,0 +1,8 @@
+30,32c30,32
+< test bench_brsettlement        ... bench:   1,680,313 ns/iter (+/- 34,530)
+< test bench_brsettlement_cached ... bench:          41 ns/iter (+/- 0)
+< test bench_weekendsonly        ... bench:          81 ns/iter (+/- 1)
+---
+> test bench_brsettlement        ... bench:   1,693,145 ns/iter (+/- 4,921)
+> test bench_brsettlement_cached ... bench:          42 ns/iter (+/- 0)
+> test bench_weekendsonly        ... bench:          80 ns/iter (+/- 0)

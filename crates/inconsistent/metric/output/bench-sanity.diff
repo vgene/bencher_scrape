@@ -1,0 +1,10 @@
+8,11c8,11
+< test nbody_dimensioned_bench ... bench:   6,053,583 ns/iter (+/- 19,199)
+< test nbody_metric_bench      ... bench:   6,099,130 ns/iter (+/- 21,592)
+< test nbody_raw_bench         ... bench:   6,099,410 ns/iter (+/- 13,853)
+< test nbody_uom_bench         ... bench:   6,099,222 ns/iter (+/- 19,065)
+---
+> test nbody_dimensioned_bench ... bench:   6,053,277 ns/iter (+/- 6,904)
+> test nbody_metric_bench      ... bench:   6,053,666 ns/iter (+/- 11,618)
+> test nbody_raw_bench         ... bench:   6,053,515 ns/iter (+/- 18,817)
+> test nbody_uom_bench         ... bench:   6,053,299 ns/iter (+/- 23,747)

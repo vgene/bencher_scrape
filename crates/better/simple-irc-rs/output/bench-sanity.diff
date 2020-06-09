@@ -1,0 +1,6 @@
+8,9c8,9
+< test parse_complex ... bench:       1,386 ns/iter (+/- 39)
+< test parse_simple  ... bench:         230 ns/iter (+/- 0)
+---
+> test parse_complex ... bench:       1,501 ns/iter (+/- 43)
+> test parse_simple  ... bench:         235 ns/iter (+/- 1)

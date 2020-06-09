@@ -1,0 +1,14 @@
+13,18c13,18
+< test decode_base16 ... bench:       3,929 ns/iter (+/- 49)
+< test decode_base2  ... bench:      13,381 ns/iter (+/- 118)
+< test decode_base58 ... bench:       3,098 ns/iter (+/- 90)
+< test encode_base16 ... bench:       8,945 ns/iter (+/- 47)
+< test encode_base2  ... bench:      18,482 ns/iter (+/- 234)
+< test encode_base58 ... bench:       7,262 ns/iter (+/- 120)
+---
+> test decode_base16 ... bench:       3,906 ns/iter (+/- 45)
+> test decode_base2  ... bench:      13,339 ns/iter (+/- 146)
+> test decode_base58 ... bench:       3,071 ns/iter (+/- 89)
+> test encode_base16 ... bench:       8,862 ns/iter (+/- 85)
+> test encode_base2  ... bench:      18,306 ns/iter (+/- 106)
+> test encode_base58 ... bench:       7,168 ns/iter (+/- 79)

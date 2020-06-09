@@ -1,0 +1,25 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+long_bmb             	46350	467	47336	715	
+long_naive           	177971	1089	166912	245	
+long_regex           	1056386	5170	1033966	3710	
+not_exist_long_bmb   	53912	257	54549	205	
+not_exist_long_naive 	213317	1864	139318	80	
+not_exist_long_regex 	553357	15330	530430	3206	
+not_exist_short_bmb  	586429	13625	583781	3026	
+not_exist_short_naive	220577	4449	219999	430	
+not_exist_short_regex	67900	323	67613	161	
+short_bmb            	1042389	8855	1021856	1617	
+short_naive          	1161684	8798	1165321	3672	
+short_regex          	670335	9509	699867	4286	
+long_bmb             	46972	180	47914	385	
+long_naive           	179547	484	168839	879	
+long_regex           	1052896	2793	1032657	1695	
+not_exist_long_bmb   	54269	515	56713	768	
+not_exist_long_naive 	214290	482	140290	1164	
+not_exist_long_regex 	551516	16881	547708	15129	
+not_exist_short_bmb  	577813	13695	658719	13251	
+not_exist_short_naive	219668	2419	222638	2388	
+not_exist_short_regex	67849	256	67437	1081	
+short_bmb            	1039162	3267	1050353	1818	
+short_naive          	1188207	2745	1180313	3070	
+short_regex          	673427	15209	705420	14660	

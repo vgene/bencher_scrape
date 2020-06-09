@@ -1,0 +1,11 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+aos_big_do_work_1000   	2533	79	2469	24	
+aos_big_do_work_10000  	34391	99	34383	42	
+aos_big_push           	113	1	122	1	
+aos_small_do_work_10000	15623	17	15499	39	
+aos_small_push         	5	0	5	1	
+soa_big_do_work_1000   	1770	36	1755	40	
+soa_big_do_work_10000  	24207	13	23989	110	
+soa_big_push           	133	1	143	2	
+soa_small_do_work_10000	12500	11	12501	30	
+soa_small_push         	11	0	11	0	

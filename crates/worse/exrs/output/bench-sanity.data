@@ -1,0 +1,14 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+read_single_image            	151159570	174160	148832864	241567	
+read_single_image_from_buffer	152645040	167639	150247292	243059	
+read_single_image_non_parallel_zips       	411988190	574266	392495392	312492	
+read_single_image_rle                     	51339071	4775821	51204245	4278418	
+read_single_image_uncompressed            	32927998	120733	33307688	172176	
+read_single_image_uncompressed_from_buffer	28918826	134160	30634823	108385	
+read_single_image_zips                    	420586329	2402233	401111944	2621328	
+read_full  	29769287	563768	29612236	229860	
+read_rgba  	138396908	215215	136816983	167606	
+read_simple	30341455	155703	29738656	119309	
+write_single_image             	248134098	1061427	213663268	1888383	
+write_single_image_parallel    	55644303	2984115	51102971	2627060	
+write_single_image_uncompressed	27262028	238591	26295430	172167	

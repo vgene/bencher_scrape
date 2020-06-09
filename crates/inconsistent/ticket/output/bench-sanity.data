@@ -1,0 +1,4 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+decode_bench	47	0	40	0	
+encode_bench	78	0	78	0	
+gen_bench   	244	1	244	1	

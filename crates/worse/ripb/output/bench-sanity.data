@@ -1,0 +1,21 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+create_1000_subscribers               	261388	272832	244494	581704	
+create_100_subscribers                	25047	28968	24824	22252	
+create_10_subscribers                 	2906	4637	2737	3005	
+create_bus                            	1428169	1103760	1342414	1435723	
+register_callback_on_single_subscriber	125	44	131	51	
+send_1000_messages_to_100_subscribers 	155818430	180396825	153772809	128461160	
+send_1000_messages_to_10_subscribers  	26186613	81855539	25474382	29939109	
+send_1000_messages_to_1_subscriber    	33820135	11096736	33565717	8811728	
+send_100_messages_to_1000_subscribers 	389515084	102406514	386993209	60381494	
+send_100_messages_to_100_subscribers  	23083353	22311689	23581106	22827071	
+send_100_messages_to_10_subscribers   	10655150	12133056	10219424	11764554	
+send_100_messages_to_1_subscriber     	4590995	6107662	4780584	4386457	
+send_10_messages_to_1000_subscribers  	41093395	26651966	41082160	27132649	
+send_10_messages_to_100_subscribers   	7273574	12127884	8045376	11652023	
+send_10_messages_to_10_subscribers    	3279717	7341928	4172024	7694412	
+send_10_messages_to_1_subscriber      	766410	761272	740874	1052484	
+send_1_message_to_1000_subscribers    	9161514	8484702	8400323	7053742	
+send_1_message_to_100_subscribers     	2490998	4828781	2613731	6311225	
+send_1_message_to_10_subscribers      	862557	3867519	836418	1602236	
+send_1_message_to_1_subscriber        	47016	63860	56161	79873	

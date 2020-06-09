@@ -1,0 +1,12 @@
+14,18c14,18
+< test cons_list_with_box     ... bench:     495,652 ns/iter (+/- 17,524)
+< test cons_list_with_obstack ... bench:      94,750 ns/iter (+/- 277)
+< test cons_list_with_rc      ... bench:     507,304 ns/iter (+/- 14,510)
+< test str_cons_list_box      ... bench:   1,508,950 ns/iter (+/- 20,613)
+< test str_cons_list_stack    ... bench:   1,483,794 ns/iter (+/- 9,981)
+---
+> test cons_list_with_box     ... bench:     502,179 ns/iter (+/- 16,034)
+> test cons_list_with_obstack ... bench:      94,468 ns/iter (+/- 1,059)
+> test cons_list_with_rc      ... bench:     508,568 ns/iter (+/- 15,495)
+> test str_cons_list_box      ... bench:   1,464,118 ns/iter (+/- 7,589)
+> test str_cons_list_stack    ... bench:   1,471,514 ns/iter (+/- 8,152)

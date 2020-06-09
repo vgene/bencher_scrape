@@ -1,0 +1,4 @@
+8c8
+< test decode_bench ... bench:          47 ns/iter (+/- 0)
+---
+> test decode_bench ... bench:          40 ns/iter (+/- 0)

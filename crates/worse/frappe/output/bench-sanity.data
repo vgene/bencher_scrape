@@ -1,0 +1,11 @@
+#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
+first_order_100   	262047	613	270863	547	
+first_order_10k   	26102411	377049	27154940	104717	
+first_order_1k    	2585367	4358	2707662	18859	
+first_order_1k_ref	1827658	739353	1177296	3126	
+second_order_100	112847	454	114225	142	
+second_order_10k	11288620	36975	11421367	359145	
+second_order_1k 	1129525	7865	1142303	4924	
+sample         	25	0	25	0	
+send           	319	5	319	0	
+send_and_sample	344	6	344	1	
