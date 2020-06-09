@@ -154,15 +154,18 @@ SUFFIX="$name"
 UNMOD_NAME="unmod-$SUFFIX"
 MOD_NAME="mod-$SUFFIX"
 
-UNMOD_RES="$UNMOD_NAME.bench"
-MOD_RES="$MOD_NAME.bench"
-UNMOD_TESTS="$UNMOD_NAME.tests"
-MOD_TESTS="$MOD_NAME.tests"
+OUTPUT="output"
+
+
+UNMOD_RES="$OUTPUT/$UNMOD_NAME.bench"
+MOD_RES="$OUTPUT/$MOD_NAME.bench"
+UNMOD_TESTS="$OUTPUT/$UNMOD_NAME.tests"
+MOD_TESTS="$OUTPUT/$MOD_NAME.tests"
 
 TARGET="target"
 
-UNMOD_TARGET_DIR="$TARGET-$UNMOD_NAME"
-MOD_TARGET_DIR="$TARGET-$MOD_NAME"
+UNMOD_TARGET_DIR="$OUTPUT/$TARGET-$UNMOD_NAME"
+MOD_TARGET_DIR="$OUTPUT/$TARGET-$MOD_NAME"
 
 # Step 1: Download reverse dependencies of `bencher` crate
 
@@ -178,7 +181,7 @@ then
 #    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
-        cd "$d" && cargo clean && cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
+        cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
     done
 fi
 
@@ -192,7 +195,7 @@ then
         # Can save building the unmodified version twice if step 2 was executed
         if [ "$unmod" -eq 0 ]
         then
-            cd "$d" && cargo clean && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
+            cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
         else
             cd "$d" && cp -r "$UNMOD_TARGET_DIR" "$TARGET" && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
         fi
@@ -206,7 +209,7 @@ then
 #    export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
-        cd "$d" && cargo clean && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
+        cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
     done
 fi
 
@@ -220,7 +223,7 @@ then
         # Can save building the modified version twice if step 4 was executed
         if [ "$mod" -eq 0 ]
         then
-            cd "$d" && cargo clean && cargo "+stage2" test > "$MOD_TESTS" && cd "$ROOT"
+            cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" test > "$MOD_TESTS" && cd "$ROOT"
         else
             cd "$d" && cp -r "$MOD_TARGET_DIR" "$TARGET" && cargo "+stage2" test > "$MOD_TESTS" && cd "$ROOT"
         fi
@@ -230,11 +233,11 @@ fi
 # Step 6: Conglomerate results
 
 AGGLOC="$ROOT/aggregate_bench.py"
-BENCH_NAME="bench-$SUFFIX"
-TEST_NAME="test-$SUFFIX"
-DATA_BENCH="$BENCH_NAME.data"
-DIFF_BENCH="$BENCH_NAME.diff"
-DIFF_TEST="$TEST_NAME.diff"
+BENCH_NAME="$OUTPUT/bench-$SUFFIX"
+TEST_NAME="$OUTPUT/test-$SUFFIX"
+DATA_BENCH="$OUTPUT/$BENCH_NAME.data"
+DIFF_BENCH="$OUTPUT/$BENCH_NAME.diff"
+DIFF_TEST="$OUTPUT/$TEST_NAME.diff"
 SCRIPT_NAME="gnuplot-script"
 
 if [ "$unmod" -eq 1 -a "$mod" -eq 1 ]
@@ -265,7 +268,7 @@ then
 fi
 
 # Simple test diff: check if test failures are specific to the modified rustc or not
-if [ "$tstunmod" -eq 1 -a "$tstmod" -eq 1 ]
+if [ "$tstunmod" -eq 1 -a "$tstmod" -eq 0 ]
 then
     for d in ${SUBDIRS[@]}
     do
