@@ -235,9 +235,9 @@ fi
 AGGLOC="$ROOT/aggregate_bench.py"
 BENCH_NAME="$OUTPUT/bench-$SUFFIX"
 TEST_NAME="$OUTPUT/test-$SUFFIX"
-DATA_BENCH="$OUTPUT/$BENCH_NAME.data"
-DIFF_BENCH="$OUTPUT/$BENCH_NAME.diff"
-DIFF_TEST="$OUTPUT/$TEST_NAME.diff"
+DATA_BENCH="$BENCH_NAME.data"
+DIFF_BENCH="$BENCH_NAME.diff"
+DIFF_TEST="$TEST_NAME.diff"
 SCRIPT_NAME="gnuplot-script"
 
 if [ "$unmod" -eq 1 -a "$mod" -eq 1 ]
