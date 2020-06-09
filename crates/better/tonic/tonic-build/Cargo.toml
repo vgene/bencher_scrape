@@ -14,6 +14,7 @@ readme = "README.md"
 categories = ["network-programming", "asynchronous"]
 keywords = ["rpc", "grpc", "async", "codegen", "protobuf"]
 
+[lib]
 
 [dependencies]
 prost-build = { version = "0.6", optional = true }
