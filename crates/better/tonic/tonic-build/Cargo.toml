@@ -15,6 +15,7 @@ categories = ["network-programming", "asynchronous"]
 keywords = ["rpc", "grpc", "async", "codegen", "protobuf"]
 
 [lib]
+path = "src/lib.rs"
 
 [dependencies]
 prost-build = { version = "0.6", optional = true }
