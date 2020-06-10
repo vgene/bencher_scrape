@@ -1,52 +1,44 @@
 # High-level view of crate performances
 
-On MacOS with 2.3 GHz Dual-Core Intel Core i5
+~On MacOS 10.15.2 with 2.3 GHz Dual-Core Intel Core i5~
+On Ubuntu 14.04 with Intel(R) Xeon(R) CPU E5620 @ 2.40GHz (4 cores)
 
-## Better
+
+## Better [13]
 
 - bdays
 - bucket_queue
-- coinaddress
-- fair-baccarat
 - fbleau
-- horned-owl
 - rtriangulate
-- rusqlite
 - rust-boomphf
 - simple-irc-rs
-- time-parse
-- tonic
 - zip-rs
 
-## Inconsistent
-
 - base-x-rs
-- chess_perft
-- color-thief-rs
-- crc-any
-- directories-rs
 - gift
 - metric
-- nblast-rs
-- rust-crc32fast
-- rust-obstack
 - rust-url
-- simhash-rs
-- sliding_puzzle_rs
-- soa-derive
-- sstable
-- ta-rs
 - ticket
-- ucg
+
+- KDFs
+
+## Inconsistent [37]
+
+- horned-owl
+- time-parse
+
+- chess_perft
+- crc-any
+- directories-rs
+- nblast-rs
+- rust-obstack
+- sliding_puzzle_rust
+- soa-derive
 - ulid-rs
 - whatlang-rs
 - woodpecker
 - xoroshiro
-- xoshiro
 
-## Worse
-
-- KDFs
 - PAKEs
 - RustQIP
 - arrayvec
@@ -55,7 +47,6 @@ On MacOS with 2.3 GHz Dual-Core Intel Core i5
 - boyer-moore-magiclen
 - bravery_router
 - exrs
-- flatten-overlapping-ranges-rs
 - frappe
 - implicit3d
 - ixlist
@@ -66,11 +57,36 @@ On MacOS with 2.3 GHz Dual-Core Intel Core i5
 - optional
 - outils
 - partition
-- ptags
 - ripb
 - rkm
 - ropey
 - rumq
 - rust-btoi
 - rust-buf-ref-reader
+
+## Worse [8]
+
+- coinaddress
+- fair-baccarat
+
+- color-thief-rs
+- simhash-rs
+- sstable
+- ta-rs
+- ucg
+
+- flatten-overlapping-ranges-rs
+
+## Equal [1]
+
+- xoshiro
+
+## Could not compile/bench [5]
+
+- rusqlite
+- tonic
+
+- rust-crc32fast
+
+- ptags
 - varnishslog
