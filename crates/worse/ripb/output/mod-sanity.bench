@@ -1,0 +1,42 @@
+
+running 12 tests
+test tests::can_drop_the_bus_while_it_is_still_working ... ignored
+test tests::can_register_multiple_message_handlers_for_the_same_message_on_a_single_receiver ... ignored
+test tests::can_send_a_complex_message_to_a_subscriber ... ignored
+test tests::can_send_a_simple_message_to_2_subscribers ... ignored
+test tests::can_send_a_simple_message_to_a_subscriber ... ignored
+test tests::can_send_simple_messages_to_a_subscriber_from_cloned_instance ... ignored
+test tests::can_send_simple_messages_to_a_subscriber_from_multiple_threads ... ignored
+test tests::can_unsubscribe_callbacks ... ignored
+test tests::cannot_receive_messages_in_a_dropped_subscriber ... ignored
+test tests::dropping_subscribers_drops_the_corresponding_subscription ... ignored
+test tests::no_busyloop ... ignored
+test tests::subscriber_on_a_dropped_bus_should_generate_dead_bus_error_on_subscribe ... ignored
+
+test result: ok. 0 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out
+
+
+running 20 tests
+test create_1000_subscribers                ... bench:     244,494 ns/iter (+/- 581,704)
+test create_100_subscribers                 ... bench:      24,824 ns/iter (+/- 22,252)
+test create_10_subscribers                  ... bench:       2,737 ns/iter (+/- 3,005)
+test create_bus                             ... bench:   1,342,414 ns/iter (+/- 1,435,723)
+test register_callback_on_single_subscriber ... bench:         131 ns/iter (+/- 51)
+test send_1000_messages_to_100_subscribers  ... bench: 153,772,809 ns/iter (+/- 128,461,160)
+test send_1000_messages_to_10_subscribers   ... bench:  25,474,382 ns/iter (+/- 29,939,109)
+test send_1000_messages_to_1_subscriber     ... bench:  33,565,717 ns/iter (+/- 8,811,728)
+test send_100_messages_to_1000_subscribers  ... bench: 386,993,209 ns/iter (+/- 60,381,494)
+test send_100_messages_to_100_subscribers   ... bench:  23,581,106 ns/iter (+/- 22,827,071)
+test send_100_messages_to_10_subscribers    ... bench:  10,219,424 ns/iter (+/- 11,764,554)
+test send_100_messages_to_1_subscriber      ... bench:   4,780,584 ns/iter (+/- 4,386,457)
+test send_10_messages_to_1000_subscribers   ... bench:  41,082,160 ns/iter (+/- 27,132,649)
+test send_10_messages_to_100_subscribers    ... bench:   8,045,376 ns/iter (+/- 11,652,023)
+test send_10_messages_to_10_subscribers     ... bench:   4,172,024 ns/iter (+/- 7,694,412)
+test send_10_messages_to_1_subscriber       ... bench:     740,874 ns/iter (+/- 1,052,484)
+test send_1_message_to_1000_subscribers     ... bench:   8,400,323 ns/iter (+/- 7,053,742)
+test send_1_message_to_100_subscribers      ... bench:   2,613,731 ns/iter (+/- 6,311,225)
+test send_1_message_to_10_subscribers       ... bench:     836,418 ns/iter (+/- 1,602,236)
+test send_1_message_to_1_subscriber         ... bench:      56,161 ns/iter (+/- 79,873)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 20 measured
+

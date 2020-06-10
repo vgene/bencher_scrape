@@ -1,0 +1,19 @@
+
+running 5 tests
+test lin::tests::test_file_user_dirs_exists ... ignored
+test lin::tests::test_trim_and_lowercase_then_replace_spaces ... ignored
+test tests::test_base_dirs ... ignored
+test tests::test_project_dirs ... ignored
+test tests::test_user_dirs ... ignored
+
+test result: ok. 0 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out
+
+
+running 4 tests
+test base_dirs              ... bench:       1,854 ns/iter (+/- 22)
+test project_dirs           ... bench:       2,538 ns/iter (+/- 66)
+test project_dirs_from_path ... bench:       2,077 ns/iter (+/- 37)
+test user_dirs              ... bench:       3,318 ns/iter (+/- 61)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 4 measured
+

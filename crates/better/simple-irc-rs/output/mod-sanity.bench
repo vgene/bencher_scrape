@@ -1,0 +1,12 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test parse_complex ... bench:       1,501 ns/iter (+/- 43)
+test parse_simple  ... bench:         235 ns/iter (+/- 1)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+

@@ -1,0 +1,31 @@
+
+running 12 tests
+test tests::arena ... ignored
+test tests::construct ... ignored
+test tests::score_function ... ignored
+test tests::symmetry_arithmetic ... ignored
+test tests::symmetry_geometric ... ignored
+test tests::symmetry_harmonic ... ignored
+test tests::symmetry_max ... ignored
+test tests::symmetry_min ... ignored
+test tests::test_find_bin_binary ... ignored
+test tests::test_score_fn ... ignored
+test tests::test_tangent_eig ... ignored
+test tests::unit_tangents_eig ... ignored
+
+test result: ok. 0 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out
+
+
+running 9 tests
+test bench_all_to_all                         ... bench: 326,832,540 ns/iter (+/- 364,524)
+test bench_arena_construction                 ... bench:   1,368,197 ns/iter (+/- 14,284)
+test bench_arena_query                        ... bench:   1,210,795 ns/iter (+/- 10,132)
+test bench_arena_query_geom                   ... bench:   2,219,718 ns/iter (+/- 18,849)
+test bench_arena_query_norm                   ... bench:   1,214,396 ns/iter (+/- 15,280)
+test bench_arena_query_norm_geom              ... bench:   2,219,774 ns/iter (+/- 17,334)
+test bench_query                              ... bench:   1,215,263 ns/iter (+/- 15,356)
+test bench_rstarpt_construction               ... bench:   2,168,026 ns/iter (+/- 6,418)
+test bench_rstarpt_construction_with_tangents ... bench:     255,557 ns/iter (+/- 4,374)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 9 measured
+

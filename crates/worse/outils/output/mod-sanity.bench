@@ -1,0 +1,17 @@
+
+running 12 tests
+test aaforest_big_random_append                    ... bench:   7,328,701 ns/iter (+/- 136,267)
+test aatree_big_random_insert_delete               ... bench:   7,571,886 ns/iter (+/- 35,158)
+test btreemap_big_random_insert_delete             ... bench:   3,596,985 ns/iter (+/- 6,496)
+test dynconn_big_insert_delete                     ... bench:   8,964,968 ns/iter (+/- 30,403)
+test dynconn_big_insert_delete_ext_weight          ... bench:  10,233,776 ns/iter (+/- 56,763)
+test hashmap_big_random_insert_delete              ... bench:     976,372 ns/iter (+/- 16,518)
+test waaforest_big_random_append                   ... bench:  10,500,358 ns/iter (+/- 260,703)
+test waaforest_big_random_append_bitboard_weight   ... bench:  12,174,971 ns/iter (+/- 74,193)
+test waaforest_big_random_append_combined_weight   ... bench:  12,149,078 ns/iter (+/- 84,285)
+test waaforest_big_random_append_empty_weight      ... bench:  10,236,496 ns/iter (+/- 107,266)
+test waaforest_big_random_append_usize_2_weight    ... bench:  10,248,912 ns/iter (+/- 106,497)
+test waaforest_big_random_append_usize_bool_weight ... bench:  11,471,134 ns/iter (+/- 80,864)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 12 measured
+

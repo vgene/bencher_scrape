@@ -1,0 +1,49 @@
+
+running 11 tests
+test compression::optimize_bytes::test::roundtrip_derive ... ignored
+test compression::optimize_bytes::test::roundtrip_interleave ... ignored
+test compression::rle::test::test ... ignored
+test io::test::peek ... ignored
+test meta::attributes::test::attribute_write_read_roundtrip_and_byte_size ... ignored
+test meta::attributes::test::rounding_down ... ignored
+test meta::attributes::test::rounding_up ... ignored
+test meta::attributes::test::text_ord ... ignored
+test meta::attributes::test::tile_description_write_read_roundtrip ... ignored
+test meta::test::round_trip ... ignored
+test meta::test::round_trip_requirements ... ignored
+
+test result: ok. 0 passed; 0 failed; 11 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test read_single_image             ... bench: 148,832,864 ns/iter (+/- 241,567)
+test read_single_image_from_buffer ... bench: 150,247,292 ns/iter (+/- 243,059)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+
+
+running 5 tests
+test read_single_image_non_parallel_zips        ... bench: 392,495,392 ns/iter (+/- 312,492)
+test read_single_image_rle                      ... bench:  51,204,245 ns/iter (+/- 4,278,418)
+test read_single_image_uncompressed             ... bench:  33,307,688 ns/iter (+/- 172,176)
+test read_single_image_uncompressed_from_buffer ... bench:  30,634,823 ns/iter (+/- 108,385)
+test read_single_image_zips                     ... bench: 401,111,944 ns/iter (+/- 2,621,328)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 5 measured
+
+
+running 3 tests
+test read_full   ... bench:  29,612,236 ns/iter (+/- 229,860)
+test read_rgba   ... bench: 136,816,983 ns/iter (+/- 167,606)
+test read_simple ... bench:  29,738,656 ns/iter (+/- 119,309)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+
+
+running 3 tests
+test write_single_image              ... bench: 213,663,268 ns/iter (+/- 1,888,383)
+test write_single_image_parallel     ... bench:  51,102,971 ns/iter (+/- 2,627,060)
+test write_single_image_uncompressed ... bench:  26,295,430 ns/iter (+/- 172,167)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+

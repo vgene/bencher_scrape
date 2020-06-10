@@ -1,0 +1,49 @@
+
+running 37 tests
+test detect::tests::test_detect_lang_ukrainian ... ignored
+test detect::tests::test_detect_spanish ... ignored
+test detect::tests::test_detect_with_options_with_blacklist ... ignored
+test detect::tests::test_detect_with_options_with_blacklist_mandarin_japanese ... ignored
+test detect::tests::test_detect_with_options_with_blacklist_none ... ignored
+test detect::tests::test_detect_with_options_with_whitelist ... ignored
+test detect::tests::test_detect_with_options_with_whitelist_mandarin_japanese ... ignored
+test detect::tests::test_detect_with_random_text ... ignored
+test detector::tests::test_detect ... ignored
+test detector::tests::test_detect_lang ... ignored
+test detector::tests::test_detect_script ... ignored
+test lang::tests::test_code ... ignored
+test lang::tests::test_eng_name ... ignored
+test lang::tests::test_from_code ... ignored
+test lang::tests::test_name ... ignored
+test script::tests::test_detect_script ... ignored
+test script::tests::test_is_bengali ... ignored
+test script::tests::test_is_cyrillic ... ignored
+test script::tests::test_is_ethiopic ... ignored
+test script::tests::test_is_georgian ... ignored
+test script::tests::test_is_greek ... ignored
+test script::tests::test_is_gujarati ... ignored
+test script::tests::test_is_gurmukhi ... ignored
+test script::tests::test_is_hangul ... ignored
+test script::tests::test_is_hiragana ... ignored
+test script::tests::test_is_kannada ... ignored
+test script::tests::test_is_katakana ... ignored
+test script::tests::test_is_latin ... ignored
+test script::tests::test_is_oriya ... ignored
+test script::tests::test_is_tamil ... ignored
+test script::tests::test_is_telugu ... ignored
+test script::tests::test_is_thai ... ignored
+test script::tests::test_script_name ... ignored
+test trigrams::tests::test_count ... ignored
+test trigrams::tests::test_get_trigrams_with_positions ... ignored
+test trigrams::tests::test_to_trigram_char ... ignored
+test utils::tests::test_is_top_char ... ignored
+
+test result: ok. 0 passed; 0 failed; 37 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test bench_detect        ... bench:  32,637,262 ns/iter (+/- 303,063)
+test bench_detect_script ... bench:     468,462 ns/iter (+/- 796)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+

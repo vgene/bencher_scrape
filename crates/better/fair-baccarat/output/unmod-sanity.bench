@@ -1,0 +1,21 @@
+
+running 5 tests
+test card::test::index_into_deck ... ignored
+test rng::test::provably_fair_rng ... ignored
+test rng::test::provably_fair_rng_float ... ignored
+test test::simulate_five_cards_drawn ... ignored
+test test::simulate_four_cards_drawn ... ignored
+
+test result: ok. 0 passed; 0 failed; 5 ignored; 0 measured; 0 filtered out
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 1 test
+test bench_simulate_games ... bench:       5,531 ns/iter (+/- 16)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 1 measured
+

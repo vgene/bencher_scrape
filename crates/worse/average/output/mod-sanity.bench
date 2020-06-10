@@ -1,0 +1,27 @@
+
+running 1 test
+test quantile::reference ... ignored
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test bench_kurtosis ... bench:  18,153,666 ns/iter (+/- 40,351)
+test bench_moments  ... bench:  61,518,865 ns/iter (+/- 167,540)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+
+
+running 2 tests
+test bench_average ... bench:  11,675,809 ns/iter (+/- 36,659)
+test bench_stats   ... bench:  18,764,140 ns/iter (+/- 49,799)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+
+
+running 2 tests
+test bench_average ... bench:   3,763,870 ns/iter (+/- 26,131)
+test bench_iter    ... bench:   3,392,053 ns/iter (+/- 11,656)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+

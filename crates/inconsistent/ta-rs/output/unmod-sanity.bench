@@ -1,0 +1,124 @@
+
+running 99 tests
+test data_item::tests::test_builder ... ignored
+test helpers::tests::test_max3 ... ignored
+test indicators::average_true_range::tests::test_default ... ignored
+test indicators::average_true_range::tests::test_display ... ignored
+test indicators::average_true_range::tests::test_indicator ... ignored
+test indicators::average_true_range::tests::test_new ... ignored
+test indicators::average_true_range::tests::test_next ... ignored
+test indicators::average_true_range::tests::test_reset ... ignored
+test indicators::bollinger_bands::tests::test_default ... ignored
+test indicators::bollinger_bands::tests::test_display ... ignored
+test indicators::bollinger_bands::tests::test_indicator ... ignored
+test indicators::bollinger_bands::tests::test_new ... ignored
+test indicators::bollinger_bands::tests::test_next ... ignored
+test indicators::bollinger_bands::tests::test_reset ... ignored
+test indicators::efficiency_ratio::tests::test_display ... ignored
+test indicators::efficiency_ratio::tests::test_indicator ... ignored
+test indicators::efficiency_ratio::tests::test_new ... ignored
+test indicators::efficiency_ratio::tests::test_next_f64 ... ignored
+test indicators::exponential_moving_average::tests::test_default ... ignored
+test indicators::exponential_moving_average::tests::test_display ... ignored
+test indicators::exponential_moving_average::tests::test_indicator ... ignored
+test indicators::exponential_moving_average::tests::test_new ... ignored
+test indicators::exponential_moving_average::tests::test_next ... ignored
+test indicators::exponential_moving_average::tests::test_reset ... ignored
+test indicators::fast_stochastic::tests::test_default ... ignored
+test indicators::fast_stochastic::tests::test_display ... ignored
+test indicators::fast_stochastic::tests::test_indicator ... ignored
+test indicators::fast_stochastic::tests::test_new ... ignored
+test indicators::fast_stochastic::tests::test_next_with_bars ... ignored
+test indicators::fast_stochastic::tests::test_next_with_f64 ... ignored
+test indicators::fast_stochastic::tests::test_reset ... ignored
+test indicators::maximum::tests::test_default ... ignored
+test indicators::maximum::tests::test_display ... ignored
+test indicators::maximum::tests::test_indicator ... ignored
+test indicators::maximum::tests::test_new ... ignored
+test indicators::maximum::tests::test_next ... ignored
+test indicators::maximum::tests::test_next_with_bars ... ignored
+test indicators::maximum::tests::test_reset ... ignored
+test indicators::minimum::tests::test_default ... ignored
+test indicators::minimum::tests::test_display ... ignored
+test indicators::minimum::tests::test_indicator ... ignored
+test indicators::minimum::tests::test_new ... ignored
+test indicators::minimum::tests::test_next ... ignored
+test indicators::minimum::tests::test_next_with_bars ... ignored
+test indicators::minimum::tests::test_reset ... ignored
+test indicators::money_flow_index::tests::test_default ... ignored
+test indicators::money_flow_index::tests::test_display ... ignored
+test indicators::money_flow_index::tests::test_new ... ignored
+test indicators::money_flow_index::tests::test_next_bar ... ignored
+test indicators::money_flow_index::tests::test_reset ... ignored
+test indicators::moving_average_convergence_divergence::tests::test_default ... ignored
+test indicators::moving_average_convergence_divergence::tests::test_display ... ignored
+test indicators::moving_average_convergence_divergence::tests::test_indicator ... ignored
+test indicators::moving_average_convergence_divergence::tests::test_macd ... ignored
+test indicators::moving_average_convergence_divergence::tests::test_new ... ignored
+test indicators::moving_average_convergence_divergence::tests::test_reset ... ignored
+test indicators::on_balance_volume::tests::test_default ... ignored
+test indicators::on_balance_volume::tests::test_display ... ignored
+test indicators::on_balance_volume::tests::test_next_bar ... ignored
+test indicators::on_balance_volume::tests::test_reset ... ignored
+test indicators::rate_of_change::tests::test_indicator ... ignored
+test indicators::rate_of_change::tests::test_new ... ignored
+test indicators::rate_of_change::tests::test_next_bar ... ignored
+test indicators::rate_of_change::tests::test_next_f64 ... ignored
+test indicators::rate_of_change::tests::test_reset ... ignored
+test indicators::relative_strength_index::tests::test_default ... ignored
+test indicators::relative_strength_index::tests::test_display ... ignored
+test indicators::relative_strength_index::tests::test_indicator ... ignored
+test indicators::relative_strength_index::tests::test_new ... ignored
+test indicators::relative_strength_index::tests::test_next ... ignored
+test indicators::relative_strength_index::tests::test_reset ... ignored
+test indicators::simple_moving_average::tests::test_default ... ignored
+test indicators::simple_moving_average::tests::test_display ... ignored
+test indicators::simple_moving_average::tests::test_indicator ... ignored
+test indicators::simple_moving_average::tests::test_new ... ignored
+test indicators::simple_moving_average::tests::test_next ... ignored
+test indicators::simple_moving_average::tests::test_next_with_bars ... ignored
+test indicators::simple_moving_average::tests::test_reset ... ignored
+test indicators::slow_stochastic::tests::test_default ... ignored
+test indicators::slow_stochastic::tests::test_display ... ignored
+test indicators::slow_stochastic::tests::test_indicator ... ignored
+test indicators::slow_stochastic::tests::test_new ... ignored
+test indicators::slow_stochastic::tests::test_next_with_bars ... ignored
+test indicators::slow_stochastic::tests::test_next_with_f64 ... ignored
+test indicators::slow_stochastic::tests::test_reset ... ignored
+test indicators::standard_deviation::tests::test_default ... ignored
+test indicators::standard_deviation::tests::test_display ... ignored
+test indicators::standard_deviation::tests::test_indicator ... ignored
+test indicators::standard_deviation::tests::test_new ... ignored
+test indicators::standard_deviation::tests::test_next ... ignored
+test indicators::standard_deviation::tests::test_next_same_values ... ignored
+test indicators::standard_deviation::tests::test_next_with_bars ... ignored
+test indicators::standard_deviation::tests::test_reset ... ignored
+test indicators::true_range::tests::test_default ... ignored
+test indicators::true_range::tests::test_display ... ignored
+test indicators::true_range::tests::test_indicator ... ignored
+test indicators::true_range::tests::test_next_bar ... ignored
+test indicators::true_range::tests::test_next_f64 ... ignored
+test indicators::true_range::tests::test_reset ... ignored
+
+test result: ok. 0 passed; 0 failed; 99 ignored; 0 measured; 0 filtered out
+
+
+running 15 tests
+test BollingerBands                     ... bench:     212,647 ns/iter (+/- 138)
+test EfficiencyRatio                    ... bench:     145,171 ns/iter (+/- 107,152)
+test ExponentialMovingAverage           ... bench:      31,275 ns/iter (+/- 34)
+test FastStochastic                     ... bench:     206,568 ns/iter (+/- 1,969)
+test Maximum                            ... bench:     100,660 ns/iter (+/- 1,798)
+test Minimum                            ... bench:     101,042 ns/iter (+/- 1,775)
+test MoneyFlowIndex                     ... bench:     178,716 ns/iter (+/- 4,031)
+test MovingAverageConvergenceDivergence ... bench:      40,465 ns/iter (+/- 363)
+test OnBalanceVolume                    ... bench:      56,384 ns/iter (+/- 1,197)
+test RateOfChange                       ... bench:      48,343 ns/iter (+/- 135)
+test RelativeStrengthIndex              ... bench:      61,438 ns/iter (+/- 1,225)
+test SimpleMovingAverage                ... bench:     118,030 ns/iter (+/- 390)
+test SlowStochastic                     ... bench:     234,316 ns/iter (+/- 2,375)
+test StandardDeviation                  ... bench:     200,411 ns/iter (+/- 75)
+test TrueRange                          ... bench:      85,497 ns/iter (+/- 713)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 15 measured
+

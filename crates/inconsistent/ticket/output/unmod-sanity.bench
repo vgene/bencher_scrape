@@ -1,0 +1,13 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 3 tests
+test decode_bench ... bench:          47 ns/iter (+/- 0)
+test encode_bench ... bench:          78 ns/iter (+/- 0)
+test gen_bench    ... bench:         244 ns/iter (+/- 1)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+

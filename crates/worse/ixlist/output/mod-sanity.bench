@@ -1,0 +1,17 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 7 tests
+test iterate_dlist       ... bench:       1,923 ns/iter (+/- 100)
+test iterate_list        ... bench:       2,511 ns/iter (+/- 2)
+test iterate_ringbuf     ... bench:       1,254 ns/iter (+/- 2)
+test push_front_dlist    ... bench:      40,156 ns/iter (+/- 215)
+test push_front_list     ... bench:       5,534 ns/iter (+/- 38)
+test push_front_list_cap ... bench:       4,947 ns/iter (+/- 51)
+test push_front_ringbuf  ... bench:       4,935 ns/iter (+/- 34)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 7 measured
+

@@ -1,0 +1,16 @@
+
+running 4 tests
+test duration::duration_hand::tests::duration ... ignored
+test duration::duration_hand::tests::parts ... ignored
+test duration::duration_nom::tests::duration ... ignored
+test duration::tests::test_nanos ... ignored
+
+test result: ok. 0 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test hand ... bench:         163 ns/iter (+/- 1)
+test nom  ... bench:         201 ns/iter (+/- 0)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+

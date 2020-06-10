@@ -1,0 +1,35 @@
+
+running 22 tests
+test calendars::us::test_end_of_month ... ignored
+test calendars::us::test_find_weekday ... ignored
+test tests::test_advance_bdays ... ignored
+test tests::test_arith ... ignored
+test tests::test_bdays ... ignored
+test tests::test_br_settlement_cached ... ignored
+test tests::test_br_settlement_no_cache ... ignored
+test tests::test_brazil_exchange ... ignored
+test tests::test_days_from_ce ... ignored
+test tests::test_easter ... ignored
+test tests::test_holiday_calendar_cache ... ignored
+test tests::test_holiday_calendar_cache_bdays_panic_1 ... ignored
+test tests::test_holiday_calendar_cache_bdays_panic_2 ... ignored
+test tests::test_holiday_calendar_cache_is_bday_panic ... ignored
+test tests::test_next_date ... ignored
+test tests::test_to_bday ... ignored
+test tests::test_us_settlement_cached ... ignored
+test tests::test_us_settlement_no_cache ... ignored
+test tests::test_weekday ... ignored
+test tests::test_weekend ... ignored
+test tests::test_weekend_calendar_cached ... ignored
+test tests::test_weekend_calendar_no_cache ... ignored
+
+test result: ok. 0 passed; 0 failed; 22 ignored; 0 measured; 0 filtered out
+
+
+running 3 tests
+test bench_brsettlement        ... bench:   1,680,313 ns/iter (+/- 34,530)
+test bench_brsettlement_cached ... bench:          41 ns/iter (+/- 0)
+test bench_weekendsonly        ... bench:          81 ns/iter (+/- 1)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+

@@ -1,0 +1,23 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 13 tests
+test parse_bareword             ... bench:      67,159 ns/iter (+/- 848)
+test parse_complex_nested_list  ... bench:   4,068,944 ns/iter (+/- 51,722)
+test parse_complex_tuple        ... bench:     242,013 ns/iter (+/- 1,741)
+test parse_complex_tuple_list   ... bench:   2,414,140 ns/iter (+/- 9,489)
+test parse_int                  ... bench:      57,688 ns/iter (+/- 390)
+test parse_post_partial_float   ... bench:      58,844 ns/iter (+/- 284)
+test parse_pre_partial_float    ... bench:      58,760 ns/iter (+/- 356)
+test parse_selector_symbol_head ... bench:      91,923 ns/iter (+/- 496)
+test parse_selector_tuple_head  ... bench:     190,228 ns/iter (+/- 510)
+test parse_simple_list          ... bench:     541,558 ns/iter (+/- 2,428)
+test parse_simple_tuple         ... bench:     497,327 ns/iter (+/- 3,124)
+test parse_string               ... bench:      51,104 ns/iter (+/- 850)
+test parse_whole_float          ... bench:      53,578 ns/iter (+/- 306)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 13 measured
+

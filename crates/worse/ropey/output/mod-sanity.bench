@@ -1,0 +1,436 @@
+
+running 329 tests
+test crlf::tests::crlf_segmenter_01 ... ignored
+test crlf::tests::crlf_segmenter_02 ... ignored
+test crlf::tests::is_break_01 ... ignored
+test crlf::tests::nearest_internal_break_01 ... ignored
+test crlf::tests::nearest_internal_break_02 ... ignored
+test crlf::tests::nearest_internal_break_03 ... ignored
+test crlf::tests::nearest_internal_break_04 ... ignored
+test crlf::tests::seam_is_break_01 ... ignored
+test crlf::tests::seam_is_break_02 ... ignored
+test iter::tests::bytes_01 ... ignored
+test iter::tests::bytes_02 ... ignored
+test iter::tests::bytes_03 ... ignored
+test iter::tests::bytes_04 ... ignored
+test iter::tests::bytes_05 ... ignored
+test iter::tests::bytes_06 ... ignored
+test iter::tests::bytes_07 ... ignored
+test iter::tests::bytes_at_01 ... ignored
+test iter::tests::bytes_at_02 ... ignored
+test iter::tests::bytes_at_03 ... ignored
+test iter::tests::bytes_at_sliced_01 ... ignored
+test iter::tests::bytes_at_sliced_02 ... ignored
+test iter::tests::bytes_at_sliced_03 ... ignored
+test iter::tests::bytes_exact_size_iter_01 ... ignored
+test iter::tests::bytes_exact_size_iter_02 ... ignored
+test iter::tests::bytes_exact_size_iter_03 ... ignored
+test iter::tests::bytes_sliced_01 ... ignored
+test iter::tests::chars_01 ... ignored
+test iter::tests::chars_02 ... ignored
+test iter::tests::chars_03 ... ignored
+test iter::tests::chars_04 ... ignored
+test iter::tests::chars_05 ... ignored
+test iter::tests::chars_06 ... ignored
+test iter::tests::chars_07 ... ignored
+test iter::tests::chars_at_01 ... ignored
+test iter::tests::chars_at_02 ... ignored
+test iter::tests::chars_at_03 ... ignored
+test iter::tests::chars_at_sliced_01 ... ignored
+test iter::tests::chars_at_sliced_02 ... ignored
+test iter::tests::chars_at_sliced_03 ... ignored
+test iter::tests::chars_exact_size_iter_01 ... ignored
+test iter::tests::chars_exact_size_iter_02 ... ignored
+test iter::tests::chars_exact_size_iter_03 ... ignored
+test iter::tests::chars_sliced_01 ... ignored
+test iter::tests::chunks_01 ... ignored
+test iter::tests::chunks_02 ... ignored
+test iter::tests::chunks_03 ... ignored
+test iter::tests::chunks_04 ... ignored
+test iter::tests::chunks_at_byte_01 ... ignored
+test iter::tests::chunks_at_byte_02 ... ignored
+test iter::tests::chunks_at_byte_03 ... ignored
+test iter::tests::chunks_at_byte_04 ... ignored
+test iter::tests::chunks_at_char_01 ... ignored
+test iter::tests::chunks_at_char_02 ... ignored
+test iter::tests::chunks_at_char_03 ... ignored
+test iter::tests::chunks_at_char_04 ... ignored
+test iter::tests::chunks_at_line_break_01 ... ignored
+test iter::tests::chunks_at_line_break_02 ... ignored
+test iter::tests::chunks_at_line_break_03 ... ignored
+test iter::tests::chunks_at_line_break_04 ... ignored
+test iter::tests::chunks_sliced_01 ... ignored
+test iter::tests::lines_01 ... ignored
+test iter::tests::lines_02 ... ignored
+test iter::tests::lines_03 ... ignored
+test iter::tests::lines_04 ... ignored
+test iter::tests::lines_05 ... ignored
+test iter::tests::lines_06 ... ignored
+test iter::tests::lines_07 ... ignored
+test iter::tests::lines_08 ... ignored
+test iter::tests::lines_09 ... ignored
+test iter::tests::lines_10 ... ignored
+test iter::tests::lines_11 ... ignored
+test iter::tests::lines_12 ... ignored
+test iter::tests::lines_13 ... ignored
+test iter::tests::lines_14 ... ignored
+test iter::tests::lines_15 ... ignored
+test iter::tests::lines_16 ... ignored
+test iter::tests::lines_17 ... ignored
+test iter::tests::lines_at_01 ... ignored
+test iter::tests::lines_at_02 ... ignored
+test iter::tests::lines_at_03 ... ignored
+test iter::tests::lines_exact_size_iter_01 ... ignored
+test iter::tests::lines_exact_size_iter_02 ... ignored
+test iter::tests::lines_exact_size_iter_03 ... ignored
+test iter::tests::lines_sliced_01 ... ignored
+test rope::tests::append_01 ... ignored
+test rope::tests::append_02 ... ignored
+test rope::tests::append_03 ... ignored
+test rope::tests::append_04 ... ignored
+test rope::tests::append_05 ... ignored
+test rope::tests::append_06 ... ignored
+test rope::tests::append_07 ... ignored
+test rope::tests::byte_01 ... ignored
+test rope::tests::byte_02 ... ignored
+test rope::tests::byte_03 ... ignored
+test rope::tests::byte_to_char_01 ... ignored
+test rope::tests::byte_to_line_01 ... ignored
+test rope::tests::byte_to_line_02 ... ignored
+test rope::tests::byte_to_line_03 ... ignored
+test rope::tests::byte_to_line_04 ... ignored
+test rope::tests::char_01 ... ignored
+test rope::tests::char_02 ... ignored
+test rope::tests::char_03 ... ignored
+test rope::tests::char_to_byte_01 ... ignored
+test rope::tests::char_to_line_01 ... ignored
+test rope::tests::char_to_line_02 ... ignored
+test rope::tests::char_to_line_03 ... ignored
+test rope::tests::char_to_line_04 ... ignored
+test rope::tests::char_to_utf16_code_unit_01 ... ignored
+test rope::tests::char_to_utf16_code_unit_02 ... ignored
+test rope::tests::char_to_utf16_code_unit_03 ... ignored
+test rope::tests::char_to_utf16_code_unit_04 ... ignored
+test rope::tests::chunk_at_byte ... ignored
+test rope::tests::chunk_at_char ... ignored
+test rope::tests::chunk_at_line_break ... ignored
+test rope::tests::eq_rope_01 ... ignored
+test rope::tests::eq_rope_02 ... ignored
+test rope::tests::eq_rope_03 ... ignored
+test rope::tests::eq_rope_04 ... ignored
+test rope::tests::eq_rope_05 ... ignored
+test rope::tests::eq_rope_06 ... ignored
+test rope::tests::eq_rope_07 ... ignored
+test rope::tests::from_iter_01 ... ignored
+test rope::tests::from_rope_slice_01 ... ignored
+test rope::tests::from_rope_slice_02 ... ignored
+test rope::tests::from_rope_slice_03 ... ignored
+test rope::tests::from_rope_slice_04 ... ignored
+test rope::tests::from_str ... ignored
+test rope::tests::insert_01 ... ignored
+test rope::tests::insert_02 ... ignored
+test rope::tests::insert_03 ... ignored
+test rope::tests::insert_04 ... ignored
+test rope::tests::insert_05 ... ignored
+test rope::tests::insert_06 ... ignored
+test rope::tests::insert_char_01 ... ignored
+test rope::tests::insert_char_02 ... ignored
+test rope::tests::len_bytes_01 ... ignored
+test rope::tests::len_bytes_02 ... ignored
+test rope::tests::len_chars_01 ... ignored
+test rope::tests::len_chars_02 ... ignored
+test rope::tests::len_lines_01 ... ignored
+test rope::tests::len_lines_02 ... ignored
+test rope::tests::len_utf16_code_units_01 ... ignored
+test rope::tests::len_utf16_code_units_02 ... ignored
+test rope::tests::len_utf16_code_units_03 ... ignored
+test rope::tests::line_01 ... ignored
+test rope::tests::line_02 ... ignored
+test rope::tests::line_03 ... ignored
+test rope::tests::line_04 ... ignored
+test rope::tests::line_05 ... ignored
+test rope::tests::line_06 ... ignored
+test rope::tests::line_to_byte_01 ... ignored
+test rope::tests::line_to_byte_02 ... ignored
+test rope::tests::line_to_byte_03 ... ignored
+test rope::tests::line_to_char_01 ... ignored
+test rope::tests::line_to_char_02 ... ignored
+test rope::tests::line_to_char_03 ... ignored
+test rope::tests::new_01 ... ignored
+test rope::tests::remove_01 ... ignored
+test rope::tests::remove_02 ... ignored
+test rope::tests::remove_03 ... ignored
+test rope::tests::remove_04 ... ignored
+test rope::tests::remove_05 ... ignored
+test rope::tests::remove_06 ... ignored
+test rope::tests::remove_07 ... ignored
+test rope::tests::remove_08 ... ignored
+test rope::tests::remove_09 ... ignored
+test rope::tests::remove_10 ... ignored
+test rope::tests::shrink_to_fit_01 ... ignored
+test rope::tests::slice_01 ... ignored
+test rope::tests::slice_02 ... ignored
+test rope::tests::slice_03 ... ignored
+test rope::tests::slice_04 ... ignored
+test rope::tests::slice_05 ... ignored
+test rope::tests::slice_06 ... ignored
+test rope::tests::split_off_01 ... ignored
+test rope::tests::split_off_02 ... ignored
+test rope::tests::split_off_03 ... ignored
+test rope::tests::split_off_04 ... ignored
+test rope::tests::split_off_05 ... ignored
+test rope::tests::split_off_06 ... ignored
+test rope::tests::to_cow_01 ... ignored
+test rope::tests::to_cow_02 ... ignored
+test rope::tests::to_cow_03 ... ignored
+test rope::tests::to_string_01 ... ignored
+test rope::tests::utf16_code_unit_to_char_01 ... ignored
+test rope::tests::utf16_code_unit_to_char_02 ... ignored
+test rope::tests::utf16_code_unit_to_char_03 ... ignored
+test rope::tests::utf16_code_unit_to_char_04 ... ignored
+test rope_builder::tests::rope_builder_01 ... ignored
+test slice::tests::byte_01 ... ignored
+test slice::tests::byte_02 ... ignored
+test slice::tests::byte_03 ... ignored
+test slice::tests::byte_to_char_01 ... ignored
+test slice::tests::byte_to_line_01 ... ignored
+test slice::tests::byte_to_line_02 ... ignored
+test slice::tests::byte_to_line_03 ... ignored
+test slice::tests::byte_to_line_04 ... ignored
+test slice::tests::char_01 ... ignored
+test slice::tests::char_02 ... ignored
+test slice::tests::char_03 ... ignored
+test slice::tests::char_to_byte_01 ... ignored
+test slice::tests::char_to_line_01 ... ignored
+test slice::tests::char_to_line_02 ... ignored
+test slice::tests::char_to_line_03 ... ignored
+test slice::tests::char_to_line_04 ... ignored
+test slice::tests::char_to_utf16_code_unit_01 ... ignored
+test slice::tests::char_to_utf16_code_unit_02 ... ignored
+test slice::tests::char_to_utf16_code_unit_03 ... ignored
+test slice::tests::char_to_utf16_code_unit_04 ... ignored
+test slice::tests::char_to_utf16_code_unit_05 ... ignored
+test slice::tests::char_to_utf16_code_unit_06 ... ignored
+test slice::tests::char_to_utf16_code_unit_07 ... ignored
+test slice::tests::char_to_utf16_code_unit_08 ... ignored
+test slice::tests::chunk_at_byte ... ignored
+test slice::tests::chunk_at_char ... ignored
+test slice::tests::chunk_at_line_break ... ignored
+test slice::tests::cmp_rope_slice_01 ... ignored
+test slice::tests::cmp_rope_slice_02 ... ignored
+test slice::tests::eq_rope_slice_01 ... ignored
+test slice::tests::eq_rope_slice_02 ... ignored
+test slice::tests::eq_rope_slice_03 ... ignored
+test slice::tests::eq_rope_slice_04 ... ignored
+test slice::tests::eq_rope_slice_05 ... ignored
+test slice::tests::eq_str_01 ... ignored
+test slice::tests::eq_str_02 ... ignored
+test slice::tests::eq_str_03 ... ignored
+test slice::tests::eq_str_04 ... ignored
+test slice::tests::len_bytes_01 ... ignored
+test slice::tests::len_bytes_02 ... ignored
+test slice::tests::len_chars_01 ... ignored
+test slice::tests::len_chars_02 ... ignored
+test slice::tests::len_lines_01 ... ignored
+test slice::tests::len_lines_02 ... ignored
+test slice::tests::len_utf16_code_units_01 ... ignored
+test slice::tests::len_utf16_code_units_02 ... ignored
+test slice::tests::len_utf16_code_units_03 ... ignored
+test slice::tests::len_utf16_code_units_04 ... ignored
+test slice::tests::len_utf16_code_units_05 ... ignored
+test slice::tests::line_01 ... ignored
+test slice::tests::line_02 ... ignored
+test slice::tests::line_03 ... ignored
+test slice::tests::line_04 ... ignored
+test slice::tests::line_05 ... ignored
+test slice::tests::line_06 ... ignored
+test slice::tests::line_to_byte_01 ... ignored
+test slice::tests::line_to_byte_02 ... ignored
+test slice::tests::line_to_byte_03 ... ignored
+test slice::tests::line_to_char_01 ... ignored
+test slice::tests::line_to_char_02 ... ignored
+test slice::tests::line_to_char_03 ... ignored
+test slice::tests::slice_01 ... ignored
+test slice::tests::slice_02 ... ignored
+test slice::tests::slice_03 ... ignored
+test slice::tests::slice_04 ... ignored
+test slice::tests::slice_05 ... ignored
+test slice::tests::slice_06 ... ignored
+test slice::tests::to_cow_01 ... ignored
+test slice::tests::to_cow_02 ... ignored
+test slice::tests::to_string_01 ... ignored
+test slice::tests::to_string_02 ... ignored
+test slice::tests::to_string_03 ... ignored
+test slice::tests::to_string_04 ... ignored
+test slice::tests::utf16_code_unit_to_char_01 ... ignored
+test slice::tests::utf16_code_unit_to_char_02 ... ignored
+test slice::tests::utf16_code_unit_to_char_03 ... ignored
+test slice::tests::utf16_code_unit_to_char_04 ... ignored
+test slice::tests::utf16_code_unit_to_char_05 ... ignored
+test slice::tests::utf16_code_unit_to_char_06 ... ignored
+test slice::tests::utf16_code_unit_to_char_07 ... ignored
+test slice::tests::utf16_code_unit_to_char_08 ... ignored
+test str_utils::tests::byte_to_char_idx_01 ... ignored
+test str_utils::tests::byte_to_char_idx_02 ... ignored
+test str_utils::tests::byte_to_char_idx_03 ... ignored
+test str_utils::tests::byte_to_line_idx_01 ... ignored
+test str_utils::tests::byte_to_line_idx_02 ... ignored
+test str_utils::tests::byte_to_line_idx_03 ... ignored
+test str_utils::tests::byte_to_line_idx_04 ... ignored
+test str_utils::tests::char_to_byte_idx_01 ... ignored
+test str_utils::tests::char_to_byte_idx_02 ... ignored
+test str_utils::tests::char_to_byte_idx_03 ... ignored
+test str_utils::tests::char_to_byte_idx_04 ... ignored
+test str_utils::tests::char_to_byte_idx_05 ... ignored
+test str_utils::tests::char_to_line_idx_01 ... ignored
+test str_utils::tests::char_to_line_idx_02 ... ignored
+test str_utils::tests::count_chars_01 ... ignored
+test str_utils::tests::count_chars_02 ... ignored
+test str_utils::tests::count_line_breaks_01 ... ignored
+test str_utils::tests::count_line_breaks_02 ... ignored
+test str_utils::tests::ends_with_line_break_01 ... ignored
+test str_utils::tests::ends_with_line_break_02 ... ignored
+test str_utils::tests::ends_with_line_break_03 ... ignored
+test str_utils::tests::ends_with_line_break_04 ... ignored
+test str_utils::tests::line_breaks_iter_01 ... ignored
+test str_utils::tests::line_byte_round_trip ... ignored
+test str_utils::tests::line_char_round_trip ... ignored
+test str_utils::tests::line_to_byte_idx_01 ... ignored
+test str_utils::tests::line_to_byte_idx_02 ... ignored
+test str_utils::tests::line_to_byte_idx_03 ... ignored
+test str_utils::tests::line_to_char_idx_01 ... ignored
+test str_utils::tests::line_to_char_idx_02 ... ignored
+test str_utils::tests::prev_line_end_char_idx_01 ... ignored
+test str_utils::tests::usize_bytes_between_127_01 ... ignored
+test str_utils::tests::usize_flag_bytes_01 ... ignored
+test tree::node::tests::crlf_corner_case_01 ... ignored
+test tree::node::tests::crlf_corner_case_02 ... ignored
+test tree::node::tests::line_to_byte_01 ... ignored
+test tree::node::tests::line_to_char_01 ... ignored
+test tree::node_children::tests::search_char_idx_01 ... ignored
+test tree::node_children::tests::search_char_idx_02 ... ignored
+test tree::node_children::tests::search_char_idx_range_01 ... ignored
+test tree::node_children::tests::search_char_idx_range_02 ... ignored
+test tree::node_children::tests::search_line_break_idx_01 ... ignored
+test tree::node_children::tests::search_line_break_idx_02 ... ignored
+test tree::node_children::tests::search_line_break_idx_03 ... ignored
+test tree::node_children::tests::search_line_break_idx_04 ... ignored
+test tree::node_text::inner::tests::insert_str_01 ... ignored
+test tree::node_text::inner::tests::insert_str_02 ... ignored
+test tree::node_text::inner::tests::insert_str_03 ... ignored
+test tree::node_text::inner::tests::remove_range_01 ... ignored
+test tree::node_text::inner::tests::remove_range_02 ... ignored
+test tree::node_text::inner::tests::remove_range_03 ... ignored
+test tree::node_text::inner::tests::remove_range_04 ... ignored
+test tree::node_text::inner::tests::small_string_basics ... ignored
+test tree::node_text::inner::tests::split_off_01 ... ignored
+test tree::node_text::inner::tests::split_off_02 ... ignored
+test tree::node_text::inner::tests::split_off_03 ... ignored
+test tree::node_text::inner::tests::truncate_01 ... ignored
+test tree::node_text::inner::tests::truncate_02 ... ignored
+test tree::node_text::inner::tests::truncate_03 ... ignored
+
+test result: ok. 0 passed; 0 failed; 329 ignored; 0 measured; 0 filtered out
+
+
+running 5 tests
+test clone              ... bench:          15 ns/iter (+/- 0)
+test from_str_large     ... bench:   2,261,542 ns/iter (+/- 10,152) = 678 MB/s
+test from_str_linefeeds ... bench:      17,724 ns/iter (+/- 178) = 934 MB/s
+test from_str_medium    ... bench:     294,736 ns/iter (+/- 2,722) = 743 MB/s
+test from_str_small     ... bench:       2,396 ns/iter (+/- 20) = 635 MB/s
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 5 measured
+
+
+running 17 tests
+test initial_insert_after_clone ... bench:       5,506 ns/iter (+/- 35)
+test inserts_end_char           ... bench:         484 ns/iter (+/- 16)
+test inserts_end_large          ... bench:       5,681 ns/iter (+/- 56)
+test inserts_end_medium         ... bench:         692 ns/iter (+/- 11)
+test inserts_end_small          ... bench:         492 ns/iter (+/- 13)
+test inserts_middle_char        ... bench:         394 ns/iter (+/- 6)
+test inserts_middle_large       ... bench:       5,169 ns/iter (+/- 59)
+test inserts_middle_medium      ... bench:         600 ns/iter (+/- 3)
+test inserts_middle_small       ... bench:         398 ns/iter (+/- 9)
+test inserts_random_char        ... bench:         701 ns/iter (+/- 6)
+test inserts_random_large       ... bench:       5,455 ns/iter (+/- 65)
+test inserts_random_medium      ... bench:         818 ns/iter (+/- 15)
+test inserts_random_small       ... bench:         717 ns/iter (+/- 11)
+test inserts_start_char         ... bench:         238 ns/iter (+/- 1)
+test inserts_start_large        ... bench:       4,724 ns/iter (+/- 64)
+test inserts_start_medium       ... bench:         423 ns/iter (+/- 8)
+test inserts_start_small        ... bench:         247 ns/iter (+/- 1)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 17 measured
+
+
+running 22 tests
+test bytes_iter_next                  ... bench:           4 ns/iter (+/- 0)
+test bytes_iter_prev                  ... bench:           4 ns/iter (+/- 0)
+test chars_iter_next                  ... bench:           8 ns/iter (+/- 0)
+test chars_iter_prev                  ... bench:           9 ns/iter (+/- 0)
+test chunks_iter_next                 ... bench:          16 ns/iter (+/- 1)
+test chunks_iter_prev                 ... bench:          17 ns/iter (+/- 1)
+test create_bytes_iter                ... bench:         331 ns/iter (+/- 3)
+test create_bytes_iter_at             ... bench:         344 ns/iter (+/- 3)
+test create_bytes_iter_at_end         ... bench:         420 ns/iter (+/- 37)
+test create_chars_iter                ... bench:         331 ns/iter (+/- 2)
+test create_chars_iter_at             ... bench:         530 ns/iter (+/- 6)
+test create_chars_iter_at_end         ... bench:         636 ns/iter (+/- 19)
+test create_chunks_iter               ... bench:         288 ns/iter (+/- 3)
+test create_chunks_iter_at_byte       ... bench:         341 ns/iter (+/- 1)
+test create_chunks_iter_at_char       ... bench:         361 ns/iter (+/- 2)
+test create_chunks_iter_at_line_break ... bench:         397 ns/iter (+/- 2)
+test create_lines_iter                ... bench:          33 ns/iter (+/- 0)
+test create_lines_iter_at             ... bench:          60 ns/iter (+/- 0)
+test lines_iter_next                  ... bench:       1,587 ns/iter (+/- 5)
+test lines_iter_next_tiny             ... bench:       3,052 ns/iter (+/- 39)
+test lines_iter_prev                  ... bench:       1,603 ns/iter (+/- 2)
+test lines_iter_prev_tiny             ... bench:       2,157 ns/iter (+/- 10)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 22 measured
+
+
+running 20 tests
+test byte_to_char              ... bench:         151 ns/iter (+/- 1)
+test byte_to_line              ... bench:         236 ns/iter (+/- 2)
+test char_to_byte              ... bench:         331 ns/iter (+/- 4)
+test char_to_line              ... bench:         441 ns/iter (+/- 3)
+test chunk_at_byte             ... bench:         138 ns/iter (+/- 2)
+test chunk_at_byte_slice       ... bench:         136 ns/iter (+/- 11)
+test chunk_at_char             ... bench:         139 ns/iter (+/- 4)
+test chunk_at_char_slice       ... bench:         133 ns/iter (+/- 4)
+test chunk_at_line_break       ... bench:         143 ns/iter (+/- 5)
+test chunk_at_line_break_slice ... bench:         137 ns/iter (+/- 3)
+test get_byte                  ... bench:         148 ns/iter (+/- 1)
+test get_char                  ... bench:         364 ns/iter (+/- 4)
+test get_line                  ... bench:         994 ns/iter (+/- 11)
+test line_to_byte              ... bench:         543 ns/iter (+/- 4)
+test line_to_char              ... bench:         544 ns/iter (+/- 6)
+test slice                     ... bench:       1,549 ns/iter (+/- 19)
+test slice_from_small_rope     ... bench:         884 ns/iter (+/- 18)
+test slice_small               ... bench:         639 ns/iter (+/- 2)
+test slice_whole_rope          ... bench:         105 ns/iter (+/- 0)
+test slice_whole_slice         ... bench:           3 ns/iter (+/- 0)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 20 measured
+
+
+running 13 tests
+test initial_remove_after_clone ... bench:       4,392 ns/iter (+/- 25)
+test removals_end_large         ... bench:       1,973 ns/iter (+/- 5)
+test removals_end_medium        ... bench:         825 ns/iter (+/- 2)
+test removals_end_small         ... bench:         562 ns/iter (+/- 5)
+test removals_middle_large      ... bench:       3,129 ns/iter (+/- 27)
+test removals_middle_medium     ... bench:         941 ns/iter (+/- 27)
+test removals_middle_small      ... bench:         504 ns/iter (+/- 4)
+test removals_random_large      ... bench:       3,381 ns/iter (+/- 68)
+test removals_random_medium     ... bench:         805 ns/iter (+/- 1)
+test removals_random_small      ... bench:         661 ns/iter (+/- 3)
+test removals_start_large       ... bench:       2,396 ns/iter (+/- 11)
+test removals_start_medium      ... bench:         579 ns/iter (+/- 23)
+test removals_start_small       ... bench:         382 ns/iter (+/- 1)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 13 measured
+

@@ -1,0 +1,62 @@
+
+running 33 tests
+test add::tests::add_more_than_one ... ignored
+test add::tests::add_one ... ignored
+test add::tests::add_regex_multiple ... ignored
+test add::tests::add_regex_named_after_static ... ignored
+test add::tests::add_regex_named_before_static ... ignored
+test add::tests::add_regex_named_neasted ... ignored
+test add::tests::add_regex_named_on_root ... ignored
+test add::tests::add_wildcard_after_regex ... ignored
+test add::tests::add_wildcard_after_static ... ignored
+test add::tests::add_wildcard_before_something ... ignored
+test add::tests::add_wildcard_on_root ... ignored
+test add::tests::two_regex ... ignored
+test find::tests::get_double_regex ... ignored
+test find::tests::get_regex_and_wildcard ... ignored
+test find::tests::get_regex_child ... ignored
+test find::tests::get_regex_fallback ... ignored
+test find::tests::get_root ... ignored
+test find::tests::get_static_child ... ignored
+test find::tests::get_static_fallback ... ignored
+test find::tests::get_wildcard ... ignored
+test optimize::tests::regex_is_untouched ... ignored
+test optimize::tests::regex_with_neasted_static_is_not_untouched ... ignored
+test optimize::tests::regex_with_static_is_not_untouched ... ignored
+test optimize::tests::static_cannot_neasting_for_value ... ignored
+test optimize::tests::static_multiple_neasting ... ignored
+test optimize::tests::static_neasting_but_not_on_root ... ignored
+test optimize::tests::static_one_neasting ... ignored
+test optimize::tests::static_with_wildcard ... ignored
+test optimize::tests::static_with_wildcard_2 ... ignored
+test optimize::tests::trivial_case ... ignored
+test tests::all ... ignored
+test tests::bench_regex ... ignored
+test tests::with_struct ... ignored
+
+test result: ok. 0 passed; 0 failed; 33 ignored; 0 measured; 0 filtered out
+
+
+running 3 tests
+test recognizer      ... bench:       2,382 ns/iter (+/- 38)
+test router          ... bench:         486 ns/iter (+/- 57)
+test router_plus_vec ... bench:         495 ns/iter (+/- 45)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+
+
+running 3 tests
+test recognizer      ... bench:         601 ns/iter (+/- 15)
+test router          ... bench:         125 ns/iter (+/- 1)
+test router_plus_vec ... bench:         129 ns/iter (+/- 2)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+
+
+running 3 tests
+test recognizer      ... bench:       2,359 ns/iter (+/- 73)
+test router          ... bench:         631 ns/iter (+/- 2)
+test router_plus_vec ... bench:         660 ns/iter (+/- 1)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+

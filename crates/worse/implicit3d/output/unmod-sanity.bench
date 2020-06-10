@@ -1,0 +1,57 @@
+
+running 31 tests
+test bender::test::normal_x_in_quadrants ... ignored
+test bender::test::normal_y_in_quadrants ... ignored
+test bender::test::normal_z_in_quadrants ... ignored
+test bender::test::values_in_quadrants ... ignored
+test boolean::test::intersection ... ignored
+test boolean::test::negation ... ignored
+test boolean::test::union ... ignored
+test cylinder::test::cone ... ignored
+test cylinder::test::cylinder ... ignored
+test mesh::test::test_2face_concave_vertex ... ignored
+test mesh::test::test_2face_convex_vertex ... ignored
+test mesh::test::test_2face_edge ... ignored
+test mesh::test::test_distance_point_face ... ignored
+test mesh::test::test_distance_point_face_by_halfcircle_around_face_edge ... ignored
+test mesh::test::test_distance_point_face_by_halfcircle_around_face_point ... ignored
+test mesh::test::test_point_over_line ... ignored
+test mesh::test::test_point_over_triangle ... ignored
+test plane::test::hessian_3points ... ignored
+test plane::test::hessian_3points_x ... ignored
+test plane::test::hessian_x ... ignored
+test plane::test::hessian_xyz ... ignored
+test plane::test::simple ... ignored
+test sphere::test::simple ... ignored
+test transformer::test::rotate ... ignored
+test transformer::test::rotate_and_translate ... ignored
+test transformer::test::scale ... ignored
+test transformer::test::scale_and_translate ... ignored
+test transformer::test::translate ... ignored
+test transformer::test::translate_and_rotate ... ignored
+test transformer::test::translate_and_scale ... ignored
+test twister::test::simple ... ignored
+
+test result: ok. 0 passed; 0 failed; 31 ignored; 0 measured; 0 filtered out
+
+
+running 16 tests
+test cube<f32>                 ... bench:  18,463,031 ns/iter (+/- 12,425,114)
+test cube<f64>                 ... bench:  19,495,867 ns/iter (+/- 486,332)
+test cube_normals<f32>         ... bench:   8,711,864 ns/iter (+/- 27,916)
+test cube_normals<f64>         ... bench:   8,484,326 ns/iter (+/- 31,099)
+test hollow_cube<f32>          ... bench:  41,175,071 ns/iter (+/- 73,726)
+test hollow_cube<f64>          ... bench:  46,677,456 ns/iter (+/- 274,118)
+test hollow_cube_normals<f32>  ... bench: 141,669,439 ns/iter (+/- 1,848,748)
+test hollow_cube_normals<f64>  ... bench: 156,896,048 ns/iter (+/- 297,720)
+test sphere<f32>               ... bench:   1,932,486 ns/iter (+/- 3,365)
+test sphere<f64>               ... bench:   1,975,875 ns/iter (+/- 1,010)
+test sphere_normals<f32>       ... bench:   3,126,148 ns/iter (+/- 9,942)
+test sphere_normals<f64>       ... bench:   6,518,319 ns/iter (+/- 12,205)
+test twisted_cube<f32>         ... bench:  15,745,892 ns/iter (+/- 43,763)
+test twisted_cube<f64>         ... bench:  21,072,766 ns/iter (+/- 52,839)
+test twisted_cube_normals<f32> ... bench:  17,314,433 ns/iter (+/- 20,280)
+test twisted_cube_normals<f64> ... bench:  24,390,141 ns/iter (+/- 60,650)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 16 measured
+

@@ -1,0 +1,12 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test q1  ... bench:   2,488,047 ns/iter (+/- 8,399)
+test q10 ... bench:   1,667,698 ns/iter (+/- 22,749)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+

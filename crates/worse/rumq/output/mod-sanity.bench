@@ -1,0 +1,138 @@
+
+running 26 tests
+test packetbytes::test::connack_stitching_works_correctly ... ignored
+test packetbytes::test::connect_stitching_works_correctlyl ... ignored
+test packetbytes::test::puback_stitching_works_correctly ... ignored
+test packetbytes::test::qos0_publish_stitching_works_correctly ... ignored
+test packetbytes::test::qos1_publish_stitching_works_correctly ... ignored
+test packetbytes::test::suback_stitching_works_correctly ... ignored
+test packetbytes::test::subscribe_stitching_works_correctly ... ignored
+test read::test::incomplete_qos1_publish_stream_errors_until_there_are_enough_bytes ... ignored
+test read::test::read_packet_connack_works ... ignored
+test read::test::read_packet_connect_mqtt_protocol ... ignored
+test read::test::read_packet_puback_works ... ignored
+test read::test::read_packet_publish_qos0_works ... ignored
+test read::test::read_packet_publish_qos1_works ... ignored
+test read::test::read_packet_suback_works ... ignored
+test read::test::read_packet_subscribe_works ... ignored
+test topic::test::dollar_subscriptions_doesnt_match_dollar_topic ... ignored
+test topic::test::filters_are_validated_correctly ... ignored
+test topic::test::topics_are_validated_correctly ... ignored
+test topic::test::topics_match_with_filters_as_expected ... ignored
+test topic::test::wildcards_are_detected_correctly ... ignored
+test topic::test::zero_len_subscriptions_are_not_allowed ... ignored
+test write::test::write_packet_connack_works ... ignored
+test write::test::write_packet_connect_mqtt_protocol_works ... ignored
+test write::test::write_packet_publish_at_least_once_works ... ignored
+test write::test::write_packet_publish_at_most_once_works ... ignored
+test write::test::write_packet_subscribe_works ... ignored
+
+test result: ok. 0 passed; 0 failed; 26 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test deserialize_publishes ... bench:         244 ns/iter (+/- 20) = 4196 MB/s
+test serialize_publishes   ... bench:         484 ns/iter (+/- 1) = 2115 MB/s
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+
+
+running 1 test
+test tests::it_works ... ignored
+
+test result: ok. 0 passed; 0 failed; 1 ignored; 0 measured; 0 filtered out
+
+
+running 12 tests
+test router::test::ingnore_new_concrete_subscription_if_a_matching_wildcard_subscription_exists_for_the_client ... ignored
+test router::test::offline_messages_are_given_back_to_reconnected_persistent_connection ... ignored
+test router::test::persistend_reconnections_are_move_from_inactive_to_active_state ... ignored
+test router::test::persistent_disconnected_and_dead_connections_are_moved_to_inactive_state ... ignored
+test router::test::remove_client_from_concrete_subsctiptions_if_new_wildcard_subscription_matches_existing_concrecte_subscription ... ignored
+test router::test::router_saves_offline_messages_of_a_persistent_dead_connection ... ignored
+test router::test::router_should_not_add_same_client_to_subscription_list ... ignored
+test router::test::router_should_remove_the_connection_during_disconnect ... ignored
+test test::accept_loop_rate_limits_incoming_connections ... ignored
+test test::accept_loop_should_accept_new_connection_when_a_client_disconnects_after_max_connections ... ignored
+test test::accept_loop_should_not_allow_more_than_maximum_connections ... ignored
+test test::client_loop_should_error_if_connect_packet_is_not_received_in_time ... ignored
+
+test result: ok. 0 passed; 0 failed; 12 ignored; 0 measured; 0 filtered out
+
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 23 tests
+test eventloop::test::connection_should_timeout_on_time ... ignored
+test eventloop::test::detects_halfopen_connections_in_the_second_ping_request ... ignored
+test eventloop::test::idle_connection_triggers_pings_on_time ... ignored
+test eventloop::test::reconnection_resends_unacked_packets_from_the_previous_connection_before_sending_current_connection_requests ... ignored
+test eventloop::test::reconnection_resumes_from_the_previous_state ... ignored
+test eventloop::test::requests_are_blocked_after_max_inflight_queue_size ... ignored
+test eventloop::test::requests_are_recovered_after_inflight_queue_size_falls_below_max ... ignored
+test eventloop::test::some_incoming_and_no_outgoing_packets_should_trigger_pings_on_time ... ignored
+test eventloop::test::some_outgoing_and_no_incoming_packets_should_trigger_pings_on_time ... ignored
+test eventloop::test::throttled_requests_works_with_correct_delays_between_requests ... ignored
+test state::test::incoming_puback_should_remove_correct_publish_from_queue ... ignored
+test state::test::incoming_pubcomp_should_release_correct_pkid_from_release_queue ... ignored
+test state::test::incoming_publish_should_be_added_to_queue_correctly ... ignored
+test state::test::incoming_pubrec_should_release_correct_publish_from_queue_and_add_releaseid_to_rel_queue ... ignored
+test state::test::incoming_pubrec_should_send_release_to_network_and_nothing_to_user ... ignored
+test state::test::incoming_pubrel_should_send_comp_to_network_and_nothing_to_user ... ignored
+test state::test::incoming_qos2_publish_should_send_rec_to_network_and_publish_to_user ... ignored
+test state::test::next_pkid_roll ... ignored
+test state::test::outgoing_ping_handle_should_succeed_if_pingresp_is_received ... ignored
+test state::test::outgoing_ping_handle_should_throw_errors_for_no_pingresp ... ignored
+test state::test::outgoing_publish_handle_should_set_pkid_correctly_and_add_publish_to_queue_correctly ... ignored
+test test::client_id_startswith_space ... ignored
+test test::no_client_id ... ignored
+
+test result: ok. 0 passed; 0 failed; 23 ignored; 0 measured; 0 filtered out
+
+
+running 32 tests
+test mqtt4::asyncdeserialize::test::read_packet_connack_works ... ignored
+test mqtt4::asyncdeserialize::test::read_packet_connect_mqtt_protocol ... ignored
+test mqtt4::asyncdeserialize::test::read_packet_puback_works ... ignored
+test mqtt4::asyncdeserialize::test::read_packet_publish_qos0_works ... ignored
+test mqtt4::asyncdeserialize::test::read_packet_publish_qos1_works ... ignored
+test mqtt4::asyncdeserialize::test::read_packet_suback_works ... ignored
+test mqtt4::asyncdeserialize::test::read_packet_subscribe_works ... ignored
+test mqtt4::asyncdeserialize::test::read_packet_unsubscribe_works ... ignored
+test mqtt4::asyncserialize::test::write_packet_connack_works ... ignored
+test mqtt4::asyncserialize::test::write_packet_connect_mqtt_protocol_works ... ignored
+test mqtt4::asyncserialize::test::write_packet_publish_at_least_once_works ... ignored
+test mqtt4::asyncserialize::test::write_packet_publish_at_most_once_works ... ignored
+test mqtt4::asyncserialize::test::write_packet_subscribe_works ... ignored
+test mqtt4::deserialize::test::read_packet_connack_works ... ignored
+test mqtt4::deserialize::test::read_packet_connect_mqtt_protocol ... ignored
+test mqtt4::deserialize::test::read_packet_puback_works ... ignored
+test mqtt4::deserialize::test::read_packet_publish_qos0_works ... ignored
+test mqtt4::deserialize::test::read_packet_publish_qos1_works ... ignored
+test mqtt4::deserialize::test::read_packet_suback_works ... ignored
+test mqtt4::deserialize::test::read_packet_subscribe_works ... ignored
+test mqtt4::deserialize::test::read_packet_unsubscribe_works ... ignored
+test mqtt4::serialize::test::write_packet_connack_works ... ignored
+test mqtt4::serialize::test::write_packet_connect_mqtt_protocol_works ... ignored
+test mqtt4::serialize::test::write_packet_publish_at_least_once_works ... ignored
+test mqtt4::serialize::test::write_packet_publish_at_most_once_works ... ignored
+test mqtt4::serialize::test::write_packet_subscribe_works ... ignored
+test mqtt4::topic::test::dollar_subscriptions_doesnt_match_dollar_topic ... ignored
+test mqtt4::topic::test::filters_are_validated_correctly ... ignored
+test mqtt4::topic::test::topics_are_validated_correctly ... ignored
+test mqtt4::topic::test::topics_match_with_filters_as_expected ... ignored
+test mqtt4::topic::test::wildcards_are_detected_correctly ... ignored
+test mqtt4::topic::test::zero_len_subscriptions_are_not_allowed ... ignored
+
+test result: ok. 0 passed; 0 failed; 32 ignored; 0 measured; 0 filtered out
+
+
+running 2 tests
+test publish_deserialize_perf ... bench:         444 ns/iter (+/- 5)
+test publish_serialize_perf   ... bench:         229 ns/iter (+/- 1)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+

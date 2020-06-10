@@ -1,0 +1,28 @@
+
+running 7 tests
+test tests::test_coincident_points ... ignored
+test tests::test_complex ... ignored
+test tests::test_four_triangles ... ignored
+test tests::test_less_than_three_points ... ignored
+test tests::test_overlapping ... ignored
+test tests::test_points_ordering ... ignored
+test tests::test_simple ... ignored
+
+test result: ok. 0 passed; 0 failed; 7 ignored; 0 measured; 0 filtered out
+
+
+running 11 tests
+test bench_eighty_points      ... bench:     473,255 ns/iter (+/- 459)
+test bench_fifty_points       ... bench:     195,284 ns/iter (+/- 412)
+test bench_forty_points       ... bench:     130,211 ns/iter (+/- 203)
+test bench_ninety_points      ... bench:     593,935 ns/iter (+/- 952)
+test bench_one_hundred_points ... bench:     722,455 ns/iter (+/- 700)
+test bench_seventy_points     ... bench:     369,414 ns/iter (+/- 3,848)
+test bench_sixty_points       ... bench:     275,378 ns/iter (+/- 327)
+test bench_ten_points         ... bench:      10,949 ns/iter (+/- 151)
+test bench_thirty_points      ... bench:      77,377 ns/iter (+/- 162)
+test bench_three_points       ... bench:       1,203 ns/iter (+/- 17)
+test bench_twenty_points      ... bench:      38,331 ns/iter (+/- 58)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 11 measured
+

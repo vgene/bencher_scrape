@@ -1,0 +1,29 @@
+
+running 8 tests
+test tests::empty_classification ... ignored
+test tests::generic_word_classification ... ignored
+test tests::key_word_classification ... ignored
+test tests::key_word_classification_after_pruning ... ignored
+test tests::multiple_generics ... ignored
+test tests::multiple_generics_after_pruning ... ignored
+test tests::parsing_file_words ... ignored
+test tests::un_indexed_tokens ... ignored
+
+test result: ok. 0 passed; 0 failed; 8 ignored; 0 measured; 0 filtered out
+
+
+running 4 tests
+test large_classify_one_word    ... bench:       7,423 ns/iter (+/- 50)
+test large_classify_three_words ... bench:      13,608 ns/iter (+/- 70)
+test small_classify_one_word    ... bench:         140 ns/iter (+/- 1)
+test small_classify_three_words ... bench:         308 ns/iter (+/- 9)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 4 measured
+
+
+running 2 tests
+test train_large ... bench: 137,109,691 ns/iter (+/- 4,316,838)
+test train_small ... bench:     115,735 ns/iter (+/- 1,883)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 2 measured
+

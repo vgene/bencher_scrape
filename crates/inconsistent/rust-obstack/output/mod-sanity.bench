@@ -1,0 +1,21 @@
+
+running 6 tests
+test impls::tests::test ... ignored
+test tests::test_consistency_multiple_types ... ignored
+test tests::test_consistency_simple ... ignored
+test tests::test_recursive_ref ... ignored
+test tests::test_ref_drop ... ignored
+test tests::test_threads ... ignored
+
+test result: ok. 0 passed; 0 failed; 6 ignored; 0 measured; 0 filtered out
+
+
+running 5 tests
+test cons_list_with_box     ... bench:     502,179 ns/iter (+/- 16,034)
+test cons_list_with_obstack ... bench:      94,468 ns/iter (+/- 1,059)
+test cons_list_with_rc      ... bench:     508,568 ns/iter (+/- 15,495)
+test str_cons_list_box      ... bench:   1,464,118 ns/iter (+/- 7,589)
+test str_cons_list_stack    ... bench:   1,471,514 ns/iter (+/- 8,152)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 5 measured
+

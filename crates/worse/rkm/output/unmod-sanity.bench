@@ -1,0 +1,17 @@
+
+running 4 tests
+test tests::test_calculate_means ... ignored
+test tests::test_closest_distances ... ignored
+test tests::test_closest_mean ... ignored
+test tests::test_distance ... ignored
+
+test result: ok. 0 passed; 0 failed; 4 ignored; 0 measured; 0 filtered out
+
+
+running 3 tests
+test bench_dim128 ... bench:  31,063,730 ns/iter (+/- 556,859)
+test bench_iris   ... bench:     247,067 ns/iter (+/- 24,317)
+test bench_s1     ... bench:  25,378,510 ns/iter (+/- 21,653,814)
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 3 measured
+

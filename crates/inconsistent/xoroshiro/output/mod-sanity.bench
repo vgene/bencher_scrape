@@ -1,0 +1,31 @@
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out
+
+
+running 21 tests
+test rand_bytes_chacha       ... bench:   3,618,905 ns/iter (+/- 7,056) = 289 MB/s
+test rand_bytes_isaac        ... bench:   1,074,628 ns/iter (+/- 5,796) = 975 MB/s
+test rand_bytes_isaac64      ... bench:     566,682 ns/iter (+/- 1,010) = 1850 MB/s
+test rand_bytes_splitmix     ... bench:     522,857 ns/iter (+/- 2,855) = 2005 MB/s
+test rand_bytes_xoroshiro128 ... bench:     601,373 ns/iter (+/- 1,558) = 1743 MB/s
+test rand_bytes_xorshift     ... bench:     626,109 ns/iter (+/- 1,374) = 1674 MB/s
+test rand_bytes_xorshift1024 ... bench:     650,370 ns/iter (+/- 956) = 1612 MB/s
+test rand_f64_chacha         ... bench:   2,834,875 ns/iter (+/- 5,425) = 282 MB/s
+test rand_f64_isaac          ... bench:     930,266 ns/iter (+/- 9,282) = 859 MB/s
+test rand_f64_isaac64        ... bench:     588,029 ns/iter (+/- 649) = 1360 MB/s
+test rand_f64_splitmix       ... bench:     389,320 ns/iter (+/- 8,456) = 2054 MB/s
+test rand_f64_xoroshiro128   ... bench:     314,953 ns/iter (+/- 196) = 2540 MB/s
+test rand_f64_xorshift       ... bench:     517,043 ns/iter (+/- 752) = 1547 MB/s
+test rand_f64_xorshift1024   ... bench:     490,045 ns/iter (+/- 5,307) = 1632 MB/s
+test rand_u64_chacha         ... bench:   2,803,550 ns/iter (+/- 4,313) = 285 MB/s
+test rand_u64_isaac          ... bench:     883,454 ns/iter (+/- 574) = 905 MB/s
+test rand_u64_isaac64        ... bench:     545,563 ns/iter (+/- 20,444) = 1466 MB/s
+test rand_u64_splitmix       ... bench:     270,835 ns/iter (+/- 656) = 2953 MB/s
+test rand_u64_xoroshiro128   ... bench:     253,637 ns/iter (+/- 540) = 3154 MB/s
+test rand_u64_xorshift       ... bench:     397,096 ns/iter (+/- 2,339) = 2014 MB/s
+test rand_u64_xorshift1024   ... bench:     448,416 ns/iter (+/- 2,131) = 1784 MB/s
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 21 measured
+
