@@ -1,6 +1,7 @@
 # High-level view of crate performances
 
 ~On MacOS 10.15.2 with 2.3 GHz Dual-Core Intel Core i5~
+
 On Ubuntu 14.04 with Intel(R) Xeon(R) CPU E5620 @ 2.40GHz (4 cores)
 
 
