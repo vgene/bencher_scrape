@@ -8,10 +8,8 @@ scrape=0
 comp="n"
 # Don't run tests
 tstcomp="n"
-# Bench in all subdirectories
-dir="a"
 # Some descriptive mame of this invocation
-name="sanity-2"
+name="sanity"
 
 usage () {
     echo ""
@@ -27,17 +25,12 @@ usage () {
     echo "                      'm' = modified rustc ONLY"
     echo "                      'b' = both unmodified and modified rustc"
     echo "                      'n' = don't run tests                           [default]"
-    echo "   -d <dir-symbol>  run only for the crates in the specified directory, where"
-    echo "                      'b' = better"
-    echo "                      'i' = inconsistent"
-    echo "                      'w' = worse"
-    echo "                      'a' = all of the above                          [default]"
     echo "   -n <out-label>   what to label the output files of this invocation with"
     echo ""
 }
 
 # Parse commandline arguments
-while getopts "sb:t:d:n:h" opt
+while getopts "sb:t:n:h" opt
 do
     case "$opt" in
     s)
@@ -48,9 +41,6 @@ do
         ;;
     t)
         tstcomp="$OPTARG"
-        ;;
-    d)
-        dir="$OPTARG"
         ;;
     n)
         name="$OPTARG"
@@ -70,31 +60,7 @@ RUSTC_UNMOD="$HOME/.cargo"
 RUSTC_MOD="$HOME/.cargo-mod"
 ROOT="$PWD"
 
-better="$ROOT/crates/better/*/"
-inconsistent="$ROOT/crates/inconsistent/*/"
-worse="$ROOT/crates/worse/*/"
-
-# Resolve which directory to run in
-case "$dir" in
-b)
-    SUBDIRS="$better"
-    ;;
-i)
-    SUBDIRS="$inconsistent"
-    ;;
-w)
-    SUBDIRS="$worse"
-    ;;
-a)
-    SUBDIRS=("$better" "$inconsistent" "$worse")
-    ;;
-*)
-    echo ""
-    echo "ERROR: Nonexistent directory option [ "$dir" ] passed to [ -d ]."
-    usage
-    exit 1
-    ;;
-esac
+SUBDIRS="$ROOT/crates/*/"
 
 # Resolve which compiler version(s) to use for benchmarks
 unmod=0
@@ -156,7 +122,6 @@ MOD_NAME="mod-$SUFFIX"
 
 OUTPUT="output"
 
-
 UNMOD_RES="$OUTPUT/$UNMOD_NAME.bench"
 MOD_RES="$OUTPUT/$MOD_NAME.bench"
 UNMOD_TESTS="$OUTPUT/$UNMOD_NAME.tests"
@@ -178,7 +143,6 @@ fi
 
 if [ "$unmod" -eq 1 ]
 then
-#    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
         cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
@@ -189,7 +153,6 @@ fi
 
 if [ "$tstunmod" -eq 1 ]
 then
-#    export CARGO_BUILD_RUSTC="$RUSTC_UNMOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
         # Can save building the unmodified version twice if step 2 was executed
@@ -206,7 +169,6 @@ fi
 
 if [ "$mod" -eq 1 ]
 then
-#    export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
         cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
@@ -217,7 +179,6 @@ fi
 
 if [ "$tstmod" -eq 1 ]
 then
-#    export CARGO_BUILD_RUSTC="$RUSTC_MOD/bin/rustc"
     for d in ${SUBDIRS[@]}
     do
         # Can save building the modified version twice if step 4 was executed
