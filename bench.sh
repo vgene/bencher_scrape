@@ -8,8 +8,9 @@ scrape=0
 comp="n"
 # Don't run tests
 tstcomp="n"
-# Some descriptive mame of this invocation
+# Some descriptive name of this invocation
 name="sanity"
+output="output"
 
 usage () {
     echo ""
@@ -25,12 +26,13 @@ usage () {
     echo "                      'm' = modified rustc ONLY"
     echo "                      'b' = both unmodified and modified rustc"
     echo "                      'n' = don't run tests                           [default]"
-    echo "   -n <out-label>   what to label the output files of this invocation with"
+    echo "   -n <out-label>   what to label the output files of this invocation as"
+    echo "   -o <dir-label>   what to label the output directory of this invocation as"
     echo ""
 }
 
 # Parse commandline arguments
-while getopts "sb:t:n:h" opt
+while getopts "sb:t:n:o:h" opt
 do
     case "$opt" in
     s)
@@ -45,6 +47,9 @@ do
     n)
         name="$OPTARG"
         ;;
+    o)
+	output="$OPTARG"
+	;;
     h)
         usage
         exit 0
@@ -60,9 +65,7 @@ RUSTC_UNMOD="$HOME/.cargo"
 RUSTC_MOD="$HOME/.cargo-mod"
 ROOT="$PWD"
 
-SUBDIRS="$ROOT/crates/*/"
-
-# Resolve which compiler version(s) to use for benchmarks
+# Resolve compiler version(s) for benchmarks
 unmod=0
 mod=0
 case "$comp" in
@@ -88,7 +91,7 @@ n)
     ;;
 esac
 
-# Resolve which compiler version(s) to use for tests
+# Resolve compiler version(s) for tests
 tstunmod=0
 tstmod=0
 case "$tstcomp" in
@@ -116,11 +119,10 @@ esac
 
 # Initialize other helpful variables (mostly for naming output files)
 SUFFIX="$name"
+OUTPUT="$output"
 
 UNMOD_NAME="unmod-$SUFFIX"
 MOD_NAME="mod-$SUFFIX"
-
-OUTPUT="output"
 
 UNMOD_RES="$OUTPUT/$UNMOD_NAME.bench"
 MOD_RES="$OUTPUT/$MOD_NAME.bench"
@@ -131,6 +133,30 @@ TARGET="target"
 
 UNMOD_TARGET_DIR="$OUTPUT/$TARGET-$UNMOD_NAME"
 MOD_TARGET_DIR="$OUTPUT/$TARGET-$MOD_NAME"
+
+SUBDIRS="$ROOT/crates/crates/*/"
+
+DIRLIST="dirlist"
+RAND_DIRLIST="rand-dirlist"
+RAND_SCRIPT="randomize.py"
+
+# Get list of crates to run on and randomize their order
+
+rm "$DIRLIST"
+for d in ${SUBDIRS[@]}
+do
+    echo "$d" >> "$DIRLIST"
+done
+
+python3 "$RAND_SCRIPT" "$DIRLIST" "$RAND_DIRLIST"
+
+# Parse randomized list as array
+
+RANDDIRS=()
+while read -r line
+do
+    RANDDIRS=( "${RANDDIRS[@]}" "$line" )
+done < "$RAND_DIRLIST"
 
 # Step 1: Download reverse dependencies of `bencher` crate
 
@@ -143,7 +169,7 @@ fi
 
 if [ "$unmod" -eq 1 ]
 then
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
     done
@@ -153,7 +179,7 @@ fi
 
 if [ "$tstunmod" -eq 1 ]
 then
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         # Can save building the unmodified version twice if step 2 was executed
         if [ "$unmod" -eq 0 ]
@@ -169,7 +195,7 @@ fi
 
 if [ "$mod" -eq 1 ]
 then
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
     done
@@ -179,7 +205,7 @@ fi
 
 if [ "$tstmod" -eq 1 ]
 then
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         # Can save building the modified version twice if step 4 was executed
         if [ "$mod" -eq 0 ]
@@ -204,7 +230,7 @@ SCRIPT_NAME="gnuplot-script"
 if [ "$unmod" -eq 1 -a "$mod" -eq 1 ]
 then
     # Simple benchmark diff: Low effort to read if small set of data
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         cd "$d" &&
             diff "$UNMOD_RES" "$MOD_RES" > "$DIFF_BENCH" && 
@@ -212,7 +238,7 @@ then
     done
     
     # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         cd "$d" &&
             python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$UNMOD_RES" "$MOD_RES" &&
@@ -220,7 +246,7 @@ then
     done
     
     # Gnuplot Script: Copy into crate directories for easier use
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         cd "$d" &&
             cp "$ROOT/$SCRIPT_NAME" "$PWD/$SCRIPT_NAME" &&
@@ -231,7 +257,7 @@ fi
 # Simple test diff: check if test failures are specific to the modified rustc or not
 if [ "$tstunmod" -eq 1 -a "$tstmod" -eq 1 ]
 then
-    for d in ${SUBDIRS[@]}
+    for d in ${RANDDIRS[@]}
     do
         cd "$d" &&
             diff "$UNMOD_TESTS" "$MOD_TESTS" > "$DIFF_TEST" && 
