@@ -1,5 +1,26 @@
 #!/bin/bash
 
+# Rustup environment management
+UNMOD_ENV="custom"
+MOD_ENV="natalie"
+
+# Optimization Level Management
+# OPTFLAGS="-C no-prepopulate-passes -C passes=name-anon-globals" # NO OPTS at all, stricter than opt-level=0
+OPTFLAGS="-C opt-level=2"
+
+# Debug Management
+DBGFLAGS="-C debuginfo=2"
+
+# LTO Flags
+LTOFLAGS_A="-C embed-bitcode=yes"
+LTOFLAGS_B="-C lto=fat"
+
+RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
+RUSTC_EXTRA_FLAGS="-- "$LTOFLAGS_B"" 
+
+RUSTC_CMD="cargo rustc --release --bench arraystring -- --emit=llvm-bc $LTOFLAGS_B"
+lprof=1
+
 # Defaults: 
 
 # Don't scrape
@@ -134,7 +155,8 @@ TARGET="target"
 UNMOD_TARGET_DIR="$OUTPUT/$TARGET-$UNMOD_NAME"
 MOD_TARGET_DIR="$OUTPUT/$TARGET-$MOD_NAME"
 
-SUBDIRS="$ROOT/crates/crates/*/"
+# SUBDIRS="$ROOT/crates/crates/*/"
+SUBDIRS="$ROOT/crates/crates/arrayvec/"
 
 DIRLIST="dirlist"
 RAND_DIRLIST="rand-dirlist"
@@ -142,7 +164,7 @@ RAND_SCRIPT="randomize.py"
 
 # Get list of crates to run on and randomize their order
 
-rm "$DIRLIST"
+rm -f "$DIRLIST"
 for d in ${SUBDIRS[@]}
 do
     echo "$d" >> "$DIRLIST"
@@ -169,9 +191,25 @@ fi
 
 if [ "$unmod" -eq 1 ]
 then
+    cd "$ROOT"
+    rustup override set $UNMOD_ENV
     for d in ${RANDDIRS[@]}
     do
-        cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
+        #cd "$d" && cargo clean && mkdir -p "$OUTPUT" && 
+        RUSTFLAGS=$RUSTFLAGS cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
+        cd "$d"
+        cargo clean
+        mkdir -p "$OUTPUT"
+        $RUSTC_BENCH_CMD_A 
+        echo RUSTFLAGS="$RUSTFLAGS" $RUSTC_CMD
+        if [[ "$lprof" -eq 1 ]]
+        then
+            RUSTFLAGS=$RUSTFLAGS $RUSTC_CMD
+            cp ./target/release/deps/*.bc unmod.bc
+            make OBJFILES_BC=unmod.bc benchmark.loopProf.out
+            mv benchmark.loopProf.out unmod.loopProf.out
+        fi
+        cd "$ROOT"
     done
 fi
 
@@ -179,6 +217,8 @@ fi
 
 if [ "$tstunmod" -eq 1 ]
 then
+    cd "$ROOT"
+    rustup override set $UNMOD_ENV
     for d in ${RANDDIRS[@]}
     do
         # Can save building the unmodified version twice if step 2 was executed
@@ -195,9 +235,24 @@ fi
 
 if [ "$mod" -eq 1 ]
 then
+    cd "$ROOT"
+    rustup override set $MOD_ENV
     for d in ${RANDDIRS[@]}
     do
-        cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
+        #cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
+        cd "$d"
+        cargo clean
+        mkdir -p "$OUTPUT"
+        $RUSTC_BENCH_CMD_A 
+        echo RUSTFLAGS=$RUSTFLAGS $RUSTC_CMD
+        if [[ "$lprof" -eq 1 ]]
+        then
+            RUSTFLAGS="$RUSTFLAGS" $RUSTC_CMD
+            cp ./target/release/deps/*.bc mod.bc
+            make OBJFILES_BC=mod.bc benchmark.loopProf.out
+            mv benchmark.loopProf.out mod.loopProf.out
+        fi
+        cd "$ROOT"
     done
 fi
 
@@ -205,6 +260,8 @@ fi
 
 if [ "$tstmod" -eq 1 ]
 then
+    cd "$ROOT"
+    rustup override set $MOD_ENV
     for d in ${RANDDIRS[@]}
     do
         # Can save building the modified version twice if step 4 was executed

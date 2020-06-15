@@ -1,0 +1,743 @@
+BINARY=benchmark
+PLAIN=$(BINARY).plain
+CANON=$(BINARY)
+TARGET_LIST?=
+
+LIBS?=
+
+#OBJFILES_BC?= $(shell find . -name \*.c | sed -e "s/\.c/.bc/" ) $(shell find . -name \*.C | sed -e "s/\.C/.bc/" ) $(shell find . -name \*.cpp | sed -e "s/\.cpp/.bc/" )  $(shell find . -name \*.cc | sed -e "s/\.cc/.bc/" ) 
+OBJFILES_BC?= $(shell find . -name \*.c | sed -e "s/\.c/.bc/" ) $(shell find . -name \*.rs | sed -e "s/\.rs/.bc/" ) $(shell find . -name \*.C | sed -e "s/\.C/.bc/" ) $(shell find . -name \*.cpp | sed -e "s/\.cpp/.bc/" )  $(shell find . -name \*.cc | sed -e "s/\.cc/.bc/" ) 
+
+BENCH_NAME?=$(shell cd .. && basename `pwd`)
+BENCH_DIR?= ../../$(BENCH_NAME)
+RESULT_FILE?=$(BENCH_NAME).result
+
+RUN_TIMEOUT?=7200 # 2 hours.
+TRANSFORM_TIMEOUT?=21600 # 6 hours.
+PROFILE_TIMEOUT?=36000 # 10 hours.
+
+.SECONDARY:
+
+-include ../compile_info
+-include ../execInfo
+
+CC?= gcc
+CXX?= g++
+#CC?= gcc-4.8
+#CXX?= g++-4.8
+LLVM_CC?= clang
+RUST_CC?= rustc
+#LLVM_CXX?= clang++ -stdlib=libc++
+LLVM_CXX?= clang++
+#LLVM_CXX?= clang++ --gcc-toolchain=/usr/lib/gcc/x86_64-linux-gnu/4.8.5 -I /usr/include/c++/libstdc++_include -I /usr/include/c++/4.8.5 -L /usr/lib/gcc/x86_64-linux-gnu/4.8.5 -cxx-isystem /usr/include/c++/4.8.5 -isystem /usr/include/c++/4.8.5 -stdlib=libc++ -v
+#-std=c++98 -stdlib=libstdc++ -v  
+# -std=gnu99
+LLVM_LINK?= llvm-link
+LLVM_OPT?= opt
+
+ARGS?=
+TESTARGS?=$(ARGS)
+PAR_TESTARGS?=$(TESTARGS)
+
+PROFILE?= 
+OPT?=-O1
+DEBUG?=
+CFLAGS?= -c $(OPT) $(PREPROCESSING_OPTIONS)  $(PREPROCESSOR_OPTIONS) $(PROFILE) $(DEBUG)
+LDFLAGS?= $(PROFILE) $(DEBUG)
+LLVM_CFLAGS?=-O1 -g -c -emit-llvm $(PREPROCESSOR_OPTIONS) $(PREPROCESSING_OPTIONS) $(DEBUG) -Xclang -disable-llvm-passes 
+#RUST_CFLAGS?=-C opt-level=1 -g --emit=llvm-bc
+RUST_CFLAGS?=-O -C no-prepopulate-passes -C passes=name-anon-globals -g --emit=llvm-bc
+#LLVM_CFLAGS?=-O0 -Xclang -disable-O0-optnone -g -c -emit-llvm $(PREPROCESSOR_OPTIONS) $(PREPROCESSING_OPTIONS) $(DEBUG)
+TRANSFORMATIONS_BEFORE_PARALLELIZATION=-mem2reg -simplifycfg -simplifycfg-sink-common=false -instcombine -tailcallelim -loop-simplify -lcssa -licm -loop-unswitch -globalopt -instcombine -ipsccp -gvn -dse -adce -loop-simplify -lcssa -indvars -loop-deletion -instcombine -indvars
+#TRANSFORMATIONS_BEFORE_PARALLELIZATION=-mem2reg -simplifycfg -instcombine -tailcallelim -loop-simplify -lcssa -loop-unswitch -globalopt -instcombine -ipsccp -gvn -dse -adce -loop-simplify -lcssa -indvars -loop-deletion -instcombine -indvars
+#TRANSFORMATIONS_BEFORE_PARALLELIZATION=-mem2reg -simplifycfg -instcombine -tailcallelim -loop-simplify -lcssa -loop-unswitch -instcombine -loop-simplify -lcssa -indvars -loop-deletion -instcombine -indvars
+LLVM_LINK_FLAGS?= 
+#LLVM_LINK_FLAGS?= -lstdc++
+RUST_LINK_FLAGS?= -fno-strict-aliasing /u/ziyangx/rust-workspace-nightly/lib/rustlib/x86_64-unknown-linux-gnu/lib/libbacktrace_sys-b93bd17170aebc7e.rlib /u/ziyangx/rust-workspace-nightly/lib/rustlib/x86_64-unknown-linux-gnu/lib/libcompiler_builtins-52eb75caf6f15397.rlib  -lpthread -ldl -lc -lunwind #-L/u/ziyangx/rust-workspace/lib/rustlib/x86_64-unknown-linux-gnu/lib -lstd-fc8bf211feb9cff7
+QUEUES=$(LIBERTY_SMTX_DIR)/sw_queue.noinline.o
+EDGEPROFLIB=$(LLVM_OBJ_DIR)/lib/clang/9.0.1/lib/linux/libclang_rt.profile-x86_64.a
+EDGEPROF=-L$(LLVM_OBJ_DIR)/lib/clang/9.0.1/lib/linux -lclang_rt.profile-x86_64
+SPPROF=$(LIBERTY_LIBS_DIR)/libspecprivprofruntime.a
+SPEX=$(LIBERTY_LIBS_DIR)/libspecprivexecutive.so
+SPEX_STATIC=$(LIBERTY_LIBS_DIR)/libspecprivexecutive.a
+
+LIBSPECPRIV=
+#$(LIBERTY_LIBS_DIR)/libUtil.so $(LIBERTY_LIBS_DIR)/libAnalysis.so $(LIBERTY_LIBS_DIR)/libIrreducibility.so $(LIBERTY_LIBS_DIR)/libRedux.so $(LIBERTY_LIBS_DIR)/libPointsToProfiler.so $(LIBERTY_LIBS_DIR)/libSpecPriv.so
+SPECPRIVPROFLIBS=
+#$(SPPROF) $(LIBERTY_SRC_DIR)/scripts/specpriv-profile $(LIBERTY_LIBS_DIR)/libUtil.so $(LIBERTY_LIBS_DIR)/libAnalysis.so $(LIBERTY_LIBS_DIR)/libPointsToProfiler.so
+LAMPLIBS=
+#$(LIBERTY_LIBS_DIR)/libLAMP.so $(LIBERTY_LIBS_DIR)/liblamp_hooks.a $(LIBERTY_SRC_DIR)/scripts/lamp-profile
+LOOPPROFLIBS=
+#$(LIBERTY_LIBS_DIR)/libLoopProf.so $(LIBERTY_LIBS_DIR)/libFullLoopProf.so $(LIBERTY_SRC_DIR)/scripts/loop-profile
+
+DEVIRTLIBS=
+#$(LIBERTY_SRC_DIR)/scripts/devirtualize $(LIBERTY_LIBS_DIR)/libUtil.so $(LIBERTY_LIBS_DIR)/libAnalysis.so $(LIBERTY_LIBS_DIR)/libDevirt.so
+DEMOTEREDUXLIBS=
+#$(LIBERTY_SRC_DIR)/scripts/specpriv-demote-redux $(LIBERTY_LIBS_DIR)/libUtil.so $(LIBERTY_LIBS_DIR)/libAnalysis.so $(LIBERTY_LIBS_DIR)/libRedux.so
+FCNSPLITLIBS=
+#$(LIBERTY_SRC_DIR)/scripts/split-fcns $(LIBERTY_LIBS_DIR)/libUtil.so $(LIBERTY_LIBS_DIR)/libIrreducibility.so $(LIBERTY_LIBS_DIR)/libAnalysis.so $(LIBERTY_LIBS_DIR)/libFcnSplit.so
+NAMEDLIBS=
+#$(LIBERTY_SRC_DIR)/scripts/namer $(LIBERTY_LIBS_DIR)/libMetadata.so
+
+
+VERIFIED ?= @echo You should verify that this benchmark builds gives reference output, then add VERIFIED=true to the makefile
+
+LARGE_PROFILEARGS?=$(PROFILEARGS)
+
+HEADERPHIPROF_LIB=-load $(LIBERTY_LIBS_DIR)/libUtil.so \
+	       -load $(LIBERTY_LIBS_DIR)/libAnalysis.so \
+	       -load $(LIBERTY_LIBS_DIR)/libMetadata.so \
+	       -load $(LIBERTY_LIBS_DIR)/libLAMPLoad.so  \
+	   		 -load $(LIBERTY_LIBS_DIR)/libLoopProf.so \
+	       -load $(LIBERTY_LIBS_DIR)/libSLAMP.so \
+	       -load $(LIBERTY_LIBS_DIR)/libPointsToProfiler.so \
+	       -load $(LIBERTY_LIBS_DIR)/libPDGBuilder.so \
+	       -load $(LIBERTY_LIBS_DIR)/libGraphAlgorithms.so \
+	       -load $(LIBERTY_LIBS_DIR)/libStrategy.so \
+	       -load $(LIBERTY_LIBS_DIR)/libRedux.so \
+				 -load $(LIBERTY_LIBS_DIR)/libOrchestration.so \
+	       -load $(LIBERTY_LIBS_DIR)/libSpeculation.so
+
+HEADERPHIPROF_HOOKS=$(LIBERTY_LIBS_DIR)/libheaderphiprofruntime.a
+# 
+# these two are not used
+SLAMP_LIB= $(shell lamplibs) -load $(LIBERTY_LIBS_DIR)/libSLAMP.so
+SLAMP_HOOKS= $(LIBERTY_LIBS_DIR)/libslamp_hooks.a
+
+INLINER_LIB=-load $(NOELLE_LIBS_DIR)/libCudd.so \
+						-load $(NOELLE_LIBS_DIR)/libSvf.so \
+						-load $(LIBERTY_LIBS_DIR)/libUtil.so \
+						-load $(LIBERTY_LIBS_DIR)/libAnalysis.so \
+						-load $(LIBERTY_LIBS_DIR)/libLoopProf.so \
+						-load $(LIBERTY_LIBS_DIR)/libMetadata.so \
+						-load $(LIBERTY_LIBS_DIR)/libLAMPLoad.so \
+						-load $(LIBERTY_LIBS_DIR)/libLAMP.so \
+						-load $(LIBERTY_LIBS_DIR)/libSLAMP.so \
+						-load $(LIBERTY_LIBS_DIR)/libRedux.so \
+						-load $(LIBERTY_LIBS_DIR)/libPointsToProfiler.so \
+						-load $(LIBERTY_LIBS_DIR)/libGraphAlgorithms.so \
+						-load $(LIBERTY_LIBS_DIR)/libGraphAlgorithms.so \
+						-load $(LIBERTY_LIBS_DIR)/libStrategy.so \
+      			-load $(LIBERTY_LIBS_DIR)/libOrchestration.so \
+      			-load $(LIBERTY_LIBS_DIR)/libSpeculation.so \
+						-load $(LIBERTY_LIBS_DIR)/libAggrInliner.so
+
+HACK=$(BINARY).hack
+HACK2=$(BINARY).hack2
+
+RUNTIME_CFLAGS="-DDEBUG"
+CPP=clang++
+OPT_LEVEL=-O3
+INCLUDES=-I/u/sa8/CPF_Benchmarks/scripts/threadpool/include
+THREADER=Parallelizer_utils
+THREADER_PATH=/u/sa8/CPF_Benchmarks/scripts
+
+all :
+
+#bc : $(BINARY).bc
+
+#compare1 :  $(PLAIN).out $(CANON).out
+compare1 :
+	diff $(PLAIN).out $(CANON).out >compare1.out 2>&1
+	
+
+profile : $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).lamp.out $(CANON).specpriv-profile.out
+
+canonical : $(CANON).out
+
+$(CANON).out : $(CANON).exe
+	date
+	rm -f canonical.time benchmark.out
+	$(SETUP)
+#	/usr/bin/time --output=canonical.time -f "%e" ./$(CANON).exe $(ARGS)$(TESTARGS) >$@ 2>&1
+	regressions-watchdog $(RUN_TIMEOUT) canonical.time ./$(CANON).exe $(TESTARGS) >$@ 2>&1
+	#$(CHECK)
+	#mv $(RESULT_FILE) $@
+	$(CLEANUP)
+	date
+
+$(CANON).exe : $(CANON).bc
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) lower-canon.time $(LLVM_CXX) -lm $(RUST_LINK_FLAGS) $(LIBS) $(LDFLAGS) $^ -o $@ 
+	date
+
+plain: $(PLAIN).o3.out
+
+$(PLAIN).o3.out : $(PLAIN).o3.exe
+	date
+	rm -f benchmark.plain.o3.out original.time
+	$(SETUP)
+#	/usr/bin/time --output=original.time -f "%e" ./$(PLAIN).exe $(ARGS)$(TESTARGS) >$@ 2>&1
+	regressions-watchdog $(RUN_TIMEOUT) original.time ./$(PLAIN).o3.exe $(TESTARGS) >$@ 2>&1
+	#$(CHECK)
+	#mv $(RESULT_FILE) $@
+	$(CLEANUP)
+	date
+
+$(PLAIN).o3.exe : $(PLAIN).o3.bc
+	date
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) lower-plain.time $(LLVM_CC) -lm -lstdc++ $(LIBS) $(LDFLAGS) $^ -o $@ 
+	regressions-watchdog $(TRANSFORM_TIMEOUT) strip.time $(LLVM_OPT) -strip $^ -o $(PLAIN).o3.striped.bc
+	regressions-watchdog $(TRANSFORM_TIMEOUT) lower-plain.time $(LLVM_CXX) -O3 -lm $(LIBS) $(PLAIN).o3.striped.bc -o $@ 
+	date
+
+#
+# edge profile
+#
+$(CANON).edgeProf_OG.out : $(CANON).edgeProf_OG.exe
+	date
+	$(SETUP)
+	$(PROFILESETUP)
+	LLVM_PROFILE_FILE=$*.profraw regressions-watchdog $(PROFILE_TIMEOUT) $(CANON).edgeProf_OG.time ./$*.exe $(ARGS) $(LARGE_PROFILEARGS) >rabbit11 2>&1
+	llvm-profdata merge $*.profraw -output=$@
+	rm -f $*.profraw
+	$(CLEANUP)
+	date
+
+
+$(CANON).edgeProf_OG.exe : $(HACK2).bc $(EDGEPROFLIB)
+	date
+	rm -f $*.edgeProf_OG.time $*.edgeProf_OG.out $*.edgeProf_OG.exe
+	regressions-watchdog $(TRANSFORM_TIMEOUT) insert-edge-prof_OG.time opt -pgo-instr-gen -instrprof $< -o tmp1.bc
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) lower-edge-prof.time llc tmp1.bc -o tmp1.s
+	regressions-watchdog $(TRANSFORM_TIMEOUT) link-edge-prof_OG.time $(LLVM_CXX) -fprofile-generate tmp1.bc -lm $(RUST_LINK_FLAGS) -o $@ $(LIBS)
+	rm -f tmp1.bc
+	date
+
+%.edgeProf.out : %.edgeProf.exe
+	date
+	$(SETUP)
+	$(PROFILESETUP)
+	#./$*.edgeProf.exe $(ARGS) >/dev/null 2>&1
+#	/usr/bin/time --output=$(CANON).edgeProf.time -f "%e" ./$*.edgeProf.exe $(ARGS)$(PROFILEARGS) >rabbit1 2>&1
+	LLVM_PROFILE_FILE=$*.profraw regressions-watchdog $(PROFILE_TIMEOUT) $(CANON).edgeProf.time ./$*.edgeProf.exe $(ARGS) $(LARGE_PROFILEARGS) >rabbit1 2>&1
+	llvm-profdata merge $*.profraw -output=$@
+	$(CLEANUP)
+	date
+
+%.edgeProf.exe : %.pre_pgo.bc $(EDGEPROFLIB)
+	date
+	rm -f $*.edgeProf.time $*.edgeProf.out $*.edgeProf.exe
+	regressions-watchdog $(TRANSFORM_TIMEOUT) insert-edge-prof.time opt -pgo-instr-gen -instrprof $< -o tmp1.bc
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) lower-edge-prof.time llc tmp1.bc -o tmp1.s
+	regressions-watchdog $(TRANSFORM_TIMEOUT) link-edge-prof.time $(LLVM_CXX) -fprofile-generate tmp1.bc -lm $(RUST_LINK_FLAGS) -o $@ $(LIBS)
+	rm -f tmp1.bc
+	date
+
+#
+# loop profile
+#
+
+%.loopProf.out : %.loopProf.exe
+	date
+	$(SETUP)
+	$(PROFILESETUP)
+	#./$*.loopProf.exe $(ARGS) >/dev/null 2>&1
+#	/usr/bin/time --output=$(CANON).loopProf.time -f "%e" ./$*.loopProf.exe $(ARGS)$(PROFILEARGS) >rabbit2 2>&1
+	regressions-watchdog $(PROFILE_TIMEOUT) $(CANON).loopProf.time ./$*.loopProf.exe $(ARGS) $(LARGE_PROFILEARGS) >rabbit2 2>&1
+	mv loopProf.out $@
+	$(CLEANUP)
+	date
+
+parse-loopProf : $(CANON).loopProf.out $(CANON).bc
+	cp $(CANON).loopProf.out loopProf.out
+	opt -load $(LIBERTY_LIBS_DIR)/libUtil.so -load $(LIBERTY_LIBS_DIR)/libLoopProf.so -targets $(CANON).bc -target-min-exec-percent 5 -target-min-iters 0
+	rm loopProf.out
+
+%.test-loopProf.parsed.out : %.test-loopProf.out $(CANON).bc
+	cp $*.test-loopProf.out loopProf.out
+	opt -load $(LIBERTY_LIBS_DIR)/libUtil.so -load $(LIBERTY_LIBS_DIR)/libLoopProf.so -targets $(CANON).bc -target-min-exec-percent 5 > /dev/null 2>$@
+	rm loopProf.out
+
+%.test-loopProf.out : %.loopProf.exe
+	date
+	$(SETUP)
+	$(PROFILESETUP)
+	regressions-watchdog $(PROFILE_TIMEOUT) $(CANON).test-loopProf.time ./$*.loopProf.exe $(TESTARGS) >rabbit23 2>&1
+	mv loopProf.out $@
+	$(CLEANUP)
+	date
+
+%.loopProf.exe : %.bc $(LOOPPROFLIBS)
+	date
+	rm -f $*.loopProf.time $*.loopProf.out $*.loopProf.exe
+	RUST_LINK_FLAGS="$(RUST_LINK_FLAGS)" loop-profile $<
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) loop-profile.time bash RUST_LINK_FLAGS="$(RUST_LINK_FLAGS)" loop-profile $<
+	date
+
+$(CANON).pgo.bc : $(HACK2).bc $(CANON).edgeProf_OG.out
+	cp $(CANON).edgeProf_OG.out llvmprof.out
+	regressions-watchdog $(TRANSFORM_TIMEOUT) insert-edge-prof_OG.time $(LLVM_OPT) -block-freq -pgo-instr-use -pgo-test-profile-file=./llvmprof.out $< -o $@
+	rm -f llvmprof.out
+
+$(CANON).loopProf_OG.out : $(CANON).loopProf_OG.exe
+	date
+	$(SETUP)
+	$(PROFILESETUP)
+	#./$*.loopProf.exe $(ARGS) >/dev/null 2>&1
+#	/usr/bin/time --output=$(CANON).loopProf.time -f "%e" ./$*.loopProf.exe $(ARGS)$(PROFILEARGS) >rabbit2 2>&1
+	regressions-watchdog $(PROFILE_TIMEOUT) $(CANON).loopProf_OG.time ./$(CANON).loopProf_OG.exe $(ARGS) $(LARGE_PROFILEARGS) >rabbit22 2>&1
+	mv loopProf.out $@
+	$(CLEANUP)
+	date
+
+$(CANON).loopProf_OG.exe : $(HACK2).bc $(LOOPPROFLIBS)
+$(CANON).loopProf_OG.exe : $(CANON).pgo.bc $(LOOPPROFLIBS)
+	date
+	rm -f loopProf_OG.time $(CANON).loopProf_OG.out $(CANON).loopProf_OG.exe
+	RUST_LINK_FLAGS="$(RUST_LINK_FLAGS)" regressions-watchdog $(TRANSFORM_TIMEOUT) loop-profile-OG.time loop-profile $<
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) loop-profile_OG.time  loop-profile $<
+	mv $(CANON).pgo.loopProf.exe $(CANON).loopProf_OG.exe
+	#mv $(HACK2).loopProf.exe $(CANON).loopProf_OG.exe
+	date
+
+#
+# lamp profile
+#
+
+%.lamp.out : %.lamp.exe
+	date
+	$(SETUP)
+	$(PROFILESETUP)
+#	/usr/bin/time --output=$(CANON).lamp.time -f "%e" ./$*.lamp.exe $(ARGS)$(PROFILEARGS) >rabbit3 2>&1
+	regressions-watchdog $(PROFILE_TIMEOUT) $*.lamp.time ./$*.lamp.exe $(ARGS) $(PROFILEARGS) >rabbit3 2>&1
+	cp result.lamp.profile $@
+	$(CLEANUP)
+	date
+
+%.lamp.exe : %.bc $(LAMPLIBS)
+	date
+	rm -f $*.lamp.time $*.lamp.out $*.lamp.exe
+	RUST_LINK_FLAGS="$(RUST_LINK_FLAGS)" lamp-profile $*.bc
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) lower-lamp.time lamp-profile $*.bc
+	date
+
+#
+# SLAMP profile
+#
+
+%.result.slamp.profile: %.loopProf.out
+	date
+	touch $@
+#	$(SETUP)
+#	$(PROFILESETUP)
+#	cp $*.loopProf.out loopProf.out
+#	DEFAULT_LDFLAGS="$(DEFAULT_LDFLAGS)" DEFAULT_LIBS="$(DEFAULT_LIBS) $(LIBS)" PROFILEARGS="$(ARGS) $(PROFILEARGS)" slamp-driver $*.bc $(TARGET_FCN) $(TARGET_LOOP) > rabbit6 2>&1
+#	mv result.slamp.profile $@
+#	rm -f loopProf.out
+#	$(CLEANUP)
+#	date
+
+#maybe it needs to have ldflags:
+#-lm -lstdc++ $(QUEUES) $(LAMP) $(EDGEPROF) $(SPPROF) $(SPEX) -lrt
+# or maybe nothing is needed
+# see link.mk from specialp for a datapoint
+
+
+#
+# header-phi profile
+#
+
+#%.headerphiprof.prelink.bc: %.pre_pgo.bc %.loopProf.out
+%.headerphiprof.prelink.bc: %.bc %.loopProf.out
+	cp $*.loopProf.out loopProf.out
+	$(LLVM_OPT) $(HEADERPHIPROF_LIB) -insert-headerphi-profiling $< -o $@
+	rm -f loopProf.out
+
+%.headerphiprof.prelink.o : %.headerphiprof.prelink.bc
+	$(LLVM_CC) -c -o $@ $<
+
+%.headerphiprof.exe : %.headerphiprof.prelink.o $(HEADERPHIPROF_HOOKS)
+	$(CXX) -O3 $^ $(DEFAULT_LDFLAGS) $(DEFAULT_LIBS) -o $@
+
+#%.headerphi_prof.out : %.headerphiprof.exe
+%.headerphi_prof.out :
+	touch $@
+
+#date
+#$(SETUP)
+#$(PROFILESETUP)
+#regressions-watchdog $(PROFILE_TIMEOUT) $*.headerphiprof.time ./$< $(ARGS) $(LARGE_PROFILEARGS) > rabbit7 2>&1
+#mv headerphi_prof.out $@
+#$(CLEANUP)
+#date
+
+
+#
+# specpriv profile
+#
+
+%.specpriv-profile.out : %.specpriv-profile.exe $(CANON).lamp.out
+	date
+	$(SETUP)
+	$(PROFILESETUP)
+#	date
+#	time ./$< $(ARGS) >/dev/null
+	rm -f result.specpriv.profile.txt
+	/usr/bin/time --output=$(CANON).specpriv-profile.time -f "%e" ./$< $(ARGS) $(PROFILEARGS) >rabbit4 2>&1
+#	regressions-watchdog $(PROFILE_TIMEOUT) $(CANON).specpriv-profile.time ./$< $(ARGS) $(PROFILEARGS) >rabbit4 2>&1
+	@echo -n Waiting for profiler to write result file
+	@for i in `seq 1 1200`; do echo -n .; if [ -r result.specpriv.profile.txt ]; then break; fi; sleep 1; done
+	@echo
+	$(CLEANUP)
+	cp result.specpriv.profile.txt $@
+	date
+
+$(CANON).specpriv-profile.exe : $(CANON).bc $(SPECPRIVPROFLIBS)
+	date
+	rm -f $(CANON).specpriv-profile.time $(CANON).specpriv-profile.out $(CANON).specpriv-profile.exe
+	regressions-watchdog $(TRANSFORM_TIMEOUT) specpriv-instrument.time specpriv-profile $(CANON).bc
+	regressions-watchdog $(TRANSFORM_TIMEOUT) specpriv-lower.time llc $(OPT) $(CANON).specpriv-profile.bc -o $(CANON).specpriv-profile.s
+	regressions-watchdog $(TRANSFORM_TIMEOUT) specpriv-link.time $(CXX) benchmark.specpriv-profile.s $(RUST_LINK_FLAGS) $(QUEUES) $(SPPROF) $(LIBS) -lrt -lpthread -o $@
+	date
+
+$(CANON).specpriv-pipeline.bc $(CANON).specpriv-pipeline-nopeep.bc : $(CANON).bc $(CANON).lamp.out $(CANON).edgeProf.out $(CANON).specpriv-profile.out $(CANON).loopProf.out $(LIBSPECPRIV) $(LIBERTY_SRC_DIR)/scripts/specpriv-pipeline
+	date
+	rm -f $(CANON).specpriv-pipeline.bc 
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).specpriv-profile.out result.specpriv.profile.txt
+	cp $(CANON).loopProf.out loopProf.out
+#	/usr/bin/time --output=$(CANON).specpriv-pipeline.bc.time -f "%e" specpriv-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP)
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $(CANON).specpriv-pipeline.bc.time specpriv-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP)
+	rm -f result.lamp.profile llvmprof.out result.specpriv.profile.txt loopProf.out
+	date
+
+$(CANON).smtx-pipeline.bc $(CANON).smtx-pipeline-nopeep.bc : $(CANON).bc $(CANON).lamp.out $(CANON).edgeProf.out $(CANON).loopProf.out $(LIBSPECPRIV) $(LIBERTY_SRC_DIR)/scripts/smtx-pipeline
+	date
+	rm -f $(CANON).smtx-pipeline.bc 
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).loopProf.out loopProf.out
+#	/usr/bin/time --output=$(CANON).smtx-pipeline.bc.time -f "%e"	smtx-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP)
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $(CANON).smtx-pipeline.bc.time 	smtx-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP)
+	rm -f result.lamp.profile llvmprof.out result.smtx.profile.txt loopProf.out
+	date
+
+#	rm -f specpriv-profile.bc specpriv-profile.s
+
+$(CANON).caf.dump: $(CANON).loopProf.out $(CANON).edgeProf.out
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	CAF=1 collaborative-pipeline $(CANON).bc
+	rm -f llvmprof.out loopProf.out
+
+$(CANON).collaborative-pipeline-no-spec.dump : $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).result.slamp.profile $(CANON).headerphi_prof.out $(CANON).lamp.out $(CANON).bc
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).headerphi_prof.out headerphi_prof.out
+	collaborative-pipeline $(CANON).bc $(TARGET_LIST)
+	mv benchmark.collaborative-pipeline.dump $@
+	rm -f llvmprof.out loopProf.out result.slamp.profile headerphi_prof.out result.lamp.profile
+
+$(CANON).collaborative-pipeline-tbaa.dump : $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).result.slamp.profile $(CANON).headerphi_prof.out $(CANON).lamp.out $(CANON).bc
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).headerphi_prof.out headerphi_prof.out
+	EXTRA="-tbaa --disable-basicaa" collaborative-pipeline $(CANON).bc $(TARGET_LIST)
+	mv benchmark.collaborative-pipeline.dump $@
+	rm -f llvmprof.out loopProf.out result.slamp.profile headerphi_prof.out result.lamp.profile
+
+$(CANON).collaborative-pipeline-notbaa.dump : $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).result.slamp.profile $(CANON).headerphi_prof.out $(CANON).lamp.out $(CANON).bc
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).headerphi_prof.out headerphi_prof.out
+	EXTRA=" --disable-basicaa" collaborative-pipeline $(CANON).bc $(TARGET_LIST)
+	mv benchmark.collaborative-pipeline.dump $@
+	rm -f llvmprof.out loopProf.out result.slamp.profile headerphi_prof.out result.lamp.profile
+
+
+$(CANON).collaborative-pipeline.dump : $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).result.slamp.profile $(CANON).headerphi_prof.out $(CANON).lamp.out $(CANON).specpriv-profile.out $(CANON).bc
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	cp $(CANON).result.slamp.profile result.slamp.profile
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).headerphi_prof.out headerphi_prof.out
+	collaborative-pipeline $(CANON).bc
+	rm -f llvmprof.out loopProf.out result.slamp.profile headerphi_prof.out result.lamp.profile
+
+$(CANON).analysis.dump : $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).result.slamp.profile $(CANON).headerphi_prof.out $(CANON).specpriv-profile.out $(CANON).bc $(THREADER_PATH)/$(THREADER).bc
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	cp $(CANON).result.slamp.profile result.slamp.profile
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).headerphi_prof.out headerphi_prof.out
+	cp $(THREADER_PATH)/$(THREADER).bc $(THREADER).bc
+	PP=1 collaborative-pipeline $(CANON).bc
+	rm -f llvmprof.out loopProf.out result.slamp.profile headerphi_prof.out result.lamp.profile $(THREADER).bc
+
+$(CANON).collaborative.exe: $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).result.slamp.profile $(CANON).headerphi_prof.out $(CANON).lamp.out $(CANON).specpriv-profile.out $(CANON).bc $(THREADER_PATH)/$(THREADER).bc
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	cp $(CANON).result.slamp.profile result.slamp.profile
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).headerphi_prof.out headerphi_prof.out
+	cp $(THREADER_PATH)/$(THREADER).bc $(THREADER).bc
+	CG=1 collaborative-pipeline $(CANON).bc
+	rm -f llvmprof.out loopProf.out result.slamp.profile headerphi_prof.out result.lamp.profile $(THREADER).bc
+
+$(CANON).collaborative_static.exe: $(CANON).edgeProf.out $(CANON).loopProf.out $(CANON).result.slamp.profile $(CANON).headerphi_prof.out $(CANON).lamp.out $(CANON).specpriv-profile.out $(CANON).bc $(THREADER_PATH)/$(THREADER).bc
+	cp $(CANON).edgeProf.out llvmprof.out
+	cp $(CANON).loopProf.out loopProf.out
+	cp $(CANON).result.slamp.profile result.slamp.profile
+	cp $(CANON).lamp.out result.lamp.profile
+	cp $(CANON).headerphi_prof.out headerphi_prof.out
+	cp $(THREADER_PATH)/$(THREADER).bc $(THREADER).bc
+	ST=1 CG=1 collaborative-pipeline $(CANON).bc
+	rm -f llvmprof.out loopProf.out result.slamp.profile headerphi_prof.out result.lamp.profile $(THREADER).bc
+
+seq.time seq.out: $(PLAIN).o3.exe
+	$(SETUP)
+	regressions-watchdog $(RUN_TIMEOUT) seq.time ./$(PLAIN).o3.exe $(TESTARGS) > seq.out 2>&1
+	$(CLEAUP)	
+
+reg_seq: $(PLAIN).o3.exe
+	$(SETUP)
+	regressions-watchdog $(RUN_TIMEOUT) seq.time taskset 0x20000000 ./$(PLAIN).o3.exe $(TESTARGS) > seq.out 2>&1
+	$(CLEAUP)	
+
+reg_para: $(CANON).collaborative.exe
+	$(SETUP)
+	#killall -q -9 benchmark.collaborative.exe
+	NUM_WORKERS=${REG_NUM_WORKERS} regressions-watchdog $(RUN_TIMEOUT) parallel.time ./$(CANON).collaborative.exe $(PAR_TESTARGS) > parallel.out 2>&1
+	- rm -f /dev/shm/specpriv-*
+	$(CLEANUP)
+
+parallel.time parallel.out: $(CANON).collaborative.exe
+	$(SETUP)
+	#killall -q -9 benchmark.collaborative.exe
+	NUM_WORKERS=28 regressions-watchdog $(RUN_TIMEOUT) parallel.time ./$(CANON).collaborative.exe $(PAR_TESTARGS) > parallel.out 2>&1
+	- rm -f /dev/shm/specpriv-*
+	$(CLEANUP)
+
+parallel_static.time parallel_static.out: $(CANON).collaborative_static.exe
+	NUM_WORKERS=28 regressions-watchdog $(RUN_TIMEOUT) parallel_static.time ./$(CANON).collaborative_static.exe $(PAR_TESTARGS) > parallel_static.out 2>&1
+	- rm -f /dev/shm/specpriv-*
+	$(CLEANUP)
+
+power_par.out: $(CANON).collaborative.exe
+	@if [ "$$EUID" -ne 0 ]; then \
+		echo "Please run as root"; \
+		exit 1; \
+	fi;
+	$(SETUP)
+	NUM_WORKERS=28 perf stat -a --per-socket --per-core --per-thread -e power/energy-pkg/,power/energy-cores/ ./$(CANON).collaborative.exe $(PAR_TESTARGS) > power_par.out 2>&1
+
+power_seq.out: $(PLAIN).o3.exe
+	@if [ "$$EUID" -ne 0 ]; then \
+		echo "Please run as root"; \
+		exit 1; \
+	fi;
+	$(SETUP)
+	perf stat -a --per-socket --per-core --per-thread -e power/energy-pkg/,power/energy-cores/ ./$(PLAIN).o3.exe $(TESTARGS) > power_seq.out 2>&1
+
+$(CANON).compare.out : seq.out parallel.out
+	$(SETUP)
+	- diff seq.out parallel.out > $@ 2>&1
+	#$(CHECK)
+	$(CLEANUP)
+
+# .bc canonicalization procedure
+%.o3.bc :%.bc
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.o3.time $(LLVM_OPT) -O3 $< -o $@
+	date
+
+%.opt.bc :%.bc
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.opt.time $(LLVM_OPT) $(TRANSFORMATIONS_BEFORE_PARALLELIZATION) $< -o $@  
+	date
+
+%.internalized.bc : %.bc
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.internalize.time $(LLVM_OPT) $< -internalize -internalize-public-api-list=main -ipconstprop -ipsccp -deadargelim -o $@
+	# regressions-watchdog $(TRANSFORM_TIMEOUT) $<.internalize.time $(LLVM_OPT) $< -internalize -internalize-public-api-list=main -ipconstprop -ipsccp -deadargelim -partial-inliner -o $@
+	date
+
+%.devirt.bc : %.bc $(DEVIRTLIBS)
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $*.devirtualize.time devirtualize $*.bc
+	date
+
+%.loopsimplified.bc : %.bc
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $*.loopsimplify.time $(LLVM_OPT) -O3 -loop-simplify -indvars $*.bc -o $*.loopsimplified.bc
+	date
+
+%.named.bc : %.bc $(NAMEDLIBS)
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.namer.time opt $< -o $@ -load $(LIBERTY_LIBS_DIR)/libMetadata.so -metadata-namer
+	date
+
+# Make seems to have trouble guessing how to build
+# benchmark.plain.o3.internalized.devirt.o3.loopsimplified.named.bc
+# I guess there's a limit of 3-levels of inferred rules?
+# So, as a HACK, we build it in two pieces:
+#  first, benchmark.plain.bc => -O3 => internalize => devirtualize => benchmark.hack.bc
+#  then, benchmark.hack.bc => -O3 => loop simplify => namer => benchmark.bc
+ifdef NODEVIRT
+$(HACK).bc : $(PLAIN).opt.internalized.bc
+	cp $< $@
+else
+$(HACK).bc : $(PLAIN).opt.internalized.devirt.bc
+	cp $< $@
+endif
+
+$(HACK2).bc : $(HACK).opt.bc
+	cp $< $@
+
+AINLINE=$(BINARY).ainline
+$(AINLINE).bc : $(HACK2).bc
+	regressions-watchdog $(TRANSFORM_TIMEOUT) inline.time $(LLVM_OPT) $(INLINER_LIB) -always-inline $< -o $@
+
+INLINED=$(BINARY).inlined
+$(INLINED).bc : $(HACK2).bc $(CANON).loopProf_OG.out
+	cp $(CANON).loopProf_OG.out loopProf.out
+	regressions-watchdog $(TRANSFORM_TIMEOUT) inline.time $(LLVM_OPT) $(INLINER_LIB) -aggr-inliner $< -o benchmark.inlined.noopt.bc
+	regressions-watchdog $(TRANSFORM_TIMEOUT) simplify.time $(LLVM_OPT) $(TRANSFORMATIONS_BEFORE_PARALLELIZATION) benchmark.inlined.noopt.bc -o $@
+	rm -f loopProf.out
+
+#$(CANON).bc: $(CANON).after_pgo.bc # -O3 =>internalize => devirtualize => -O3 => loop simplify => namer
+#	cp $< $@
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.o3.time $(LLVM_OPT) -O3 $@ -o $@
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.internalize.time $(LLVM_OPT) $@ -internalize -internalize-public-api-list=main -ipconstprop -ipsccp -deadargelim -partial-inliner -o $@
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.devirtualize.time devirtualize $@ -o $@
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.namer.time opt $@ -o $@ -load $(LIBERTY_LIBS_DIR)/libMetadata.so -metadata-namer
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.o3.time $(LLVM_OPT) -O3 $@ -o $@
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.loopsimplify.time $(LLVM_OPT) -O3 -loop-simplify -indvars $@ -o $@
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.namer.time opt $@ -o $@ -load $(LIBERTY_LIBS_DIR)/libMetadata.so -metadata-namer
+
+$(CANON).bc : $(CANON).pre_pgo.bc $(CANON).edgeProf.out $(NAMEDLIBS)
+	cp $(CANON).edgeProf.out llvmprof.out
+	regressions-watchdog $(TRANSFORM_TIMEOUT) insert-edge-prof.time $(LLVM_OPT) -block-freq -pgo-instr-use -pgo-test-profile-file=./llvmprof.out $< -o $@
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) simplify.time $(LLVM_OPT) -O1 -loop-simplify -indvars $@ -o $@
+	regressions-watchdog $(TRANSFORM_TIMEOUT) simplify.time $(LLVM_OPT) $(TRANSFORMATIONS_BEFORE_PARALLELIZATION) -loop-simplify -indvars $@ -o $@
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.dbgCl.time opt $@ -o $@ -load $(LIBERTY_LIBS_DIR)/libDbgClean.so -dbg-clean
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.namer.time opt $@ -o $@ -load $(LIBERTY_LIBS_DIR)/libMetadata.so -metadata-namer
+	#regressions-watchdog $(TRANSFORM_TIMEOUT) insert-edge-prof.time $(LLVM_OPT) -block-freq -pgo-instr-use -pgo-test-profile-file=./llvmprof.out $< -o $@
+
+ifdef ALWAYSINLINE
+$(CANON).pre_pgo.bc : $(AINLINE).bc
+else
+ifdef NOINLINE
+$(CANON).pre_pgo.bc : $(HACK2).bc
+else
+$(CANON).pre_pgo.bc : $(INLINED).bc
+endif
+endif
+	cp $< $@
+	$(VERIFIED)
+
+
+$(PLAIN).bc : $(OBJFILES_BC)
+	date
+	regressions-watchdog $(TRANSFORM_TIMEOUT) link-to-plain.time $(LLVM_LINK) $(LLVM_LINK_FLAGS) $^ -o $@
+	date
+
+
+#$(BINARY).bc : $(OBJFILES_BC)
+#	$(LLVM_LINK) $(LLVM_LINK_FLAGS) $(OBJFILES_BC) -o tmp1.bc
+#	opt tmp1.bc -loop-simplify -o $@
+#	rm -f tmp1.bc
+
+%.bc : %.rs
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.compile.time $(RUST_CC) $(RUST_CFLAGS) $< -o $@
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.opt.time $(LLVM_OPT) $(TRANSFORMATIONS_BEFORE_PARALLELIZATION) $@ -o $@  
+
+%.bc : %.c
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.compile.time $(LLVM_CC) $(LLVM_CFLAGS) $< -o $@
+
+%.bc : %.C
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.compile.time $(LLVM_CC) $(LLVM_CFLAGS) $< -o $@
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.opt.time $(LLVM_OPT) $(TRANSFORMATIONS_BEFORE_PARALLELIZATION) $@ -o $@  
+
+%.bc : %.cpp
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.compile.time $(LLVM_CXX) $(LLVM_CFLAGS) $< -o $@
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.opt.time $(LLVM_OPT) $(TRANSFORMATIONS_BEFORE_PARALLELIZATION) $@ -o $@  
+
+%.bc : %.cc
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.compile.time $(LLVM_CXX) $(LLVM_CFLAGS) $< -o $@
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.opt.time $(LLVM_OPT) $(TRANSFORMATIONS_BEFORE_PARALLELIZATION) $@ -o $@  
+
+%.exe : %.bc
+	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.link.time $(LLVM_CXX) -O3 $< -lm $(RUST_LINK_FLAGS)  $(QUEUES) $(LAMP) $(EDGEPROF) $(SPPROF) $(SPEX) -lrt -o $@
+#regressions-watchdog $(TRANSFORM_TIMEOUT) $<.link.time $(LLVM_CC) $(OPT) $< -lm -lstdc++ $(QUEUES) $(LAMP) $(EDGEPROF) $(SPPROF) $(SPEX) -lrt -o $@
+
+
+clean-canon :
+	rm -f *.o3.*.bc *.o3.bc benchmark.bc benchmark.out benchmark.exe benchmark.canonical.log compare1.out
+
+clean-runtime :
+	$(CLEANUP)
+
+clean :
+	- $(CLEANUP)
+	rm -f *.o *.ll *.bc *.pdf *.dot $(CANON).* $(CANON).opt.* *.time *.dump compare1.out rabbit* seq.out parallel.out $(CANON).compare.out dout.out loops.out auxout.out lcout.out result.slamp.profile loopProf.out llvmprof.out __targets.txt result.lamp.profile a.out result.specpriv.profile.txt headerphi_prof.out
+
+clean-exp:
+	- rm -f $(CANON).collaborative-pipeline.dump
+	- rm benchmark.collaborative.exe
+
+clean-prof :
+	rm benchmark.edgeProf.* benchmark.lamp.* benchmark.loopProf.* benchmark.specpriv-profile.* rabbit*
+
+clean-lamp:
+	rm *.lamp.*
+
+clean-cntr-only-dat:
+	rm benchmark.pldi14-O3-exhaustive-none-NOLAMP-CONTEXTUALIZED-CNTRSPEC-NOVALUEPRED.dat benchmark_only_cntr_spec.dat
+
+clean-seq:
+	- rm -f seq.out seq.time
+
+clean-para:
+	- rm -f parallel.out parallel.time
+
+clean-time: clean-seq clean-para
+
+clean-speed: clean-time
+	- rm -f benchmark.compare benchmark.compare.out
+	- rm -f benchmark.collaborative.exe
+
+# the following are not needeed for now
+#
+#%.specpriv-demote.bc : %.bc $(DEMOTEREDUXLIBS)
+#	date
+#	DEBUG=nodebug regressions-watchdog $(TRANSFORM_TIMEOUT) $<.demote-redux.time specpriv-demote-redux $< $(PAR_FUNCTION) $(LOOP)				# demote register reductions to memory
+#	date
+#
+#%.fcnsplit.bc : %.bc $(FCNSPLITLIBS)
+#	date
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $<.split.time split-fcns $<
+#	date
+#
+#callgraph.dot : $(PLAIN).bc
+#	date
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) dot-callgraph.time opt -disable-output -dot-callgraph $<
+#	date
+#
+#$(CANON).nospec-pipeline.bc $(CANON).nospec-pipeline-nopeep.bc : $(CANON).bc $(CANON).edgeProf.out $(CANON).loopProf.out $(LIBSPECPRIV) $(LIBERTY_SRC_DIR)/scripts/nospec-pipeline
+#	date
+#	rm -f $(CANON).nospec-pipeline.bc
+#	cp $(CANON).edgeProf.out llvmprof.out
+#	cp $(CANON).loopProf.out loopProf.out
+##	/usr/bin/time --output=$(CANON).nospec-pipeline.bc.time -f "%e" nospec-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP) 
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $(CANON).nospec-pipeline.bc.time nospec-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP) 
+#	rm -f llvmprof.out loopProf.out
+#	date
+#
+##$(CANON).smtx2-pipeline.bc $(CANON).specpriv-pipeline-nopeep.bc : $(CANON).bc $(CANON).lamp.out $(CANON).edgeProf.out $(CANON).specpriv-profile.out $(CANON).loopProf.out $(LIBSPECPRIV) $(LIBERTY_SRC_DIR)/scripts/specpriv-pipeline
+#$(CANON).smtx2-pipeline.bc $(CANON).smtx2-pipeline-nopeep.bc : $(CANON).bc $(CANON).lamp.out $(CANON).edgeProf.out $(CANON).specpriv-profile.out $(CANON).loopProf.out $(LIBSPECPRIV) $(LIBERTY_SRC_DIR)/scripts/specpriv-pipeline
+#	date
+#	rm -f $(CANON).smtx2-pipeline.bc 
+#	cp $(CANON).edgeProf.out llvmprof.out
+#	cp $(CANON).lamp.out result.lamp.profile
+#	cp $(CANON).specpriv-profile.out result.specpriv.profile.txt
+#	cp $(CANON).loopProf.out loopProf.out
+##	/usr/bin/time --output=$(CANON).smtx2-pipeline.bc.time -f "%e" specpriv-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP)
+#	regressions-watchdog $(TRANSFORM_TIMEOUT) $(CANON).smtx2-pipeline.bc.time smtx2-pipeline $(CANON).bc $(PAR_FUNCTION) $(LOOP)
+#	rm -f result.lamp.profile llvmprof.out result.specpriv.profile.txt loopProf.out
+#	date
