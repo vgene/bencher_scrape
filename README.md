@@ -106,23 +106,28 @@ Note that this will take a while. Once the modified rustc is installed and you a
 you should create a rust toolchain for the stage2 build of the modified version. 
 
 ```sh
-$ rustup toolchain link stage2 build/<host-triple>/stage2
+$ rustup toolchain link nobc build/<host-triple>/stage2
 ```
 
-Now you can run with the modified rustc like:
+The easiest way to toggle between toolchains is by changing the rustup environment:
 
 ```sh
-$ rustc +stage2 <cmd>
+$ rustup override set nobc
+```
+
+But you can also run directly with the modified rustc like:
+
+```sh
+$ rustc +nobc <cmd>
 ```
 
 Or:
 
 ```sh
-$ cargo +stage2 <cmd>
+$ cargo +nobc <cmd>
 ```
 
-The `bench.sh` script toggles between using the rustc specified in the `rust-toolchain`
-file and this locally modified version, which you can do manually as well.
+The `bench.sh` script toggles between toolchains using the first method. 
 
 ## End Goals
 
