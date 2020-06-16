@@ -174,11 +174,9 @@ then
     do
         if [[ "$env" == "$UNMOD_ENV" ]]
         then
-            echo "SKIPPING in bench"
             continue
         fi
         unmod_benchres="$OUTPUT/$UNMOD_ENV-$SUFFIX.bench"
-        DATA_BENCH="$PWD/$BENCH_NAME-$env.data"
         DIFF_BENCH="$BENCH_NAME-$env.diff"
         for d in ${RANDDIRS[@]}
         do
@@ -186,12 +184,21 @@ then
             cd "$d"
             # Simple benchmark diff: Low effort to read if small set of data
             diff "$unmod_benchres" "$this_benchres" > "$DIFF_BENCH"
-            # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
-            python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$unmod_benchres" "$this_benchres"
             # Gnuplot Script: Copy into crate directories for easier use
             cp "$ROOT/$SCRIPT_NAME" "$PWD/$SCRIPT_NAME"
             cd "$ROOT"
         done
+    done
+    DATA_BENCH="$BENCH_NAME.data"
+    for d in ${RANDDIRS[@]}
+    do
+        nobc_benchres="$OUTPUT/$NOBC_ENV-$SUFFIX.bench"
+        safelib_benchres="$OUTPUT/$SAFELIB_ENV-$SUFFIX.bench"
+        cd "$d"
+        # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
+        # (hard-coded for 3 input files atm)
+        python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$unmod_benchres" "$nobc_benchres" "$safelib_benchres"
+        cd "$ROOT"
     done
 fi
 
@@ -202,7 +209,6 @@ then
     do
         if [[ "$env" == "$UNMOD_ENV" ]]
         then
-            echo "SKIPPING in test"
             continue
         fi
         unmod_testres="$OUTPUT/$UNMOD_ENV-$SUFFIX.test"

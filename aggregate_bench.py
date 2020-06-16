@@ -27,14 +27,16 @@ name_pattern = "(?<=test\s).*(?=\s+[.]{3}\s+bench)"
 default_file = "./bench.data"
 
 default_unmod = "./unmod.bench"
-default_mod = "./mod.bench"
+default_nobc = "./nobc.bench"
+default_safelib = "./safelib.bench"
 
 def dump_benchmark(
     pattern,
     filepath=default_file,
     unmod=default_unmod,
-    mod=default_mod,
-    headers=['#','bench-name','unmod-time', 'unmod-error','mod-time','mod-error'],
+    nobc=default_nobc,
+    safelib=default_safelib,
+    headers=['#','bench-name','unmod-time', 'unmod-error','nobc-time','nobc-error','safelib-time','safelib-error'],
     **kwargs):
     """
     Customise with your own output path and header row.
@@ -43,12 +45,14 @@ def dump_benchmark(
     # run cargo bench in cwd, capture output
     unmod_names = re.findall(name_pattern, check_output(["cat", unmod]).decode('utf-8'))
     unmod_result = re.findall(pattern, check_output(["cat", unmod]).decode('utf-8'))
-    mod_result = re.findall(pattern, check_output(["cat", mod]).decode('utf-8'))
+    nobc_result = re.findall(pattern, check_output(["cat", nobc]).decode('utf-8'))
+    safelib_result = re.findall(pattern, check_output(["cat", safelib]).decode('utf-8'))
     # get rid of nasty commas
     output = []
     unmod_len = len(unmod_result)
-    mod_len = len(mod_result)
-    length = unmod_len if unmod_len < mod_len else mod_len
+    nobc_len = len(nobc_result)
+    safelib_len = len(safelib_result)
+    length = unmod_len if unmod_len < nobc_len else nobc_len if nobc_len < safelib_len else safelib_len
     for i in range(length):
         line = []
         # grab and append benchmark name to line
@@ -56,12 +60,16 @@ def dump_benchmark(
         line.append(bname)
         # grab each matched line
         unmod_line = unmod_result[i]
-        mod_line = mod_result[i]
+        nobc_line = nobc_result[i]
+        safelib_line = safelib_result[i]
         # grab each of the two numbers per line
         for num in unmod_line:
             tnum = num.translate({ord(','): None})
             line.append(tnum)
-        for num in mod_line:
+        for num in nobc_line:
+            tnum = num.translate({ord(','): None})
+            line.append(tnum)
+        for num in safelib_line:
             tnum = num.translate({ord(','): None})
             line.append(tnum)
         output.append(line)
@@ -103,14 +111,17 @@ if __name__ == "__main__":
     # So brittle. Shhh.
     filepath = default_file
     unmod = default_unmod
-    mod = default_mod
-    if len(sys.argv) == 4:
+    nobc = default_nobc
+    safelib = default_safelib
+    if len(sys.argv) == 5:
         filepath = sys.argv[1]
         unmod = sys.argv[2]
-        mod = sys.argv[3]
+        nobc = sys.argv[3]
+        safelib = sys.argv[4]
     dump_benchmark(
         pattern,
         filepath=filepath,
         unmod=unmod,
-        mod=mod
+        nobc=nobc,
+        safelib=safelib
     )
