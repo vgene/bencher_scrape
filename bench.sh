@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# DEFAULTS
+# *****DEFAULTS*****
 
 # Don't scrape
 scrape=0
@@ -12,14 +12,16 @@ tst=0
 name="sanity"
 output="output"
 
+# *****COMMAND-LINE ARGS*****
+
 usage () {
     echo ""
     echo "Usage: $0 [-s] [-c <tchain-name>] [-b] [-t] [-n <out-label>] [-o <dir-label>]"
     echo "   -s               scrape reverse dependencies and download locally  [default = off]"
     echo "   -c <tchain-name> adds this rustup toolchain name to the list of toolchains to use"
     echo "                      for the benchmarks and/or tests - note that in order to use the"
-    echo "                      unmodified rustc specified in the 'rust-toolchain' file you must"
-    echo "                      pass an empty <tchain-name>"
+    echo "                      unmodified rustc specified in this repository's 'rust-toolchain'"
+    echo "                      file you must pass: '-' as the <tchain-name>"
     echo "   -b               bench all crates with all three versions of rustc"
     echo "   -t               test all crates with all three versions of rustc"
     echo "   -n <out-label>   what to label the output files of this invocation as"
@@ -61,11 +63,10 @@ do
     esac
 done
 
-#RUSTC_UNMOD="$HOME/.cargo"
-#RUSTC_MOD="$HOME/.cargo-mod"
-ROOT="$PWD"
+# *****PRE-PROCESS*****
 
 # Get list of crates to run on and randomize their order
+ROOT="$PWD"
 SUBDIRS="$ROOT/crates/crates/*/"
 DIRLIST="dirlist"
 RAND_DIRLIST="rand-dirlist"
@@ -80,16 +81,13 @@ done
 python3 "$RAND_SCRIPT" "$DIRLIST" "$RAND_DIRLIST"
 
 # Parse randomized list as array
-
 RANDDIRS=()
 while read -r line
 do
     RANDDIRS=( "${RANDDIRS[@]}" "$line" )
 done < "$RAND_DIRLIST"
 
-# Pre-processing done, start running
-
-# Download reverse dependencies of `bencher` crate
+# *****SCRAPE*****
 
 if [ "$scrape" -eq 1 ]
 then
@@ -99,54 +97,68 @@ fi
 # Initialize other helpful variables (mostly for naming output files)
 SUFFIX="$name"
 OUTPUT="$output"
-
-#UNMOD_NAME="unmod-$SUFFIX"
-#MOD_NAME="mod-$SUFFIX"
-
-#UNMOD_RES="$OUTPUT/$UNMOD_NAME.bench"
-#MOD_RES="$OUTPUT/$MOD_NAME.bench"
-#UNMOD_TESTS="$OUTPUT/$UNMOD_NAME.tests"
-#MOD_TESTS="$OUTPUT/$MOD_NAME.tests"
-
 TARGET="target"
 
-#UNMOD_TARGET_DIR="$OUTPUT/$TARGET-$UNMOD_NAME"
-#MOD_TARGET_DIR="$OUTPUT/$TARGET-$MOD_NAME"
-
-# BENCH
+# *****BENCH*****
 
 if [ "$bench" -eq 1 ]
 then
     for tchain in ${TCHAINS[@]}
     do
+        outdir="$OUTPUT/$TARGET-$tchain-$SUFFIX"
+        benchres="$OUTPUT/$tchain-$SUFFIX.bench"
+        if [[ "$tchain" == "-" ]]
+        then
+            tc=""
+        else
+            tc="+$tchain"
+        fi
         for d in ${RANDDIRS[@]}
         do
-            #echo "$d/$tchain-$SUFFIX"
-            cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+$tchain" bench > "$OUTPUT/$tchain-$SUFFIX.bench" && mv "$TARGET" "$OUTPUT/$TARGET-$tchain-$SUFFIX" && cd "$ROOT"
+            cd "$d"
+            cargo clean
+            mkdir -p "$OUTPUT"
+            cargo "$tc" bench > "$benchres"
+            mv "$TARGET" "$outdir"
+            cd "$ROOT"
         done
     done
 fi
 
-# TEST
+# *****TEST*****
 
 if [ "$tst" -eq 1 ]
 then
     for tchain in ${TCHAINS[@]}
     do
+        outdir="$OUTPUT/$TARGET-$tchain-$SUFFIX"
+        testres="$OUTPUT/$tchain-$SUFFIX.test"
+        if [[ "$tchain" == "-" ]]
+        then
+            tc=""
+        else
+            tc="+$tchain"
+        fi
         for d in ${RANDDIRS[@]}
         do
+            cd "$d"
             # Avoid re-compiling if possible
             if [ "$bench" -eq 1]
             then
-                cd "$d" && mv "$OUTPUT/$TARGET-$tchain-$SUFFIX" "$TARGET" && cargo "+$tchain" test > "$OUTPUT/$tchain-$SUFFIX.test" && mv "$TARGET" "$OUTPUT/$TARGET-$tchain-$SUFFIX" && cd "$ROOT"
+                mv "$outdir" "$TARGET"
+                cargo "$tc" test > "$testres"
             else
-                cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+$tchain" test > "$OUTPUT/$tchain-$SUFFIX.test" && mv "$TARGET" "$OUTPUT/$TARGET-$tchain-$SUFFIX" && cd "$ROOT"
+                cargo clean && mkdir -p "$OUTPUT"
+                cargo "$tc" test > "$testres"
             fi
+            # Store back
+            mv "$TARGET" "$outdir"
+            cd "$ROOT"
         done
     done
 fi
 
-# AGGREGATE RESULTS
+# *****AGGREGATE RESULTS*****
 
 AGGLOC="$ROOT/aggregate_bench.py"
 BENCH_NAME="$OUTPUT/bench-$SUFFIX"
@@ -158,38 +170,44 @@ SCRIPT_NAME="gnuplot-script"
 
 if [ "$bench" -eq 1 ]
 then
-    # Simple benchmark diff: Low effort to read if small set of data
-    for d in ${RANDDIRS[@]}
+    for tchain in ${TCHAINS[@]}
     do
-        cd "$d" &&
-#            diff "$UNMOD_RES" "$MOD_RES" > "$DIFF_BENCH" && 
+        if [[ "$tchain" == "-" ]]
+        then
+            continue
+        fi
+        unmod_benchres="$OUTPUT/--$SUFFIX.bench"
+        for d in ${RANDDIRS[@]}
+        do
+            this_benchres="$OUTPUT/$tchain-$SUFFIX.bench"
+            cd "$d"
+            # Simple benchmark diff: Low effort to read if small set of data
+            diff "$unmod_benchres" "$this_benchres" > "$DIFF_BENCH"
+            # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
+            python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$unmod_benchres" "$this_benchres"
+            # Gnuplot Script: Copy into crate directories for easier use
+            cp "$ROOT/$SCRIPT_NAME" "$PWD/$SCRIPT_NAME"
             cd "$ROOT"
-    done
-    
-    # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
-    for d in ${RANDDIRS[@]}
-    do
-        cd "$d" &&
-#            python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$UNMOD_RES" "$MOD_RES" &&
-            cd "$ROOT"
-    done
-    
-    # Gnuplot Script: Copy into crate directories for easier use
-    for d in ${RANDDIRS[@]}
-    do
-        cd "$d" &&
-            cp "$ROOT/$SCRIPT_NAME" "$PWD/$SCRIPT_NAME" &&
-            cd "$ROOT"
+        done
     done
 fi
 
 # Simple test diff: check if test failures are specific to the modified rustc or not
 if [ "$tst" -eq 1 ]
 then
-    for d in ${RANDDIRS[@]}
+    for tchain in ${TCHAINS[@]}
     do
-        cd "$d" &&
-#            diff "$UNMOD_TESTS" "$MOD_TESTS" > "$DIFF_TEST" && 
+        if [[ "$tchain" == "-" ]]
+        then
+            continue
+        fi
+        unmod_testres="$OUTPUT/--$SUFFIX.test"
+        for d in ${RANDDIRS[@]}
+        do
+            this_testres="$OUTPUT/$tchain-$SUFFIX.test"
+            cd "$d"
+            diff "$unmod_testres" "$this_testres" > "$DIFF_TEST"
             cd "$ROOT"
+        done
     done
 fi
