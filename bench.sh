@@ -12,7 +12,7 @@ tst=0
 name="sanity"
 output="output"
 
-UNMOD_ENV="unmod"
+UNMOD_ENV="nightly-2020-05-07-x86_64-unknown-linux-gnu"
 NOBC_ENV="nobc"
 SAFELIB_ENV="safelib"
 
@@ -28,10 +28,10 @@ DBGFLAGS="-C debuginfo=2"
 # LTO Flags
 LTOFLAGS_A="-C embed-bitcode=no"
 
-RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
+RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS"" # "$LTOFLAGS_A""
 
 # Command to use below
-RUSTC_CMD="cargo rustc --release --bench arraystring -- --emit=llvm-bc"
+RUSTC_CMD="cargo rustc --release --bench -- --emit=llvm-bc"
 
 # *****COMMAND-LINE ARGS*****
 
@@ -39,10 +39,6 @@ usage () {
     echo ""
     echo "Usage: $0 [-s] [-c <tchain-name>] [-b] [-t] [-n <out-label>] [-o <dir-label>]"
     echo "   -s               scrape reverse dependencies and download locally  [default = off]"
-    echo "   -c <tchain-name> adds this rustup toolchain name to the list of toolchains to use"
-    echo "                      for the benchmarks and/or tests - note that in order to use the"
-    echo "                      unmodified rustc specified in this repository's 'rust-toolchain'"
-    echo "                      file you must pass: '-' as the <tchain-name>"
     echo "   -b               bench all crates with all three versions of rustc"
     echo "   -t               test all crates with all three versions of rustc"
     echo "   -n <out-label>   what to label the output files of this invocation as"
@@ -51,16 +47,12 @@ usage () {
 }
 
 # Parse commandline arguments
-TCHAINS=()
 while getopts "sc:btn:o:h" opt
 do
     case "$opt" in
     s)
         scrape=1
         ;;
-    c)
-	TCHAINS=( "${TCHAINS[@]}" "$OPTARG" )
-	;;
     b)
         bench=1
         ;;
@@ -88,7 +80,8 @@ done
 
 # Get list of crates to run on and randomize their order
 ROOT="$PWD"
-SUBDIRS="$ROOT/crates/crates/*/"
+#SUBDIRS="$ROOT/crates/crates/*/"
+SUBDIRS="$ROOT/crates/crates/rust-obstack/"
 DIRLIST="dirlist"
 RAND_DIRLIST="rand-dirlist"
 RAND_SCRIPT="randomize.py"
@@ -124,25 +117,17 @@ TARGET="target"
 
 if [ "$bench" -eq 1 ]
 then
-    for tchain in ${TCHAINS[@]}
-    #for env in ${TCHAIN_ENVS[@]}
+    for env in ${TCHAIN_ENVS[@]}
     do
-        outdir="$OUTPUT/$TARGET-$tchain-$SUFFIX"
-        benchres="$OUTPUT/$tchain-$SUFFIX.bench"
-        if [[ "$tchain" == "-" ]]
-        then
-            tc=""
-        else
-            tc="+$tchain"
-        fi
-        #rustup override set $env
+        outdir="$OUTPUT/$TARGET-$env-$SUFFIX"
+        benchres="$OUTPUT/$env-$SUFFIX.bench"
+        rustup override set $env
         for d in ${RANDDIRS[@]}
         do
             cd "$d"
             cargo clean
             mkdir -p "$OUTPUT"
-            cargo "$tc" bench > "$benchres"
-            #RUSTFLAGS=$RUSTFLAGS cargo "$tc" bench > "$benchres"
+            RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
             mv "$TARGET" "$outdir"
             cd "$ROOT"
         done
@@ -153,28 +138,22 @@ fi
 
 if [ "$tst" -eq 1 ]
 then
-    for tchain in ${TCHAINS[@]}
+    for env in ${TCHAIN_ENVS[@]}
     do
-        outdir="$OUTPUT/$TARGET-$tchain-$SUFFIX"
-        testres="$OUTPUT/$tchain-$SUFFIX.test"
-        if [[ "$tchain" == "-" ]]
-        then
-            tc=""
-        else
-            tc="+$tchain"
-        fi
+        outdir="$OUTPUT/$TARGET-$env-$SUFFIX"
+        testres="$OUTPUT/$env-$SUFFIX.test"
+        rustup override set $env
         for d in ${RANDDIRS[@]}
         do
             cd "$d"
             # Avoid re-compiling if possible
-            if [ "$bench" -eq 1]
+            if [ "$bench" -eq 1 ]
             then
                 mv "$outdir" "$TARGET"
-                cargo "$tc" test > "$testres"
             else
                 cargo clean && mkdir -p "$OUTPUT"
-                cargo "$tc" test > "$testres"
             fi
+            RUSTFLAGS=$RUSTFLAGS cargo test > "$testres"
             # Store back
             mv "$TARGET" "$outdir"
             cd "$ROOT"
@@ -187,23 +166,23 @@ fi
 AGGLOC="$ROOT/aggregate_bench.py"
 BENCH_NAME="$OUTPUT/bench-$SUFFIX"
 TEST_NAME="$OUTPUT/test-$SUFFIX"
-DATA_BENCH="$BENCH_NAME.data"
-DIFF_BENCH="$BENCH_NAME.diff"
-DIFF_TEST="$TEST_NAME.diff"
 SCRIPT_NAME="gnuplot-script"
 
 if [ "$bench" -eq 1 ]
 then
-    for tchain in ${TCHAINS[@]}
+    for env in ${TCHAIN_ENVS[@]}
     do
-        if [[ "$tchain" == "-" ]]
+        if [[ "$env" == "$UNMOD_ENV" ]]
         then
+            echo "SKIPPING in bench"
             continue
         fi
-        unmod_benchres="$OUTPUT/--$SUFFIX.bench"
+        unmod_benchres="$OUTPUT/$UNMOD_ENV-$SUFFIX.bench"
+        DATA_BENCH="$PWD/$BENCH_NAME-$env.data"
+        DIFF_BENCH="$BENCH_NAME-$env.diff"
         for d in ${RANDDIRS[@]}
         do
-            this_benchres="$OUTPUT/$tchain-$SUFFIX.bench"
+            this_benchres="$OUTPUT/$env-$SUFFIX.bench"
             cd "$d"
             # Simple benchmark diff: Low effort to read if small set of data
             diff "$unmod_benchres" "$this_benchres" > "$DIFF_BENCH"
@@ -219,16 +198,18 @@ fi
 # Simple test diff: check if test failures are specific to the modified rustc or not
 if [ "$tst" -eq 1 ]
 then
-    for tchain in ${TCHAINS[@]}
+    for env in ${TCHAIN_ENVS[@]}
     do
-        if [[ "$tchain" == "-" ]]
+        if [[ "$env" == "$UNMOD_ENV" ]]
         then
+            echo "SKIPPING in test"
             continue
         fi
-        unmod_testres="$OUTPUT/--$SUFFIX.test"
+        unmod_testres="$OUTPUT/$UNMOD_ENV-$SUFFIX.test"
+        DIFF_TEST="$TEST_NAME-$env.diff"
         for d in ${RANDDIRS[@]}
         do
-            this_testres="$OUTPUT/$tchain-$SUFFIX.test"
+            this_testres="$OUTPUT/$env-$SUFFIX.test"
             cd "$d"
             diff "$unmod_testres" "$this_testres" > "$DIFF_TEST"
             cd "$ROOT"
