@@ -80,8 +80,7 @@ done
 
 # Get list of crates to run on and randomize their order
 ROOT="$PWD"
-#SUBDIRS="$ROOT/crates/crates/*/"
-SUBDIRS="$ROOT/crates/crates/rust-obstack/"
+SUBDIRS="$ROOT/crates/crates/*/"
 DIRLIST="dirlist"
 RAND_DIRLIST="rand-dirlist"
 RAND_SCRIPT="randomize.py"
@@ -185,7 +184,7 @@ then
             # Simple benchmark diff: Low effort to read if small set of data
             diff "$unmod_benchres" "$this_benchres" > "$DIFF_BENCH"
             # Gnuplot Script: Copy into crate directories for easier use
-            cp "$ROOT/$SCRIPT_NAME" "$PWD/$SCRIPT_NAME"
+            cp "$ROOT/$SCRIPT_NAME" "$PWD/$OUTPUT/$SCRIPT_NAME"
             cd "$ROOT"
         done
     done
