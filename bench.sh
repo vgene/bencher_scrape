@@ -12,6 +12,27 @@ tst=0
 name="sanity"
 output="output"
 
+UNMOD_ENV="unmod"
+NOBC_ENV="nobc"
+SAFELIB_ENV="safelib"
+
+TCHAIN_ENVS=( "$UNMOD_ENV" "$NOBC_ENV" "$SAFELIB_ENV" )
+
+# Optimization Level Management
+# OPTFLAGS="-C no-prepopulate-passes -C passes=name-anon-globals" # NO OPTS at all, stricter than opt-level=0
+OPTFLAGS="-C opt-level=3"
+
+# Debug Management
+DBGFLAGS="-C debuginfo=2"
+
+# LTO Flags
+LTOFLAGS_A="-C embed-bitcode=no"
+
+RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
+
+# Command to use below
+RUSTC_CMD="cargo rustc --release --bench arraystring -- --emit=llvm-bc"
+
 # *****COMMAND-LINE ARGS*****
 
 usage () {
@@ -104,6 +125,7 @@ TARGET="target"
 if [ "$bench" -eq 1 ]
 then
     for tchain in ${TCHAINS[@]}
+    #for env in ${TCHAIN_ENVS[@]}
     do
         outdir="$OUTPUT/$TARGET-$tchain-$SUFFIX"
         benchres="$OUTPUT/$tchain-$SUFFIX.bench"
@@ -113,12 +135,14 @@ then
         else
             tc="+$tchain"
         fi
+        #rustup override set $env
         for d in ${RANDDIRS[@]}
         do
             cd "$d"
             cargo clean
             mkdir -p "$OUTPUT"
             cargo "$tc" bench > "$benchres"
+            #RUSTFLAGS=$RUSTFLAGS cargo "$tc" bench > "$benchres"
             mv "$TARGET" "$outdir"
             cd "$ROOT"
         done
