@@ -47,7 +47,7 @@ usage () {
 }
 
 # Parse commandline arguments
-while getopts "sc:btn:o:h" opt
+while getopts "sbtn:o:h" opt
 do
     case "$opt" in
     s)
