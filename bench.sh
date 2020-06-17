@@ -8,6 +8,8 @@ scrape=0
 bench=0
 # Don't test
 tst=0
+# Only one run
+runs=1
 # Some descriptive name of this invocation
 name="sanity"
 output="output"
@@ -38,16 +40,17 @@ RUSTC_CMD="cargo rustc --release --bench -- --emit=llvm-bc"
 usage () {
     echo ""
     echo "Usage: $0 [-s] [-c <tchain-name>] [-b] [-t] [-n <out-label>] [-o <dir-label>]"
-    echo "   -s               scrape reverse dependencies and download locally  [default = off]"
-    echo "   -b               bench all crates with all three versions of rustc"
-    echo "   -t               test all crates with all three versions of rustc"
-    echo "   -n <out-label>   what to label the output files of this invocation as"
-    echo "   -o <dir-label>   what to label the output directory of this invocation as"
+    echo "   -s               Scrape reverse dependencies and download locally [default = off]."
+    echo "   -b               Bench crates with all three versions of rustc [default = off]."
+    echo "   -t               Test crates with all three versions of rustc [default = off]."
+    echo "   -n <out-label>   How to label the output files of this invocation."
+    echo "   -o <dir-label>   How to label the output directory of this invocation."
+    echo "   -r <num-runs>    How many runs to execute [default = 1]."
     echo ""
 }
 
 # Parse commandline arguments
-while getopts "sc:btn:o:h" opt
+while getopts "sbtn:o:r:h" opt
 do
     case "$opt" in
     s)
@@ -65,6 +68,9 @@ do
     o)
 	output="$OPTARG"
 	;;
+    r)
+	runs="$(($OPTARG))"
+	;;
     h)
         usage
         exit 0
@@ -77,6 +83,11 @@ do
 done
 
 # *****PRE-PROCESS*****
+
+# Between consecutive runs of this script, want to
+# re-randomize and also create distinct output dirs
+for i in $(seq 1 $runs)
+do
 
 # Get list of crates to run on and randomize their order
 ROOT="$PWD"
@@ -109,7 +120,13 @@ fi
 
 # Initialize other helpful variables (mostly for naming output files)
 SUFFIX="$name"
-OUTPUT="$output"
+if [ "$runs" -gt 1 ]
+then
+    OUTPUT="$output-$i"
+else
+    OUTPUT="$output"
+fi
+echo "OUTPUT == $OUTPUT when RUNS == $runs"
 TARGET="target"
 
 # *****BENCH*****
@@ -221,3 +238,5 @@ then
         done
     done
 fi
+
+done
