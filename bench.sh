@@ -100,7 +100,8 @@ do
 
 # Get list of crates to run on and randomize their order
 ROOT="$PWD"
-SUBDIRS="$ROOT/crates/crates/*/"
+#SUBDIRS="$ROOT/crates/crates/*/"
+SUBDIRS="$ROOT/crates/crates/rust-obstack/"
 DIRLIST="dirlist"
 RAND_DIRLIST="rand-dirlist"
 RAND_SCRIPT="randomize.py"
@@ -236,11 +237,12 @@ then
     for d in ${RANDDIRS[@]}
     do
         nobc_benchres="$OUTPUT/$NOBC_ENV-$SUFFIX.bench"
+        nobcsl_benchres="$OUTPUT/$NOBC_SL_ENV-$SUFFIX.bench"
         safelib_benchres="$OUTPUT/$SAFELIB_ENV-$SUFFIX.bench"
         cd "$d"
         # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
         # (hard-coded for 3 input files atm)
-        python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$unmod_benchres" "$nobc_benchres" "$safelib_benchres"
+        python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$unmod_benchres" "$nobc_benchres" "$nobcsl_benchres" "$safelib_benchres"
         cd "$ROOT"
     done
 fi
