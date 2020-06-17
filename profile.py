@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
-"""Profile for running these benchmarks across multiple CloudLab machine.
+"""Profile for running rust crate benchmarks across multiple CloudLab machine.
 
 Instructions:
 """
 
 import geni.portal as portal
-import geni.rspec as pg
+import geni.rspec.pg as pg
 
 pc = portal.Context()
 rspec = pg.Request()
