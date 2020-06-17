@@ -8,6 +8,8 @@ scrape=0
 bench=0
 # Don't test
 tst=0
+# Don't pre-compile
+comp=0
 # Only one run
 runs=1
 # Some descriptive name of this invocation
@@ -16,9 +18,10 @@ output="output"
 
 UNMOD_ENV="nightly-2020-05-07-x86_64-unknown-linux-gnu"
 NOBC_ENV="nobc"
+NOBC_SL_ENV="nobc+sl"
 SAFELIB_ENV="safelib"
 
-TCHAIN_ENVS=( "$UNMOD_ENV" "$NOBC_ENV" "$SAFELIB_ENV" )
+TCHAIN_ENVS=( "$UNMOD_ENV" "$NOBC_ENV" "$NOBC_SL_ENV" "$SAFELIB_ENV" )
 
 # Optimization Level Management
 # OPTFLAGS="-C no-prepopulate-passes -C passes=name-anon-globals" # NO OPTS at all, stricter than opt-level=0
@@ -30,7 +33,7 @@ DBGFLAGS="-C debuginfo=2"
 # LTO Flags
 LTOFLAGS_A="-C embed-bitcode=no"
 
-RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS"" # "$LTOFLAGS_A""
+RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
 
 # Command to use below
 RUSTC_CMD="cargo rustc --release --bench -- --emit=llvm-bc"
@@ -43,6 +46,9 @@ usage () {
     echo "   -s               Scrape reverse dependencies and download locally [default = off]."
     echo "   -b               Bench crates with all three versions of rustc [default = off]."
     echo "   -t               Test crates with all three versions of rustc [default = off]."
+    echo "   -c               Compile crate benchmarks only (without running) with all three"
+    echo "                      versions of rustc; for large-scale benchmark experiment"
+    echo "                      [default = off]."
     echo "   -n <out-label>   How to label the output files of this invocation."
     echo "   -o <dir-label>   How to label the output directory of this invocation."
     echo "   -r <num-runs>    How many runs to execute [default = 1]."
@@ -50,7 +56,7 @@ usage () {
 }
 
 # Parse commandline arguments
-while getopts "sbtn:o:r:h" opt
+while getopts "sbtcn:o:r:h" opt
 do
     case "$opt" in
     s)
@@ -62,6 +68,9 @@ do
     t)
         tst=1
         ;;
+    c)
+        comp=1
+	;;
     n)
         name="$OPTARG"
         ;;
@@ -120,31 +129,39 @@ fi
 
 # Initialize other helpful variables (mostly for naming output files)
 SUFFIX="$name"
-if [ "$runs" -gt 1 ]
+if [ "$runs" -gt 1 -a "$comp" -eq 0 ]
 then
     OUTPUT="$output-$i"
 else
     OUTPUT="$output"
 fi
-echo "OUTPUT == $OUTPUT when RUNS == $runs"
 TARGET="target"
 
 # *****BENCH*****
 
-if [ "$bench" -eq 1 ]
+if [ "$bench" -eq 1 -o "$comp" -eq 1 ]
 then
     for env in ${TCHAIN_ENVS[@]}
     do
-        outdir="$OUTPUT/$TARGET-$env-$SUFFIX"
+        precomp_outdir="$output/$TARGET-$env-$SUFFIX"
         benchres="$OUTPUT/$env-$SUFFIX.bench"
         rustup override set $env
         for d in ${RANDDIRS[@]}
         do
             cd "$d"
-            cargo clean
-            mkdir -p "$OUTPUT"
-            RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
-            mv "$TARGET" "$outdir"
+            if [ "$comp" -eq 1 ]
+            then
+                cargo clean
+                mkdir -p "$OUTPUT"
+                RUSTFLAGS=$RUSTFLAGS cargo bench --no-run
+            else
+                mkdir -p "$OUTPUT"
+                # If pre-compiled, only need one version of the compiled code
+                # but want to save the multiple run results in distinct locations
+                mv "$precomp_outdir" "$TARGET"
+                RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
+            fi
+            mv "$TARGET" "$precomp_outdir"
             cd "$ROOT"
         done
     done
@@ -184,6 +201,18 @@ BENCH_NAME="$OUTPUT/bench-$SUFFIX"
 TEST_NAME="$OUTPUT/test-$SUFFIX"
 SCRIPT_NAME="gnuplot-script"
 
+if [ "$comp" -eq 1 ]
+then
+    for d in ${RANDDIRS[@]}
+    do
+        cd "$d"
+        mkdir -p "$PWD/$OUTPUT"
+        # Gnuplot Script: Copy into crate directories for easier use
+        cp "$ROOT/$SCRIPT_NAME" "$PWD/$OUTPUT/$SCRIPT_NAME"
+        cd "$ROOT"
+    done
+fi
+
 if [ "$bench" -eq 1 ]
 then
     for env in ${TCHAIN_ENVS[@]}
@@ -200,8 +229,6 @@ then
             cd "$d"
             # Simple benchmark diff: Low effort to read if small set of data
             diff "$unmod_benchres" "$this_benchres" > "$DIFF_BENCH"
-            # Gnuplot Script: Copy into crate directories for easier use
-            cp "$ROOT/$SCRIPT_NAME" "$PWD/$OUTPUT/$SCRIPT_NAME"
             cd "$ROOT"
         done
     done
