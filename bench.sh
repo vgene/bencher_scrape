@@ -100,8 +100,7 @@ do
 
 # Get list of crates to run on and randomize their order
 ROOT="$PWD"
-#SUBDIRS="$ROOT/crates/crates/*/"
-SUBDIRS="$ROOT/crates/crates/rust-obstack/"
+SUBDIRS="$ROOT/crates/crates/*/"
 DIRLIST="dirlist"
 RAND_DIRLIST="rand-dirlist"
 RAND_SCRIPT="randomize.py"
