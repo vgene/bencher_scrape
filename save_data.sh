@@ -27,18 +27,28 @@ SSH_NODES=(
 # Total runs per crate per toolchain = 32
 
 # Parse paths to get concise crate names
-
+ROOT="$PWD"
+SUBDIRS="$ROOT/crates/crates/*/"
 DIRLIST="dirlist"
 CRATELIST="cratelist"
 ISO_SCRIPT="isolate_crate_names.py"
 
-if [ ! -f "$DIRLIST" ]
+if [ -f "$DIRLIST" ]
 then
-    for d in ${SUBDIRS[@]}
-    do
-        echo "$d" >> "$DIRLIST"
-    done
+    rm "$DIRLIST"
 fi
+touch "$DIRLIST"
+
+for d in ${SUBDIRS[@]}
+do
+    echo "$d" >> "$DIRLIST"
+done
+
+if [ -f "$CRATELIST" ]
+then
+    rm "$CRATELIST"
+fi
+touch "$CRATELIST"
 
 python3 "$ISO_SCRIPT" "$DIRLIST" "$CRATELIST"
 
@@ -60,10 +70,10 @@ TRGT_SAFELIB="target-safelib-sanity"
 
 for crate in ${CRATES[@]}
 do
-        scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_UNMOD/" "$LOCAL_PATH/$crate/output/$TRGT_UNMOD/"
-        scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_NOBC/" "$LOCAL_PATH/$crate/output/$TRGT_NOBCSL/"
-        scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_NOBCSL/" "$LOCAL_PATH/$crate/output/$TRGT_NOBCSL/"
-        scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_SAFELIB/" "$LOCAL_PATH/$crate/output/$TRGT_SAFELIB/"
+    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_UNMOD/" "$LOCAL_PATH/$crate/output/$TRGT_UNMOD/"
+    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_NOBC/" "$LOCAL_PATH/$crate/output/$TRGT_NOBC/"
+    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_NOBCSL/" "$LOCAL_PATH/$crate/output/$TRGT_NOBCSL/"
+    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_SAFELIB/" "$LOCAL_PATH/$crate/output/$TRGT_SAFELIB/"
 done
 
 #for node in ${SSH_NODES[@]}
