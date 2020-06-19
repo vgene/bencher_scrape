@@ -62,18 +62,17 @@ done < "$CRATELIST"
 
 ROOT="$PWD"
 LOCAL_PATH="$ROOT/crates/crates"
-REMOTE_PATH="/benchdata/rust/bencher_scrape/crates/crates"
+REMOTE_PATH="/mydata/rust/bencher_scrape/crates/crates"
 TRGT_UNMOD="target-nightly-2020-05-07-x86_64-unknown-linux-gnu-sanity"
 TRGT_NOBC="target-nobc-sanity"
 TRGT_NOBCSL="target-nobc+sl-sanity"
 TRGT_SAFELIB="target-safelib-sanity"
+OUTPUT="output"
 
 for crate in ${CRATES[@]}
 do
-    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_UNMOD/" "$LOCAL_PATH/$crate/output/$TRGT_UNMOD/"
-    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_NOBC/" "$LOCAL_PATH/$crate/output/$TRGT_NOBC/"
-    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_NOBCSL/" "$LOCAL_PATH/$crate/output/$TRGT_NOBCSL/"
-    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/output/$TRGT_SAFELIB/" "$LOCAL_PATH/$crate/output/$TRGT_SAFELIB/"
+#    rm -r "$LOCAL_PATH/$crate/$OUTPUT/"
+    scp -r "$PRECOMP_NODE:$REMOTE_PATH/$crate/$OUTPUT/" "$LOCAL_PATH/$crate/$OUTPUT/"
 done
 
 #for node in ${SSH_NODES[@]}
