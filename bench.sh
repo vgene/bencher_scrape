@@ -33,7 +33,7 @@ DBGFLAGS="-C debuginfo=2"
 # LTO Flags
 LTOFLAGS_A="-C embed-bitcode=no"
 
-RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
+RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS"" # "$LTOFLAGS_A""
 
 # Command to use below
 RUSTC_CMD="cargo rustc --release --bench -- --emit=llvm-bc"
