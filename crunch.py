@@ -5,7 +5,7 @@ import sys
 import math
 from subprocess import check_output
 import numpy
-
+import re
 
 def average(array):
     # Get length of array
@@ -33,9 +33,8 @@ def stddev(array, arr_avg):
     return res
 
 
-def populate(
+def crunch(
     crate,
-    labels_file,
     data_file,
     data_file_loc,
     numnodes,
@@ -43,13 +42,6 @@ def populate(
     # Use same headers and will be using similar logic as "aggregate_bench.py" later on
     headers = ['#','bench-name','unmod-time', 'unmod-error','nobc-time','nobc-error','nobc+sl-time','nobc+sl-error','safelib-time','safelib-error']
     
-    # Read in labels to eventually put in output file
-    fd_labels = open(labels_file, 'r')
-    labels = []
-    for line in fd_labels:
-        labels.append(line.rstrip())
-#    print(labels)
-
     # Grab the numbers for each [benchmark x rustc] combo (per crate)
     base_file = "./crates/crates/" + crate + "/" + data_file_loc + "/" + data_file
     crunched_output = base_file + "-CRUNCHED.data"
@@ -60,13 +52,16 @@ def populate(
     # each loop iteration adds to all the arrays _once_ (one data point
     # per file); so the arrays we write to should be created outside of this
     # main processing loop
+    get_names_file = base_file + "-0-1.data"
 
     totalruns = int(numnodes) * int(numruns)
-    rows = len(labels)
+    rows = len(open(get_names_file, 'r').readlines()) - 1
     cols = 4
-    matrix = numpy.zeros((rows,cols,totalruns))
-    print(matrix)
-    
+    matrix = numpy.zeros((rows, cols, totalruns))
+
+    get_names = True
+    labels = []
+    run = 0
     for i in range(int(numnodes)):
         for j in range(1, int(numruns) + 1):
             fd_data_file = base_file + "-" + str(i) + "-" + str(j) + ".data"
@@ -81,17 +76,33 @@ def populate(
                 columns = line.split()
                 col = 0
                 for c in range(len(columns)):
+                    if get_names == True and c == 0:
+                        labels.append(columns[c])
                     if c % 2 == 1:
                         elem = columns[c]
-                        print("ADDING " + elem + " at ROW=" + str(row) + " and COL=" + str(col))
-                        old = matrix[0][row][col]
-                        new = old.append(int(elem))
-                        matrix[0][row][col] = new
+                        matrix[row][col][run] = elem
                         col += 1
                 row += 1
-                print(matrix)
-                print("\n\n")
+            get_names = False
+            run += 1
 
+    fd_crunched_output = open(crunched_output, 'a')
+    # Now that we've populated our matrix, can start crunching numbers
+    for r in range(rows):
+        row = []
+        label = labels[r]
+        row.append(label)
+        for c in range(cols):
+            # Order when print matrix: 
+            #   unmod
+            #   nobc
+            #   nobc+sl
+            #   safelib
+            avg = average(matrix[r][c])
+            stdev = stddev(matrix[r][c], avg)
+            row.append(str(avg))
+            row.append(str(stdev))
+        writerow(fd_crunched_output, row)
 
 def path_wrangle(filepath, headers):
     """ Check for or create path and output file
@@ -117,21 +128,19 @@ def writerow(filehandle, array):
     filehandle.write("\n")
 
 
-# Called like: python3 "$CRUNCH" "$crate" "$BENCH_LABELS" "$FNAME" "$LOCAL_OUTPUT" "$numnodes" "$runs"
+# Called like: python3 "$CRUNCH" "$crate" "$FNAME" "$LOCAL_OUTPUT" "$numnodes" "$runs"
 if __name__ == "__main__":
-    if len(sys.argv) != 7: 
-        sys.exit("Wrong number of arguments! Need 7.")
+    if len(sys.argv) != 6: 
+        sys.exit("Wrong number of arguments! Need 6.")
     crate = sys.argv[1]
-    bench_label_file = sys.argv[2]
-    data_file_name = sys.argv[3]
-    data_file_loc = sys.argv[4]
-    numnodes = sys.argv[5]
-    numruns = sys.argv[6]
+    data_file_name = sys.argv[2]
+    data_file_loc = sys.argv[3]
+    numnodes = sys.argv[4]
+    numruns = sys.argv[5]
 
-    # Populate Arrays
-    populate(
+    # Get average and stddev across all nodes + runs
+    crunch(
         crate=crate,
-        labels_file=bench_label_file,
         data_file=data_file_name,
         data_file_loc=data_file_loc,
         numnodes=numnodes,

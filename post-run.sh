@@ -1,10 +1,5 @@
 #!/bin/bash
 
-numnodes=1
-runs=2
-#numnodes=13
-#runs=3
-
 SSH_NODES=(
 "npopescu@c220g5-111219.wisc.cloudlab.us"
 "npopescu@c220g5-110529.wisc.cloudlab.us"
@@ -20,6 +15,9 @@ SSH_NODES=(
 "npopescu@c220g5-111014.wisc.cloudlab.us"
 "npopescu@c220g5-110521.wisc.cloudlab.us"
 )
+
+numnodes=13
+runs=3
 
 # Parse paths to get concise crate names
 ROOT="$PWD"
@@ -59,20 +57,21 @@ OUTPUT="cl-output"
 LOCAL_OUTPUT="cloudlab-output"
 FNAME="bench-sanity"
 LOCAL_PATH="$ROOT/crates/crates"
+REMOTE_PATH="/mydata/rust/bencher_scrape/crates/crates"
 
 i=0
-#for node in ${SSH_NODES[@]}
-#do
-#    for crate in ${CRATES[@]}
-#    do
-#        dir="$LOCAL_PATH/$crate/$LOCAL_OUTPUT"
-#        mkdir -p "$dir"
-#        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-1/$FNAME.data" "$dir/$FNAME-$i-1.data"
-#        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-2/$FNAME.data" "$dir/$FNAME-$i-2.data"
-#        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-3/$FNAME.data" "$dir/$FNAME-$i-3.data"
-#    done
-#    i=$((i+1))
-#done
+for node in ${SSH_NODES[@]}
+do
+    for crate in ${CRATES[@]}
+    do
+        dir="$LOCAL_PATH/$crate/$LOCAL_OUTPUT"
+        mkdir -p "$dir"
+        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-1/$FNAME.data" "$dir/$FNAME-$i-1.data"
+        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-2/$FNAME.data" "$dir/$FNAME-$i-2.data"
+        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-3/$FNAME.data" "$dir/$FNAME-$i-3.data"
+    done
+    i=$((i+1))
+done
 
 # Read out benchmark names from one file and create arrays
 #   One array = 1 crate, 1 benchmark (function), 1 rustc version (out of the four)
@@ -81,22 +80,13 @@ i=0
 # of the rows in the bench data file (which is how we will ultimately iterate through 
 # the data).
 
-#for crate in ${CRATES[@]}
-#do
-
-crate="rust-obstack"
-
-# Parse file such that we only collect the name part
-mkdir -p "$LOCAL_PATH/$crate/$LOCAL_OUTPUT" # FIXME
-BENCH_LABELS="$LOCAL_PATH/$crate/$LOCAL_OUTPUT/$FNAME-NAMES.data"
-grep -o '^\S*' "$LOCAL_PATH/$crate/$LOCAL_OUTPUT/$FNAME-0-1.data" > "$BENCH_LABELS"
-# Skip the first line that labels the columns
-sed -i "1d" "$BENCH_LABELS"
+for crate in ${CRATES[@]}
+do
 
 # Now that we have the benchmark data locally, transfer control to python (read + number crunch)
 
 CRUNCH="crunch.py"
 
-python3 "$CRUNCH" "$crate" "$BENCH_LABELS" "$FNAME" "$LOCAL_OUTPUT" "$numnodes" "$runs"
+python3 "$CRUNCH" "$crate" "$FNAME" "$LOCAL_OUTPUT" "$numnodes" "$runs"
 
-#done
+done
