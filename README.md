@@ -140,7 +140,7 @@ Once your experiment is ready, the `/mydata` directory should be set up with all
 necessities, so all you should need to do is enter that directory and start. 
 
 Once the benchmarks have completed on the remote nodes, you can use the `post-run.sh`
-script to copy over the many [.data] files to process locally (or you can process remotely
+script to copy over the many [ data ] files to process locally (or you can process remotely
 and then copy over the condensed files). However, the script expects to be used as the 
 former, so you will have to modify it should you choose to do the latter. 
 
