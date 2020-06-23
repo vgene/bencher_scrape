@@ -136,6 +136,9 @@ On [Cloudlab](https://www.cloudlab.us/), create an experiment by instantiating
 profile allows you to customize the number of nodes and the hardware type upon
 instantiation, so you can change those according to cluster availability. 
 
+If you want to create your own pre-populated data set, see the "Creating and Populating
+your Dataset" subsection. 
+
 Once your experiment is ready, the `/mydata` directory should be set up with all the
 necessities, so all you should need to do is enter that directory and start. 
 
@@ -155,6 +158,32 @@ Find these out by running:
 ```sh
 $ ./post-run.sh -h
 ```
+
+### Creating and Populating your Dataset
+
+Create a long term dataset [Storage > Create Dataset] in Cloudlab. The size of 3 individually-built rustcs and the
+bencher_scrape repository is about 80GB, so I'd recommend creating your dataset with at
+least that much space. 
+
+You can use the above [profile](https://www.cloudlab.us/p/Praxis/setup-bench-lt) to spin
+up an experiment and initialize the dataset, making sure to replace the current URN with
+that of your specific dataset. You will also only need a single node rather than the default 
+of 10.
+
+Once you have an experiment for initializing the dataset, if 
+using the Ubuntu20-STD disk image, you will probably have to build cmake and rustup. 
+Note also that any modifications to your home directory will not be saved, so keep that 
+in mind when installing the various projects. I've customized the modified-rustcs to 
+install in a subdirectory of the dataset's filesystem root, and copy over the `~/.bashrc` 
+and `~/.bash_profile` files into the dataset with the intent of copying them back when I 
+instantiate a new experiment. 
+
+When you've finished initializing your dataset, you can just terminate your experiment and
+start a new one that uses the dataset, and your data should just be there. However, I have been
+having trouble with this step (my dataset initialization does not persist), so be aware that 
+that may also happen to you, and maybe take appropriate precautions (like snapshotting the
+underlying filesystem so you don't have to build everything all over again). I am still working 
+on getting the kinks out of this step. 
 
 ## End Goals
 
