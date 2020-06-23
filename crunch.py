@@ -60,6 +60,11 @@ def crunch(
     matrix = numpy.zeros((rows, cols, totalruns))
 
     get_names = True
+    # Flag needed because bug in my regex for extracting benchmark names =>
+    # creates an offset when process the numbers, leading program to try to parse
+    # the actual benchmark name as a float (this bug only manifests sometimes, 
+    # when there is only a single benchmark, don't know why)
+    extra_name = False
     labels = []
     run = 0
     for i in range(int(numnodes)):
@@ -77,8 +82,20 @@ def crunch(
                 col = 0
                 for c in range(len(columns)):
                     if get_names == True and c == 0:
+                        if columns[c] == "test":
+                            extra_name = True
+                            continue
+                        else: 
+                            labels.append(columns[c])
+                    if extra_name == True and c == 1:
                         labels.append(columns[c])
-                    if c % 2 == 1:
+                    # Collect numbers @ even columns (skipping first) if extra name column exists
+                    if extra_name == True and c > 0 and c % 2 == 0:
+                        elem = columns[c]
+                        matrix[row][col][run] = elem
+                        col += 1
+                    # Otherwise collect numbers @ odd columns
+                    elif extra_name == False and c % 2 == 1:
                         elem = columns[c]
                         matrix[row][col][run] = elem
                         col += 1
