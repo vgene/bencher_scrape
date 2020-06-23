@@ -137,15 +137,12 @@ profile allows you to customize the number of nodes and the hardware type upon
 instantiation, so you can change those according to cluster availability. 
 
 Once your experiment is ready, the `/mydata` directory should be set up with all the
-necessities, so all you should need to do is enter that directory and start. You
-may want to pull from the `bencher_scrape` repository (this is not set up to happen
-automatically), but the benching infrastructure should have largely remained
-unchanged. 
+necessities, so all you should need to do is enter that directory and start. 
 
 Once the benchmarks have completed on the remote nodes, you can use the `post-run.sh`
-script to copy over the many .data files and process locally (or you can process remotely
-and then copy over the condensed files). However the script expects to be used in the 
-former way, so you will have to modify it should you choose to do the latter. 
+script to copy over the many [.data] files to process locally (or you can process remotely
+and then copy over the condensed files). However, the script expects to be used as the 
+former, so you will have to modify it should you choose to do the latter. 
 
 One thing you will have to do whenever you run a new experiment is, in the `post-run.sh`
 script, you will have to manually update the `SSH_NODES` field to match up with the
@@ -153,7 +150,7 @@ nodes you actually ran the benchmarks on (I haven't figured out a good way to do
 automatically yet). 
 
 The `post-run.sh` script also has a couple options you can configure when you run it. 
-Find these out by: 
+Find these out by running: 
 
 ```sh
 $ ./post-run.sh -h
