@@ -42,7 +42,7 @@ RUSTC_CMD="cargo rustc --release --bench -- --emit=llvm-bc"
 
 usage () {
     echo ""
-    echo "Usage: $0 [-s] [-c <tchain-name>] [-b] [-t] [-n <out-label>] [-o <dir-label>]"
+    echo "Usage: $0 [-s] [-b] [-t] [-c <pre-comp>] [-n <out-label>] [-o <dir-label>] [-r <num-runs>]"
     echo "   -s               Scrape reverse dependencies and download locally [default = off]."
     echo "   -b               Bench crates with all three versions of rustc [default = off]."
     echo "   -t               Test crates with all three versions of rustc [default = off]."
@@ -139,7 +139,7 @@ TARGET="target"
 
 # *****BENCH*****
 
-if [ "$bench" -eq 1 -o "$comp" -eq 1 ]
+if [ "$bench" -eq 1 -o "$comp" -eq 0 ]
 then
     for env in ${TCHAIN_ENVS[@]}
     do

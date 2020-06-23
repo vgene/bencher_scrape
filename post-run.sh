@@ -1,23 +1,51 @@
 #!/bin/bash
 
-SSH_NODES=(
-"npopescu@c220g5-111219.wisc.cloudlab.us"
-"npopescu@c220g5-110529.wisc.cloudlab.us"
-"npopescu@c220g5-111031.wisc.cloudlab.us"
-"npopescu@c220g5-110510.wisc.cloudlab.us"
-"npopescu@c220g5-111009.wisc.cloudlab.us"
-"npopescu@c220g5-111019.wisc.cloudlab.us"
-"npopescu@c220g5-111224.wisc.cloudlab.us"
-"npopescu@c220g5-111222.wisc.cloudlab.us"
-"npopescu@c220g5-111228.wisc.cloudlab.us"
-"npopescu@c220g5-111213.wisc.cloudlab.us"
-"npopescu@c220g5-111207.wisc.cloudlab.us"
-"npopescu@c220g5-111014.wisc.cloudlab.us"
-"npopescu@c220g5-110521.wisc.cloudlab.us"
-)
+#SSH_NODES=(
+#"npopescu@c220g5-111219.wisc.cloudlab.us"
+#"npopescu@c220g5-110529.wisc.cloudlab.us"
+#"npopescu@c220g5-111031.wisc.cloudlab.us"
+#"npopescu@c220g5-110510.wisc.cloudlab.us"
+#"npopescu@c220g5-111009.wisc.cloudlab.us"
+#"npopescu@c220g5-111019.wisc.cloudlab.us"
+#"npopescu@c220g5-111224.wisc.cloudlab.us"
+#"npopescu@c220g5-111222.wisc.cloudlab.us"
+#"npopescu@c220g5-111228.wisc.cloudlab.us"
+#"npopescu@c220g5-111213.wisc.cloudlab.us"
+#"npopescu@c220g5-111207.wisc.cloudlab.us"
+#"npopescu@c220g5-111014.wisc.cloudlab.us"
+#"npopescu@c220g5-110521.wisc.cloudlab.us"
+#)
 
 numnodes=13
 runs=3
+
+usage () {
+    echo ""
+    echo "Usage: $0 [-n <num-nodes>] [-r <num-runs>]"
+    echo "   -n <num-nodes>   How many nodes were used [default = 13]."
+    echo "   -r <num-runs>    How many runs were executed [default = 3]."
+    echo ""
+}
+
+while getopts "n:r:h" opt
+do
+    case "$opt" in
+    n)
+        numnodes="$(($OPTARG))"
+        ;;
+    r)
+        runs="$(($OPTARG))"
+        ;;
+    h)
+        usage
+        exit 0
+        ;;
+    *)
+        usage
+        exit 1
+        ;;
+    esac
+done
 
 # Parse paths to get concise crate names
 ROOT="$PWD"
