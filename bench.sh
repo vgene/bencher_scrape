@@ -1,75 +1,105 @@
 #!/bin/bash
 
-# Rustup environment management
-UNMOD_ENV="custom"
-MOD_ENV="natalie"
+# # Rustup environment management
+# UNMOD_ENV="custom"
+# MOD_ENV="natalie"
+# 
+# # Optimization Level Management
+# # OPTFLAGS="-C no-prepopulate-passes -C passes=name-anon-globals" # NO OPTS at all, stricter than opt-level=0
+# OPTFLAGS="-C opt-level=2"
+# 
+# # Debug Management
+# DBGFLAGS="-C debuginfo=2"
+# 
+# # LTO Flags
+# LTOFLAGS_A="-C embed-bitcode=yes"
+# LTOFLAGS_B="-C lto=fat"
+# 
+# RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
+# RUSTC_EXTRA_FLAGS="-- "$LTOFLAGS_B"" 
+# 
+# RUSTC_CMD="cargo rustc --release --bench arraystring -- --emit=llvm-bc $LTOFLAGS_B"
+# lprof=1
+
+# *****DEFAULTS*****
+
+# Don't scrape
+scrape=0
+# Don't bench
+bench=0
+# Don't test
+tst=0
+# Don't pre-compile
+comp=0
+# Only one run
+runs=1
+# Some descriptive name of this invocation
+name="sanity"
+output="output"
+
+UNMOD_ENV="nightly-2020-05-07-x86_64-unknown-linux-gnu"
+NOBC_ENV="nobc"
+NOBC_SL_ENV="nobc+sl"
+SAFELIB_ENV="safelib"
+
+TCHAIN_ENVS=( "$UNMOD_ENV" "$NOBC_ENV" "$NOBC_SL_ENV" "$SAFELIB_ENV" )
 
 # Optimization Level Management
 # OPTFLAGS="-C no-prepopulate-passes -C passes=name-anon-globals" # NO OPTS at all, stricter than opt-level=0
-OPTFLAGS="-C opt-level=2"
+OPTFLAGS="-C opt-level=3"
 
 # Debug Management
 DBGFLAGS="-C debuginfo=2"
 
 # LTO Flags
-LTOFLAGS_A="-C embed-bitcode=yes"
-LTOFLAGS_B="-C lto=fat"
+LTOFLAGS_A="-C embed-bitcode=no"
 
-RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
-RUSTC_EXTRA_FLAGS="-- "$LTOFLAGS_B"" 
+RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS"" # "$LTOFLAGS_A""
 
-RUSTC_CMD="cargo rustc --release --bench arraystring -- --emit=llvm-bc $LTOFLAGS_B"
-lprof=1
+# Command to use below
+RUSTC_CMD="cargo rustc --release --bench -- --emit=llvm-bc"
 
-# Defaults: 
-
-# Don't scrape
-scrape=0
-# Bench BOTH unmod + mod
-comp="n"
-# Don't run tests
-tstcomp="n"
-# Some descriptive name of this invocation
-name="sanity"
-output="output"
+# *****COMMAND-LINE ARGS*****
 
 usage () {
     echo ""
-    echo "Usage: $0 [-s] [-b <rustc-optn>] [-t] [-d <dir-symbol>] [-n <out-label>]"
-    echo "   -s               scrape reverse dependencies and download locally  [default = off]"
-    echo "   -b <rustc-optn>  bench crates with one of the following options:"
-    echo "                      'u' = unmodified rustc ONLY"
-    echo "                      'm' = modified rustc ONLY"
-    echo "                      'b' = both unmodified and modified rustc"
-    echo "                      'n' = don't run benchmarks                      [default]"
-    echo "   -t <rustc-optn>  test crates with one of the following options:"
-    echo "                      'u' = unmodified rustc ONLY"
-    echo "                      'm' = modified rustc ONLY"
-    echo "                      'b' = both unmodified and modified rustc"
-    echo "                      'n' = don't run tests                           [default]"
-    echo "   -n <out-label>   what to label the output files of this invocation as"
-    echo "   -o <dir-label>   what to label the output directory of this invocation as"
+    echo "Usage: $0 [-s] [-b] [-t] [-c <pre-comp>] [-n <out-label>] [-o <dir-label>] [-r <num-runs>]"
+    echo "   -s               Scrape reverse dependencies and download locally [default = off]."
+    echo "   -b               Bench crates with all three versions of rustc [default = off]."
+    echo "   -t               Test crates with all three versions of rustc [default = off]."
+    echo "   -c               Compile crate benchmarks only (without running) with all three"
+    echo "                      versions of rustc; for large-scale benchmark experiment"
+    echo "                      [default = off]."
+    echo "   -n <out-label>   How to label the output files of this invocation."
+    echo "   -o <dir-label>   How to label the output directory of this invocation."
+    echo "   -r <num-runs>    How many runs to execute [default = 1]."
     echo ""
 }
 
 # Parse commandline arguments
-while getopts "sb:t:n:o:h" opt
+while getopts "sbtcn:o:r:h" opt
 do
     case "$opt" in
     s)
         scrape=1
         ;;
     b)
-        comp="$OPTARG"
+        bench=1
         ;;
     t)
-        tstcomp="$OPTARG"
+        tst=1
         ;;
+    c)
+        comp=1
+	;;
     n)
         name="$OPTARG"
         ;;
     o)
 	output="$OPTARG"
+	;;
+    r)
+	runs="$(($OPTARG))"
 	;;
     h)
         usage
@@ -82,89 +112,24 @@ do
     esac
 done
 
-RUSTC_UNMOD="$HOME/.cargo"
-RUSTC_MOD="$HOME/.cargo-mod"
+# *****PRE-PROCESS*****
+
+# Between consecutive runs of this script, want to
+# re-randomize and also create distinct output dirs
+for i in $(seq 1 $runs)
+do
+
+# SUBDIRS="$ROOT/crates/crates/arrayvec/"
+
+# Get list of crates to run on and randomize their order
 ROOT="$PWD"
-
-# Resolve compiler version(s) for benchmarks
-unmod=0
-mod=0
-case "$comp" in
-u)
-    unmod=1
-    ;;
-m)
-    mod=1
-    ;;
-b)
-    unmod=1
-    mod=1
-    ;;
-n)
-    unmod=0
-    mod=0
-    ;;
-*)
-    echo ""
-    echo "ERROR: Nonexistent compiler-version-option [ "$comp" ] passed to [ -b ]."
-    usage
-    exit 1
-    ;;
-esac
-
-# Resolve compiler version(s) for tests
-tstunmod=0
-tstmod=0
-case "$tstcomp" in
-u)
-    tstunmod=1
-    ;;
-m)
-    tstmod=1
-    ;;
-b)
-    tstunmod=1
-    tstmod=1
-    ;;
-n)
-    tstunmod=0
-    tstmod=0
-    ;;
-*)
-    echo ""
-    echo "ERROR: Nonexistent compiler-version-option [ "$tstcomp" ] passed to [ -t ]."
-    usage
-    exit 1
-    ;;
-esac
-
-# Initialize other helpful variables (mostly for naming output files)
-SUFFIX="$name"
-OUTPUT="$output"
-
-UNMOD_NAME="unmod-$SUFFIX"
-MOD_NAME="mod-$SUFFIX"
-
-UNMOD_RES="$OUTPUT/$UNMOD_NAME.bench"
-MOD_RES="$OUTPUT/$MOD_NAME.bench"
-UNMOD_TESTS="$OUTPUT/$UNMOD_NAME.tests"
-MOD_TESTS="$OUTPUT/$MOD_NAME.tests"
-
-TARGET="target"
-
-UNMOD_TARGET_DIR="$OUTPUT/$TARGET-$UNMOD_NAME"
-MOD_TARGET_DIR="$OUTPUT/$TARGET-$MOD_NAME"
-
+SUBDIRS="$ROOT/crates/crates/*/"
 # SUBDIRS="$ROOT/crates/crates/*/"
-SUBDIRS="$ROOT/crates/crates/arrayvec/"
-
 DIRLIST="dirlist"
 RAND_DIRLIST="rand-dirlist"
 RAND_SCRIPT="randomize.py"
 
-# Get list of crates to run on and randomize their order
-
-rm -f "$DIRLIST"
+rm "$DIRLIST"
 for d in ${SUBDIRS[@]}
 do
     echo "$d" >> "$DIRLIST"
@@ -173,151 +138,185 @@ done
 python3 "$RAND_SCRIPT" "$DIRLIST" "$RAND_DIRLIST"
 
 # Parse randomized list as array
-
 RANDDIRS=()
 while read -r line
 do
     RANDDIRS=( "${RANDDIRS[@]}" "$line" )
 done < "$RAND_DIRLIST"
 
-# Step 1: Download reverse dependencies of `bencher` crate
+# *****SCRAPE*****
 
 if [ "$scrape" -eq 1 ]
 then
     cd crates/ && scrapy crawl crates && cd ..
 fi
 
-# Step 2: Build and bench with unmodified rustc (slice bounds checks still on)
-
-if [ "$unmod" -eq 1 ]
-then
-    cd "$ROOT"
-    rustup override set $UNMOD_ENV
-    for d in ${RANDDIRS[@]}
-    do
-        #cd "$d" && cargo clean && mkdir -p "$OUTPUT" && 
-        RUSTFLAGS=$RUSTFLAGS cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
-        cd "$d"
-        cargo clean
-        mkdir -p "$OUTPUT"
-        $RUSTC_BENCH_CMD_A 
-        echo RUSTFLAGS="$RUSTFLAGS" $RUSTC_CMD
-        if [[ "$lprof" -eq 1 ]]
-        then
-            RUSTFLAGS=$RUSTFLAGS $RUSTC_CMD
-            cp ./target/release/deps/*.bc unmod.bc
-            make OBJFILES_BC=unmod.bc benchmark.loopProf.out
-            mv benchmark.loopProf.out unmod.loopProf.out
-        fi
-        cd "$ROOT"
-    done
-fi
+# # Step 2: Build and bench with unmodified rustc (slice bounds checks still on)
+# 
+# if [ "$unmod" -eq 1 ]
+# then
+#     cd "$ROOT"
+#     rustup override set $UNMOD_ENV
+#     for d in ${RANDDIRS[@]}
+#     do
+#         #cd "$d" && cargo clean && mkdir -p "$OUTPUT" && 
+#         RUSTFLAGS=$RUSTFLAGS cargo bench > "$UNMOD_RES" && mv "$TARGET" "$UNMOD_TARGET_DIR" && cd "$ROOT"
+#         cd "$d"
+#         cargo clean
+#         mkdir -p "$OUTPUT"
+#         $RUSTC_BENCH_CMD_A 
+#         echo RUSTFLAGS="$RUSTFLAGS" $RUSTC_CMD
+#         if [[ "$lprof" -eq 1 ]]
+#         then
+#             RUSTFLAGS=$RUSTFLAGS $RUSTC_CMD
+#             cp ./target/release/deps/*.bc unmod.bc
+#             make OBJFILES_BC=unmod.bc benchmark.loopProf.out
+#             mv benchmark.loopProf.out unmod.loopProf.out
+#         fi
+#         cd "$ROOT"
+#     done
+# fi
 
 # Step 3: Run crate tests when compiled with unmodified rustc
 
-if [ "$tstunmod" -eq 1 ]
+# Initialize other helpful variables (mostly for naming output files)
+SUFFIX="$name"
+if [ "$runs" -gt 1 -a "$comp" -eq 0 ]
 then
-    cd "$ROOT"
-    rustup override set $UNMOD_ENV
-    for d in ${RANDDIRS[@]}
+    OUTPUT="$output-$i"
+else
+    OUTPUT="$output"
+fi
+TARGET="target"
+
+# *****BENCH*****
+
+if [ "$bench" -eq 1 -o "$comp" -eq 0 ]
+then
+    for env in ${TCHAIN_ENVS[@]}
     do
-        # Can save building the unmodified version twice if step 2 was executed
-        if [ "$unmod" -eq 0 ]
-        then
-            cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
-        else
-            cd "$d" && cp -r "$UNMOD_TARGET_DIR" "$TARGET" && cargo test > "$UNMOD_TESTS" && cd "$ROOT"
-        fi
+        precomp_outdir="$output/$TARGET-$env-$SUFFIX"
+        benchres="$OUTPUT/$env-$SUFFIX.bench"
+        rustup override set $env
+        for d in ${RANDDIRS[@]}
+        do
+            cd "$d"
+            if [ "$comp" -eq 1 ]
+            then
+                cargo clean
+                mkdir -p "$OUTPUT"
+                RUSTFLAGS=$RUSTFLAGS cargo bench --no-run
+            else
+                mkdir -p "$OUTPUT"
+                # If pre-compiled, only need one version of the compiled code
+                # but want to save the multiple run results in distinct locations
+                mv "$precomp_outdir" "$TARGET"
+                RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
+            fi
+            mv "$TARGET" "$precomp_outdir"
+            cd "$ROOT"
+        done
     done
 fi
 
-# Step 4: Build and bench with modified rustc (slice bounds checks now OFF)
+# *****TEST*****
 
-if [ "$mod" -eq 1 ]
+if [ "$tst" -eq 1 ]
 then
-    cd "$ROOT"
-    rustup override set $MOD_ENV
-    for d in ${RANDDIRS[@]}
+    for env in ${TCHAIN_ENVS[@]}
     do
-        #cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" bench > "$MOD_RES" && mv "$TARGET" "$MOD_TARGET_DIR" && cd "$ROOT"
-        cd "$d"
-        cargo clean
-        mkdir -p "$OUTPUT"
-        $RUSTC_BENCH_CMD_A 
-        echo RUSTFLAGS=$RUSTFLAGS $RUSTC_CMD
-        if [[ "$lprof" -eq 1 ]]
-        then
-            RUSTFLAGS="$RUSTFLAGS" $RUSTC_CMD
-            cp ./target/release/deps/*.bc mod.bc
-            make OBJFILES_BC=mod.bc benchmark.loopProf.out
-            mv benchmark.loopProf.out mod.loopProf.out
-        fi
-        cd "$ROOT"
+        outdir="$OUTPUT/$TARGET-$env-$SUFFIX"
+        testres="$OUTPUT/$env-$SUFFIX.test"
+        rustup override set $env
+        for d in ${RANDDIRS[@]}
+        do
+            cd "$d"
+            # Avoid re-compiling if possible
+            if [ "$bench" -eq 1 ]
+            then
+                mv "$outdir" "$TARGET"
+            else
+                cargo clean && mkdir -p "$OUTPUT"
+            fi
+            RUSTFLAGS=$RUSTFLAGS cargo test > "$testres"
+            # Store back
+            mv "$TARGET" "$outdir"
+            cd "$ROOT"
+        done
     done
 fi
 
-# Step 5: Run crate tests when compiled with modified rustc
-
-if [ "$tstmod" -eq 1 ]
-then
-    cd "$ROOT"
-    rustup override set $MOD_ENV
-    for d in ${RANDDIRS[@]}
-    do
-        # Can save building the modified version twice if step 4 was executed
-        if [ "$mod" -eq 0 ]
-        then
-            cd "$d" && cargo clean && mkdir -p "$OUTPUT" && cargo "+stage2" test > "$MOD_TESTS" && cd "$ROOT"
-        else
-            cd "$d" && cp -r "$MOD_TARGET_DIR" "$TARGET" && cargo "+stage2" test > "$MOD_TESTS" && cd "$ROOT"
-        fi
-    done
-fi
-
-# Step 6: Conglomerate results
+# *****AGGREGATE RESULTS*****
 
 AGGLOC="$ROOT/aggregate_bench.py"
 BENCH_NAME="$OUTPUT/bench-$SUFFIX"
 TEST_NAME="$OUTPUT/test-$SUFFIX"
-DATA_BENCH="$BENCH_NAME.data"
-DIFF_BENCH="$BENCH_NAME.diff"
-DIFF_TEST="$TEST_NAME.diff"
 SCRIPT_NAME="gnuplot-script"
 
-if [ "$unmod" -eq 1 -a "$mod" -eq 1 ]
+if [ "$comp" -eq 1 ]
 then
-    # Simple benchmark diff: Low effort to read if small set of data
     for d in ${RANDDIRS[@]}
     do
-        cd "$d" &&
-            diff "$UNMOD_RES" "$MOD_RES" > "$DIFF_BENCH" && 
-            cd "$ROOT"
+        cd "$d"
+        mkdir -p "$PWD/$OUTPUT"
+        # Gnuplot Script: Copy into crate directories for easier use
+        cp "$ROOT/$SCRIPT_NAME" "$PWD/$OUTPUT/$SCRIPT_NAME"
+        cd "$ROOT"
     done
-    
-    # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
-    for d in ${RANDDIRS[@]}
+fi
+
+if [ "$bench" -eq 1 ]
+then
+    for env in ${TCHAIN_ENVS[@]}
     do
-        cd "$d" &&
-            python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$UNMOD_RES" "$MOD_RES" &&
+        if [[ "$env" == "$UNMOD_ENV" ]]
+        then
+            continue
+        fi
+        unmod_benchres="$OUTPUT/$UNMOD_ENV-$SUFFIX.bench"
+        DIFF_BENCH="$BENCH_NAME-$env.diff"
+        for d in ${RANDDIRS[@]}
+        do
+            this_benchres="$OUTPUT/$env-$SUFFIX.bench"
+            cd "$d"
+            # Simple benchmark diff: Low effort to read if small set of data
+            diff "$unmod_benchres" "$this_benchres" > "$DIFF_BENCH"
             cd "$ROOT"
+        done
     done
-    
-    # Gnuplot Script: Copy into crate directories for easier use
+    DATA_BENCH="$BENCH_NAME.data"
     for d in ${RANDDIRS[@]}
     do
-        cd "$d" &&
-            cp "$ROOT/$SCRIPT_NAME" "$PWD/$SCRIPT_NAME" &&
-            cd "$ROOT"
+        nobc_benchres="$OUTPUT/$NOBC_ENV-$SUFFIX.bench"
+        nobcsl_benchres="$OUTPUT/$NOBC_SL_ENV-$SUFFIX.bench"
+        safelib_benchres="$OUTPUT/$SAFELIB_ENV-$SUFFIX.bench"
+        cd "$d"
+        # Run Data Aggregator for Gnuplot: Better visualization for larger sets of data
+        # (hard-coded for 3 input files atm)
+        python3 "$AGGLOC" "$PWD/$DATA_BENCH" "$unmod_benchres" "$nobc_benchres" "$nobcsl_benchres" "$safelib_benchres"
+        cd "$ROOT"
     done
 fi
 
 # Simple test diff: check if test failures are specific to the modified rustc or not
-if [ "$tstunmod" -eq 1 -a "$tstmod" -eq 1 ]
+if [ "$tst" -eq 1 ]
 then
-    for d in ${RANDDIRS[@]}
+    for env in ${TCHAIN_ENVS[@]}
     do
-        cd "$d" &&
-            diff "$UNMOD_TESTS" "$MOD_TESTS" > "$DIFF_TEST" && 
+        if [[ "$env" == "$UNMOD_ENV" ]]
+        then
+            continue
+        fi
+        unmod_testres="$OUTPUT/$UNMOD_ENV-$SUFFIX.test"
+        DIFF_TEST="$TEST_NAME-$env.diff"
+        for d in ${RANDDIRS[@]}
+        do
+            this_testres="$OUTPUT/$env-$SUFFIX.test"
+            cd "$d"
+            diff "$unmod_testres" "$this_testres" > "$DIFF_TEST"
             cd "$ROOT"
+        done
     done
 fi
+
+done

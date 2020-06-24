@@ -74,14 +74,22 @@ $ gnuplot> filename="bench-just-for-kicks.data"; load "gnuplot-script"
 
 ## What Changes are we Measuring?
 
-See them [here](https://github.com/nataliepopescu/rust).
+See them [here](https://github.com/nataliepopescu/rust). 
+
+We are looking into the effects of: 
+
+1. Removing bounds checks when indexing into slices [branch: master]
+
+2. Using safe implementations of library functions like memcpy [branch: version2_safe-lib]
+
+3. Both [1] and [2] together [branch: version2_no-bounds-check+safe-lib]
 
 ### Building the Modified Rustc Locally
 
 Clone the [repo](https://github.com/nataliepopescu/rust) and largely follow the instructions listed there.
 This includes double checking all of your dependencies. You may also want to change the default "prefix" 
 directory (install location of this rustc) and the "sysconfdir" to something you have write access to. Normally, running
-`which rustc` lands me in `~/.cargo/bin/rustc`, so I just created an analogous directory `~/.cargo-mod/` 
+`which rustc` lands me in `~/.cargo/bin/rustc`, so I just created an analogous directory `~/.cargo-nobc/` 
 and changed my config.toml respectively:
 
 ```
@@ -89,9 +97,9 @@ and changed my config.toml respectively:
 
 ...
 
-prefix = "/Users/np/.cargo-mod"
+prefix = "/Users/np/.cargo-nobc"
 
-sysconfdir = "$prefix/sysconf"
+sysconfdir = "etc" # Note this is a *relative* path
 
 ...
 ```
@@ -106,23 +114,94 @@ Note that this will take a while. Once the modified rustc is installed and you a
 you should create a rust toolchain for the stage2 build of the modified version. 
 
 ```sh
-$ rustup toolchain link stage2 build/<host-triple>/stage2
+$ rustup toolchain link nobc build/<host-triple>/stage2
 ```
 
-Now you can run with the modified rustc like:
+The easiest way to toggle between toolchains is by changing the rustup environment:
 
 ```sh
-$ rustc +stage2 <cmd>
+$ rustup override set nobc
+```
+
+But you can also run directly with the modified rustc like:
+
+```sh
+$ rustc +nobc <cmd>
 ```
 
 Or:
 
 ```sh
-$ cargo +stage2 <cmd>
+$ cargo +nobc <cmd>
 ```
 
-The `bench.sh` script toggles between using the rustc specified in the `rust-toolchain`
-file and this locally modified version, which you can do manually as well.
+The `bench.sh` script toggles between toolchains using the first method. 
+
+## Running on Cloudlab
+
+On [Cloudlab](https://www.cloudlab.us/), create an experiment by instantiating
+[this](https://www.cloudlab.us/p/Praxis/setup-bench-lt) profile. The
+profile allows you to customize the number of nodes and the hardware type upon
+instantiation, so you can change those according to cluster availability. 
+
+If you want to create your own pre-populated data set, see the "Creating and Populating
+your Dataset" subsection. 
+
+Once your experiment is ready, the `/mydata` directory should be set up with all the
+necessities, so all you should need to do is enter that directory and start. 
+
+Unfortunately, commands in the the profile that use the "execute" service on the RSpec 
+cannot modify files in the file system home directory, due to the privileges of the 
+special user that executes these commands on node bootup. This affects how much we
+can automate initializing the benchmark environment. Specificially, the system
+won't know where `rustup` is if `~/.bash_profile` (or some alternative file) doesn't
+point it to the right location, and will think `rustup` is not installed at all. 
+To solve this I've written a simple `spawn.sh` script that copies over and sources such 
+files. The script also starts the benchmarks, so once configured to your needs it can 
+enable you to only run a single command per node. 
+
+Once the benchmarks have completed on the remote nodes, you can use the `post-run.sh`
+script to copy over the many [ data ] files to process locally (or you can process remotely
+and then copy over the condensed files). However, the script expects to be used as the 
+former, so you will have to modify it should you choose to do the latter. 
+
+One thing you will have to do whenever you run a new experiment is, in the `post-run.sh`
+script, you will have to manually update the `SSH_NODES` field to match up with the
+nodes you actually ran the benchmarks on (I haven't figured out a good way to do this
+automatically yet). 
+
+The `post-run.sh` script also has a couple options you can configure when you run it. 
+Find these out by running: 
+
+```sh
+$ ./post-run.sh -h
+```
+
+### Creating and Populating your Dataset
+
+Create a long term dataset [Storage > Create Dataset] in Cloudlab. The size of 3 individually-built rustcs and the
+bencher_scrape repository is about 80GB, so I'd recommend creating your dataset with at
+least that much space. 
+
+You can use the above [profile](https://www.cloudlab.us/p/Praxis/setup-bench-lt) to spin
+up an experiment and initialize the dataset, making sure to replace the current URN with
+that of your specific dataset. You will also only need a single node rather than the default 
+of 10.
+
+Once you have an experiment for initializing the dataset, if 
+using the Ubuntu20-STD disk image, you will probably have to build cmake and rustup. 
+Note also that any modifications to your home directory will not be saved, so keep that 
+in mind when installing the various projects. I've customized the modified-rustcs to 
+install in a subdirectory of the dataset's filesystem root, and copy over the `~/.bashrc` 
+and `~/.bash_profile` files into the dataset with the intent of copying them back when I 
+instantiate a new experiment. 
+
+When you've finished initializing your dataset, you can just terminate your experiment and
+start a new one that uses the dataset, and your data should just be there. However, I have been
+having trouble with this step (my dataset initialization does not persist), so be aware that 
+that may also happen to you, and maybe take appropriate precautions (like snapshotting the
+underlying filesystem so you don't have to build everything all over again). I am still working 
+on getting the kinks out of this step. 
 
 ## End Goals
 
