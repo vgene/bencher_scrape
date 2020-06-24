@@ -142,6 +142,16 @@ your Dataset" subsection.
 Once your experiment is ready, the `/mydata` directory should be set up with all the
 necessities, so all you should need to do is enter that directory and start. 
 
+Unfortunately, commands in the the profile that use the "execute" service on the RSpec 
+cannot modify files in the file system home directory, due to the privileges of the 
+special user that executes these commands on node bootup. This affects how much we
+can automate initializing the benchmark environment. Specificially, the system
+won't know where `rustup` is if `~/.bash_profile` (or some alternative file) doesn't
+point it to the right location, and will think `rustup` is not installed at all. 
+To solve this I've written a simple `spawn.sh` script that copies over and sources such 
+files. The script also starts the benchmarks, so once configured to your needs it can 
+enable you to only run a single command per node. 
+
 Once the benchmarks have completed on the remote nodes, you can use the `post-run.sh`
 script to copy over the many [ data ] files to process locally (or you can process remotely
 and then copy over the condensed files). However, the script expects to be used as the 
