@@ -74,14 +74,22 @@ $ gnuplot> filename="bench-just-for-kicks.data"; load "gnuplot-script"
 
 ## What Changes are we Measuring?
 
-See them [here](https://github.com/nataliepopescu/rust).
+See them [here](https://github.com/nataliepopescu/rust). 
+
+We are looking into the effects of: 
+
+1. Removing bounds checks when indexing into slices [branch: master]
+
+2. Using safe implementations of library functions like memcpy [branch: version2_safe-lib]
+
+3. Both [1] and [2] together [branch: version2_no-bounds-check+safe-lib]
 
 ### Building the Modified Rustc Locally
 
 Clone the [repo](https://github.com/nataliepopescu/rust) and largely follow the instructions listed there.
 This includes double checking all of your dependencies. You may also want to change the default "prefix" 
 directory (install location of this rustc) and the "sysconfdir" to something you have write access to. Normally, running
-`which rustc` lands me in `~/.cargo/bin/rustc`, so I just created an analogous directory `~/.cargo-mod/` 
+`which rustc` lands me in `~/.cargo/bin/rustc`, so I just created an analogous directory `~/.cargo-nobc/` 
 and changed my config.toml respectively:
 
 ```
@@ -89,7 +97,7 @@ and changed my config.toml respectively:
 
 ...
 
-prefix = "/Users/np/.cargo-mod"
+prefix = "/Users/np/.cargo-nobc"
 
 sysconfdir = "$prefix/sysconf"
 
