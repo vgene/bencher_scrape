@@ -99,7 +99,7 @@ and changed my config.toml respectively:
 
 prefix = "/Users/np/.cargo-nobc"
 
-sysconfdir = "$prefix/sysconf"
+sysconfdir = "etc" # Note this is a *relative* path
 
 ...
 ```
