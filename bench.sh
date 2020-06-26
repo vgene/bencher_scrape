@@ -143,32 +143,33 @@ if [ "$bench" -eq 1 -o "$comp" -eq 0 ]
 then
     for env in ${TCHAIN_ENVS[@]}
     do
-        precomp_outdir="$output/$TARGET-$env-$SUFFIX"
+        #precomp_outdir="$output/$TARGET-$env-$SUFFIX"
         benchres="$OUTPUT/$env-$SUFFIX.bench"
         rustup override set $env
         for d in ${RANDDIRS[@]}
         do
             cd "$d"
-            if [ "$comp" -eq 1 ]
+            if [ "$comp" -eq 0 ]
             then
+#                cargo clean
+#                mkdir -p "$OUTPUT"
+#                RUSTFLAGS=$RUSTFLAGS cargo bench --no-run
+#            else
                 cargo clean
-                mkdir -p "$OUTPUT"
-                RUSTFLAGS=$RUSTFLAGS cargo bench --no-run
-            else
                 mkdir -p "$OUTPUT"
                 # If pre-compiled or already ran this benchmark before, 
                 # only need one version of the compiled code
                 # but want to save the multiple run results in distinct locations
-                if [ -f "$precomp_outdir" ]
-                then
-                    mv "$precomp_outdir" "$TARGET"
-                else
-                    mkdir -p "$output"
-                    mkdir "$precomp_outdir"
-                fi
+#                if [ -f "$precomp_outdir" ]
+#                then
+#                    mv "$precomp_outdir" "$TARGET"
+#                else
+#                    mkdir -p "$output"
+#                    mkdir "$precomp_outdir"
+#                fi
                 RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
             fi
-            mv "$TARGET" "$precomp_outdir"
+            #mv "$TARGET" "$precomp_outdir"
             cd "$ROOT"
         done
     done
