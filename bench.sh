@@ -17,9 +17,9 @@ name="sanity"
 output="output"
 
 UNMOD_ENV="nightly-2020-05-07-x86_64-unknown-linux-gnu"
-NOBC_ENV="nobc"
-NOBC_SL_ENV="nobc+sl"
-SAFELIB_ENV="safelib"
+#NOBC_ENV="nobc"
+#NOBC_SL_ENV="nobc+sl"
+#SAFELIB_ENV="safelib"
 
 TCHAIN_ENVS=( "$UNMOD_ENV" "$NOBC_ENV" "$NOBC_SL_ENV" "$SAFELIB_ENV" )
 
@@ -162,6 +162,9 @@ then
                 if [ -f "$precomp_outdir" ]
                 then
                     mv "$precomp_outdir" "$TARGET"
+                else
+                    mkdir -p "$output"
+                    mkdir "$precomp_outdir"
                 fi
                 RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
             fi
