@@ -4,7 +4,7 @@ cp bashrc ~/.bashrc
 cp bash_profile ~/.bash_profile
 source ~/.bashrc
 
-OUTNAME="cloudlab-output"
+OUTNAME="cloudlab-output-lto"
 
 # Pre-compile
 #./bench.sh -c -o "$OUTNAME"

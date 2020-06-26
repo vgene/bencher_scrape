@@ -149,13 +149,13 @@ then
         for d in ${RANDDIRS[@]}
         do
             cd "$d"
+            mkdir -p "$output"
+            mkdir -p "$OUTPUT"
             if [ "$comp" -eq 1 ]
             then
                 cargo clean
-                mkdir -p "$OUTPUT"
                 RUSTFLAGS=$RUSTFLAGS cargo bench --no-run
             else
-                mkdir -p "$OUTPUT"
                 # If pre-compiled or already ran this benchmark before, 
                 # only need one version of the compiled code
                 # but want to save the multiple run results in distinct locations
@@ -163,6 +163,7 @@ then
                 then
                     mv "$precomp_outdir" "$TARGET"
                 fi
+                touch "$benchres"
                 RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
             fi
             mv "$TARGET" "$precomp_outdir"

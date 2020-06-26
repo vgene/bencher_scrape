@@ -81,7 +81,7 @@ done < "$CRATELIST"
 
 # Copy actual benchmark data over
 
-REMOTE_OUTPUT="cloudlab-output"
+REMOTE_OUTPUT="cloudlab-output-lto"
 LOCAL_OUTPUT="cloudlab-output-lto"
 FNAME="bench-sanity"
 LOCAL_PATH="$ROOT/crates/crates"
