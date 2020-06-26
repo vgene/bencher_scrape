@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#SSH_NODES=(
+SSH_NODES=(
 #"npopescu@c220g5-111219.wisc.cloudlab.us"
 #"npopescu@c220g5-110529.wisc.cloudlab.us"
 #"npopescu@c220g5-111031.wisc.cloudlab.us"
@@ -14,7 +14,7 @@
 #"npopescu@c220g5-111207.wisc.cloudlab.us"
 #"npopescu@c220g5-111014.wisc.cloudlab.us"
 #"npopescu@c220g5-110521.wisc.cloudlab.us"
-#)
+)
 
 numnodes=13
 runs=3
@@ -81,8 +81,8 @@ done < "$CRATELIST"
 
 # Copy actual benchmark data over
 
-OUTPUT="cl-output"
-LOCAL_OUTPUT="cloudlab-output"
+REMOTE_OUTPUT="cloudlab-output"
+LOCAL_OUTPUT="cloudlab-output-lto"
 FNAME="bench-sanity"
 LOCAL_PATH="$ROOT/crates/crates"
 REMOTE_PATH="/mydata/rust/bencher_scrape/crates/crates"
@@ -92,11 +92,15 @@ for node in ${SSH_NODES[@]}
 do
     for crate in ${CRATES[@]}
     do
-        dir="$LOCAL_PATH/$crate/$LOCAL_OUTPUT"
-        mkdir -p "$dir"
-        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-1/$FNAME.data" "$dir/$FNAME-$i-1.data"
-        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-2/$FNAME.data" "$dir/$FNAME-$i-2.data"
-        scp "$node:$REMOTE_PATH/$crate/$OUTPUT-3/$FNAME.data" "$dir/$FNAME-$i-3.data"
+        loc_dir="$LOCAL_PATH/$crate/$LOCAL_OUTPUT"
+        rem_dir="$REMOTE_PATH/$crate/$REMOTE_OUTPUT"
+        mkdir -p "$loc_dir"
+        for r in $(seq 1 $runs)
+        do
+            #echo "REMOTE: $node:$rem_dir-$r/$FNAME.data"
+            #echo "LOCAL: $loc_dir/$FNAME-$i-$r.data"
+            scp "$node:$rem_dir-$r/$FNAME.data" "$loc_dir/$FNAME-$i-$r.data"
+        done
     done
     i=$((i+1))
 done
