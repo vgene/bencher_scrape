@@ -31,9 +31,9 @@ OPTFLAGS="-C opt-level=3"
 DBGFLAGS="-C debuginfo=2"
 
 # LTO Flags
-LTOFLAGS_A="-C embed-bitcode=no"
+LTOFLAGS_A="-C embed-bitcode=yes"
 
-RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS"" # "$LTOFLAGS_A""
+RUSTFLAGS=""$OPTFLAGS" "$DBGFLAGS" "$LTOFLAGS_A""
 
 # Command to use below
 RUSTC_CMD="cargo rustc --release --bench -- --emit=llvm-bc"
@@ -156,9 +156,13 @@ then
                 RUSTFLAGS=$RUSTFLAGS cargo bench --no-run
             else
                 mkdir -p "$OUTPUT"
-                # If pre-compiled, only need one version of the compiled code
+                # If pre-compiled or already ran this benchmark before, 
+                # only need one version of the compiled code
                 # but want to save the multiple run results in distinct locations
-                mv "$precomp_outdir" "$TARGET"
+                if [ -f "$precomp_outdir" ]
+                then
+                    mv "$precomp_outdir" "$TARGET"
+                fi
                 RUSTFLAGS=$RUSTFLAGS cargo bench > "$benchres"
             fi
             mv "$TARGET" "$precomp_outdir"
