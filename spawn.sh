@@ -1,10 +1,8 @@
 #!/bin/bash
 
-cp /benchdata/.bashrc ~/.bashrc
-cp /benchdata/.bash_profile ~/.bash_profile
+cp bashrc ~/.bashrc
+cp bash_profile ~/.bash_profile
 source ~/.bashrc
-
-cd /benchdata/rust/bencher_scrape
 
 OUTNAME="cloudlab-output"
 
