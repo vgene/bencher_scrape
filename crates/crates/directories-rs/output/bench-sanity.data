@@ -1,5 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-base_dirs             	1744	40	1854	22	
-project_dirs          	2354	47	2538	66	
-project_dirs_from_path	1883	33	2077	37	
-user_dirs             	3358	86	3318	61	

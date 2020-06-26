@@ -1,3 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-parse_complex	1386	39	1501	43	
-parse_simple 	230	0	235	1	

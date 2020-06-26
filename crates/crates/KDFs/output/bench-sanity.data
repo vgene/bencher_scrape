@@ -1,4 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-sha256_10	5058	124	4995	131	
-sha256_1k	56279	119	56173	140	
-sha256_8k	416516	540	416035	671	

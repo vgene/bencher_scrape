@@ -1,6 +1,0 @@
-12,13c12,13
-< test hand ... bench:         101 ns/iter (+/- 3)
-< test nom  ... bench:          94 ns/iter (+/- 2)
----
-> test hand ... bench:         101 ns/iter (+/- 1)
-> test nom  ... bench:          93 ns/iter (+/- 3)

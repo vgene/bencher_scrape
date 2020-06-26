@@ -1,3 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-bench_read 	31241004	352030	31542922	566391	
-bench_write	156249293	4757831	158004368	5431260	

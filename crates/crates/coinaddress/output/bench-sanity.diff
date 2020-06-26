@@ -1,4 +1,0 @@
-8c8
-< test bench_validate_hash ... bench:      17,095 ns/iter (+/- 273)
----
-> test bench_validate_hash ... bench:      17,704 ns/iter (+/- 40)

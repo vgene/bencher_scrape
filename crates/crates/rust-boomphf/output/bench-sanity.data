@@ -1,4 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-build1_par	61773900	4464230	54940503	4545703	
-build1_ser	82808058	1759879	82763636	1852246	
-scan1_ser 	81097824	135472	82549448	102399	

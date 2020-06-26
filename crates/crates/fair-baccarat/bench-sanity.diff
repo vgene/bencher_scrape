@@ -1,4 +1,0 @@
-18c18
-< test bench_simulate_games ... bench:       3,854 ns/iter (+/- 939)
----
-> test bench_simulate_games ... bench:       3,703 ns/iter (+/- 498)

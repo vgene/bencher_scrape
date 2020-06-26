@@ -1,5 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-deserialize_publishes	252	15	244	20	
-serialize_publishes  	482	13	484	1	
-publish_deserialize_perf	445	10	444	5	
-publish_serialize_perf  	227	4	229	1	
