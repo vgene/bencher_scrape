@@ -94,8 +94,8 @@ done < "$CRATELIST"
 
 OUTPUT="$output"
 FNAME="bench-sanity"
-#LOCAL_PATH="$ROOT/crates/crates"
-LOCAL_PATH="npopescu@sns52.cs.princeton.edu:/disk/scratch2/npopescu/hack/bencher_scrape/crates/crates"
+LOCAL_PATH="$ROOT/crates/crates"
+#LOCAL_PATH="npopescu@sns52.cs.princeton.edu:/disk/scratch2/npopescu/hack/bencher_scrape/crates/crates"
 REMOTE_PATH="/mydata/rust/bencher_scrape/crates/crates"
 
 i=0
