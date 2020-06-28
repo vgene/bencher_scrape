@@ -1,33 +1,41 @@
 #!/bin/bash
 
 SSH_NODES=(
-#"npopescu@c220g5-111219.wisc.cloudlab.us"
-#"npopescu@c220g5-110529.wisc.cloudlab.us"
-#"npopescu@c220g5-111031.wisc.cloudlab.us"
-#"npopescu@c220g5-110510.wisc.cloudlab.us"
-#"npopescu@c220g5-111009.wisc.cloudlab.us"
-#"npopescu@c220g5-111019.wisc.cloudlab.us"
-#"npopescu@c220g5-111224.wisc.cloudlab.us"
-#"npopescu@c220g5-111222.wisc.cloudlab.us"
-#"npopescu@c220g5-111228.wisc.cloudlab.us"
-#"npopescu@c220g5-111213.wisc.cloudlab.us"
-#"npopescu@c220g5-111207.wisc.cloudlab.us"
-#"npopescu@c220g5-111014.wisc.cloudlab.us"
-#"npopescu@c220g5-110521.wisc.cloudlab.us"
+"npopescu@c220g2-010819.wisc.cloudlab.us"
+"npopescu@c220g2-010826.wisc.cloudlab.us"
+"npopescu@c220g2-010824.wisc.cloudlab.us"
+"npopescu@c220g2-011305.wisc.cloudlab.us"
+"npopescu@c220g2-011310.wisc.cloudlab.us"
+"npopescu@c220g2-011315.wisc.cloudlab.us"
+"npopescu@c220g2-011303.wisc.cloudlab.us"
+"npopescu@c220g2-010821.wisc.cloudlab.us"
+"npopescu@c220g2-011321.wisc.cloudlab.us"
+"npopescu@c220g2-011319.wisc.cloudlab.us"
+"npopescu@c220g2-010817.wisc.cloudlab.us"
+"npopescu@c220g2-011019.wisc.cloudlab.us"
+"npopescu@c220g2-011020.wisc.cloudlab.us"
+"npopescu@c220g2-010820.wisc.cloudlab.us"
+"npopescu@c220g2-011318.wisc.cloudlab.us"
+"npopescu@c220g2-010829.wisc.cloudlab.us"
+"npopescu@c220g2-010825.wisc.cloudlab.us"
+"npopescu@c220g2-011018.wisc.cloudlab.us"
+"npopescu@c220g2-011309.wisc.cloudlab.us"
 )
 
-numnodes=13
-runs=3
+numnodes=19
+runs=2
+output="cloudlab-output-lto"
 
 usage () {
     echo ""
-    echo "Usage: $0 [-n <num-nodes>] [-r <num-runs>]"
+    echo "Usage: $0 [-n <num-nodes>] [-o <dir-label>] [-r <num-runs>]"
     echo "   -n <num-nodes>   How many nodes were used [default = 13]."
+    echo "   -o <dir-label>   How to label the output directory of this invocation."
     echo "   -r <num-runs>    How many runs were executed [default = 3]."
     echo ""
 }
 
-while getopts "n:r:h" opt
+while getopts "n:o:r:h" opt
 do
     case "$opt" in
     n)
@@ -35,6 +43,9 @@ do
         ;;
     r)
         runs="$(($OPTARG))"
+        ;;
+    o)
+        output="$OPTARG"
         ;;
     h)
         usage
@@ -81,10 +92,10 @@ done < "$CRATELIST"
 
 # Copy actual benchmark data over
 
-REMOTE_OUTPUT="cloudlab-output-lto"
-LOCAL_OUTPUT="cloudlab-output-lto"
+OUTPUT="$output"
 FNAME="bench-sanity"
-LOCAL_PATH="$ROOT/crates/crates"
+#LOCAL_PATH="$ROOT/crates/crates"
+LOCAL_PATH="npopescu@sns52.cs.princeton.edu:/disk/scratch2/npopescu/hack/bencher_scrape/crates/crates"
 REMOTE_PATH="/mydata/rust/bencher_scrape/crates/crates"
 
 i=0
@@ -92,8 +103,8 @@ for node in ${SSH_NODES[@]}
 do
     for crate in ${CRATES[@]}
     do
-        loc_dir="$LOCAL_PATH/$crate/$LOCAL_OUTPUT"
-        rem_dir="$REMOTE_PATH/$crate/$REMOTE_OUTPUT"
+        loc_dir="$LOCAL_PATH/$crate/$OUTPUT"
+        rem_dir="$REMOTE_PATH/$crate/$OUTPUT"
         mkdir -p "$loc_dir"
         for r in $(seq 1 $runs)
         do
