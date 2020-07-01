@@ -1,7 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-large_classify_one_word   	5742	780	5842	347	
-large_classify_three_words	10186	447	10350	1943	
-small_classify_one_word   	211	27	209	25	
-small_classify_three_words	463	16	461	12	
-train_large	124593337	24197367	129367079	11917157	
-train_small	157008	13393	158460	5950	

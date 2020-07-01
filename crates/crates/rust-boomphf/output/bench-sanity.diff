@@ -1,8 +1,0 @@
-24,26c24,26
-< test build1_par ... bench:  61,773,900 ns/iter (+/- 4,464,230)
-< test build1_ser ... bench:  82,808,058 ns/iter (+/- 1,759,879)
-< test scan1_ser  ... bench:  81,097,824 ns/iter (+/- 135,472)
----
-> test build1_par ... bench:  54,940,503 ns/iter (+/- 4,545,703)
-> test build1_ser ... bench:  82,763,636 ns/iter (+/- 1,852,246)
-> test scan1_ser  ... bench:  82,549,448 ns/iter (+/- 102,399)

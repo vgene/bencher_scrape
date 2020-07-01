@@ -1,5 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-bench_kilobyte_baseline   	313	156	312	7	
-bench_kilobyte_specialized	54	1	54	1	
-bench_megabyte_baseline   	315474	10295	315718	18257	
-bench_megabyte_specialized	45967	886	45981	2476	

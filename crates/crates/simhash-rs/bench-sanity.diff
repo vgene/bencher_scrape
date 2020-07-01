@@ -1,4 +1,0 @@
-12c12
-< test bench_simhash ... bench:   1,116,594 ns/iter (+/- 25,941)
----
-> test bench_simhash ... bench:   1,168,149 ns/iter (+/- 793,939)

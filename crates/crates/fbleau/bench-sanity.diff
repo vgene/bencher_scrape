@@ -1,6 +1,0 @@
-27,28c27,28
-< test bench_knn_forward ... bench:   4,044,137 ns/iter (+/- 138,160)
-< test bench_knn_init    ... bench:   1,297,617 ns/iter (+/- 88,056)
----
-> test bench_knn_forward ... bench:   4,029,762 ns/iter (+/- 98,358)
-> test bench_knn_init    ... bench:   1,259,115 ns/iter (+/- 23,225)

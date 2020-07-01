@@ -1,4 +1,0 @@
-21c21
-< test bench_from_str                 ... bench:          41 ns/iter (+/- 37)
----
-> test bench_from_str                 ... bench:          41 ns/iter (+/- 0)

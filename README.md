@@ -160,6 +160,13 @@ To solve this I've written a simple `spawn.sh` script that copies over and sourc
 files. The script also starts the benchmarks, so once configured to your needs it can 
 enable you to only run a single command per node. 
 
+Note that since the `spawn.sh` script itself contains a `source` command, it needs to 
+be run as:
+
+```sh
+$ source spawn.sh
+```
+
 Once the benchmarks have completed on the remote nodes, you can use the `post-run.sh`
 script to copy over the many [ data ] files to process locally (or you can process remotely
 and then copy over the condensed files). However, the script expects to be used as the 

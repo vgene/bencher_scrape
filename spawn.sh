@@ -1,15 +1,15 @@
 #!/bin/bash
 
-cp /benchdata/.bashrc ~/.bashrc
-cp /benchdata/.bash_profile ~/.bash_profile
+cp bashrc ~/.bashrc
+cp bash_profile ~/.bash_profile
 source ~/.bashrc
 
-cd /benchdata/rust/bencher_scrape
+sudo apt install tmux
 
-OUTNAME="cloudlab-output"
+OUTNAME="cloudlab-output-lto"
 
 # Pre-compile
 #./bench.sh -c -o "$OUTNAME"
 
 # Run
-./bench.sh -b -r 2 -o "$OUTNAME"
+#./bench.sh -b -r 2 -o "$OUTNAME"

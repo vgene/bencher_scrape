@@ -1,6 +1,0 @@
-45,46c45,46
-< test bench_detect        ... bench:  32,792,291 ns/iter (+/- 238,499)
-< test bench_detect_script ... bench:     465,967 ns/iter (+/- 761)
----
-> test bench_detect        ... bench:  32,637,262 ns/iter (+/- 303,063)
-> test bench_detect_script ... bench:     468,462 ns/iter (+/- 796)

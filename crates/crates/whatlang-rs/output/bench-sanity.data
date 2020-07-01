@@ -1,3 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-bench_detect       	32792291	238499	32637262	303063	
-bench_detect_script	465967	761	468462	796	

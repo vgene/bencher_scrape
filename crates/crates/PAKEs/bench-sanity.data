@@ -1,3 +1,0 @@
-#	bench-name	unmod-time	unmod-error	mod-time	mod-error	
-spake2_start           	128061	3389	132071	8554	
-spake2_start_and_finish	266336	34150	258215	8151	

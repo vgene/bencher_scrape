@@ -1,8 +1,0 @@
-12,14c12,14
-< test bench_dim128 ... bench:  21,780,650 ns/iter (+/- 533,720)
-< test bench_iris   ... bench:     345,354 ns/iter (+/- 35,169)
-< test bench_s1     ... bench:  27,384,977 ns/iter (+/- 26,602,284)
----
-> test bench_dim128 ... bench:  21,964,464 ns/iter (+/- 279,221)
-> test bench_iris   ... bench:     336,658 ns/iter (+/- 39,423)
-> test bench_s1     ... bench:  28,047,342 ns/iter (+/- 21,433,466)

@@ -1,6 +1,0 @@
-9,10c9,10
-< test encode_bench ... bench:          95 ns/iter (+/- 3)
-< test gen_bench    ... bench:       6,002 ns/iter (+/- 283)
----
-> test encode_bench ... bench:          96 ns/iter (+/- 1)
-> test gen_bench    ... bench:       6,168 ns/iter (+/- 10)
